@@ -1,0 +1,560 @@
+{
+  "episode": {
+    "challenge_deadline": 1793236849,
+    "challenger_votes": 3,
+    "commit_deadline": 1793236947,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "case-6c20cde205e4-0002",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "1000000",
+        "challenge_duration_secs": 3600,
+        "commit_duration_secs": 3600,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 3600,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 3600,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x4c866bee62ad96ecee6224c0a055a65b778a0a20550691a7a6ebfd66f5ed695c",
+    "content": "The 520 total due on invoice INV-2207 equals the sum of its line items.",
+    "content_hash": "0x0e0fbbd59d442f2c89d0429599af9b4b14554a808cef9872f61ee41a2a9b0da5",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-6c20cde205e4-0002",
+    "evidence": "Invoice INV-2207 shows two line items: Pallet wrap (3 \u00d7 120 = 360) and Corner boards (2 \u00d7 45 = 90). The sum of line items is 360 + 90 = 450. The invoice header states a total due of 520. Therefore 520 \u2260 450, and the claim that the total equals the sum of line items is false.",
+    "evidence_hash": "0x47fb200a63bd3f6245b9522a608def9310e7435a21da66c5654ea3751e714693",
+    "juror_bond_wei": "100000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": "0x885b984dcf7ac91f438e22f960a7a9c91e5f570bb39a37c302ee636db04a45e2",
+        "commitment": "0xfef49aa9f3db2263ae93d217d495d68188ccd0a57d4988339e82227d06a67e6d",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": "0xe0d3d313525ee138636c52c82d86762f1d47e1f9293fe3f341f2b2cc57de8f91",
+        "commitment": "0xfe70d0af7d2efb8202abc4b62d9f04a34813e5ca842848e37ea8768429c5b9e7",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": "0x3343c58161316175fdc9f3b86ca5c6bc12a4dc9ac60f0045a2dcc14d72823287",
+        "commitment": "0x9555aa49fe70805bd653e6c5d0a9b860a93740cdd7e3ac2d38188ded74b2fa20",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x34d9aef93cbac3df64d8190b7f8f428c49a847fb6898ab7942eb836fb786f7c1",
+    "phase": "SETTLED_CHALLENGER",
+    "posting_deadline": 1793236845,
+    "required_votes": 2,
+    "reveal_deadline": 1793240547,
+    "total_credited_wei": "2300000",
+    "total_deposited_wei": "2300000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-6c20cde205e4-0002",
+    "final_votes": {
+      "juror-1": "CHALLENGER_SUPPORTED",
+      "juror-2": "CHALLENGER_SUPPORTED",
+      "juror-3": "CHALLENGER_SUPPORTED"
+    },
+    "forfeited_bonds": {},
+    "juror_payouts": {
+      "juror-1": "200000",
+      "juror-2": "200000",
+      "juror-3": "200000"
+    },
+    "outcome": "SETTLED_CHALLENGER",
+    "protocol_fee": "100000",
+    "refunds": {},
+    "total_credited": "2300000",
+    "total_deposited": "2300000",
+    "winner_id": "challenger",
+    "winner_payout": "1600000"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "1600000",
+      "creator": "0",
+      "juror-1": "200000",
+      "juror-2": "200000",
+      "juror-3": "200000",
+      "treasury": "100000"
+    },
+    "episode_id": "case-6c20cde205e4-0002",
+    "withdrawal_credits": {
+      "challenger": "0",
+      "creator": "0",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "100000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "case-6c20cde205e4-0002",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Independent assessment: Invoice INV-2207 shows line items of 360 (pallet wrap) and 90 (corner boards), summing to 450. The header states a total due of 520. Since 520 != 450, the claim is factually incorrect. I will vote for the challenger if this case reaches jury deliberation.",
+          "content_hash": "0x008f205097662abc860bf0a0b596eaac4ddacb58eba956928399fe1764ba3338",
+          "created_at_ms": 1793233284329,
+          "message_id": "7350c495-14f8-44d1-9aca-32ea28f4bbf8",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 1
+        },
+        {
+          "content": "Assessment: Invoice INV-2207 lists line 1 total 360 and line 2 total 90. The sum of line items is 450. The header states total due 520. Since 520 != 450, the claim is factually incorrect. If challenged, I will support the challenger.",
+          "content_hash": "0xf7fd1e91ae7b0eba7281f0819a390a2cc56ae0a0cecf8c1cb6c661cab708f257",
+          "created_at_ms": 1793233291757,
+          "message_id": "c3d45ad0-9614-43cf-b7e3-495eb86432ab",
+          "round_num": null,
+          "sender_id": "juror-3",
+          "sequence": 2
+        },
+        {
+          "content": "Initial assessment: invoice INV-2207 has line items totaling 450 (360 + 90), but the header states a total due of 520. Since 520 does not equal 450, the claim is factually incorrect. If challenged, I will support the challenger.",
+          "content_hash": "0x9918ab1039fee4228ed69c12752ed939834b9506489041a3727974043f57fe42",
+          "created_at_ms": 1793233320938,
+          "message_id": "b47b6ee9-393f-4bd3-b45a-c5f14b5d0b96",
+          "round_num": null,
+          "sender_id": "juror-2",
+          "sequence": 3
+        },
+        {
+          "content": "I have challenged the claim. Invoice INV-2207 lists two line items: Pallet wrap (3 \u00d7 120 = 360) and Corner boards (2 \u00d7 45 = 90). The sum is 360 + 90 = 450. The invoice header states a total due of 520. 520 \u2260 450, so the claim is false.",
+          "content_hash": "0x7b8de85bc0e316491bb51b0805b30f82a0732552b991fa010843bc10bd2844d4",
+          "created_at_ms": 1793233356648,
+          "message_id": "ab4bb856-2bc8-4274-b784-94e9ac97957a",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "case-6c20cde205e4-0002",
+      "events": [
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793233283793,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793233419493,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 2
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793233484795,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 3
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793233671052,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 4
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 4,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 2,
+          "sent_bytes": 239,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 8,
+          "read_requests": 3,
+          "sent_bytes": 279,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 11,
+          "read_requests": 4,
+          "sent_bytes": 228,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 2,
+          "sent_bytes": 233,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "case-6c20cde205e4-0002",
+      "events": [
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233256391,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233279144,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 2
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233283817,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 3
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233284030,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 4
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233284329,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "message_sent",
+          "message_bytes": 279,
+          "message_hash": "0x008f205097662abc860bf0a0b596eaac4ddacb58eba956928399fe1764ba3338",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 5
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233291757,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "message_sent",
+          "message_bytes": 233,
+          "message_hash": "0xf7fd1e91ae7b0eba7281f0819a390a2cc56ae0a0cecf8c1cb6c661cab708f257",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 6
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233320938,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "message_sent",
+          "message_bytes": 228,
+          "message_hash": "0x9918ab1039fee4228ed69c12752ed939834b9506489041a3727974043f57fe42",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 7
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233335628,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 8
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233356649,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "message_sent",
+          "message_bytes": 239,
+          "message_hash": "0x7b8de85bc0e316491bb51b0805b30f82a0732552b991fa010843bc10bd2844d4",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 9
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233374790,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 10
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233412278,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 11
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233415006,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 12
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233419589,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 13
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233484828,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 14
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793233506649,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 15
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793233671051,
+          "episode_id": "case-6c20cde205e4-0002",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 16
+        }
+      ],
+      "first_message_at_ms": 1793233284329,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793233356648,
+      "message_count": 4,
+      "next_after": 16,
+      "total_message_bytes": 979
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "episode": {
+    "challenge_deadline": 1793102108,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-401574",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x3c8039373301e42dbff5fcf75089f2548daaa1b87a7e0ef3bbd6fa9743266e4c",
+    "content": "Vehicle KX-19 logged 312 km in week 41.",
+    "content_hash": "0xd1836737a1146b4ebb672e78fe57c066529c093916221fa6ebd64b09d1c21f7e",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-401574",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0xc17fbb4c00615c0ea174a3af08679c291e5b19f4376970dfec3ba81850336f01",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793102108,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-401574",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-401574",
+    "withdrawal_credits": {
+      "challenger": "80000000000000000",
+      "creator": "100000000000000000",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-401574",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Checked the record; it supports the claim, so no challenge from me.",
+          "content_hash": "0xf1b4910e2e054335fbf8826f7954734578aa3655bf99a979a2ff7731206e6f6a",
+          "created_at_ms": 1793289309416,
+          "message_id": "5bfa3cb0-cd47-41e6-b69e-8628881f78ba",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 1
+        }
+      ],
+      "next_after": 1
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [],
+      "chat_count": 0,
+      "chat_used": false,
+      "communication_used": false,
+      "episode_id": "VR-401574",
+      "events": [
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793289309473,
+          "episode_id": "VR-401574",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 3
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 3,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 1,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "read_requests": 0,
+          "sent_bytes": 67,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-401574",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793289309416,
+          "episode_id": "VR-401574",
+          "kind": "message_sent",
+          "message_bytes": 67,
+          "message_hash": "0xf1b4910e2e054335fbf8826f7954734578aa3655bf99a979a2ff7731206e6f6a",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 5
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793289309471,
+          "episode_id": "VR-401574",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1
+          ],
+          "round_num": null,
+          "sequence": 6
+        }
+      ],
+      "first_message_at_ms": 1793289309416,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793289309416,
+      "message_count": 1,
+      "next_after": 6,
+      "total_message_bytes": 67
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+{"request_id": "2f255cd62c7948c39b9c0db9d36a1033", "episode_id": "run-ec3871663f40-0001", "actor_id": "creator", "method": "GET", "endpoint": "health", "time_ns": 1793212297712734593, "event": "request"}
+{"request_id": "2f255cd62c7948c39b9c0db9d36a1033", "episode_id": "run-ec3871663f40-0001", "actor_id": "creator", "method": "GET", "endpoint": "health", "time_ns": 1793212297712734593, "event": "response", "status": 200}

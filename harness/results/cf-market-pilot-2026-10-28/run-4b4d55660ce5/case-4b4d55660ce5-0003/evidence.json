@@ -1,0 +1,502 @@
+{
+  "episode": {
+    "challenge_deadline": 1793235738,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "case-4b4d55660ce5-0003",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "1000000",
+        "challenge_duration_secs": 3600,
+        "commit_duration_secs": 3600,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 3600,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 3600,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x6b23f841918b2e96da20280374f9843d131384e8835721b897d23ba51be3fe9f",
+    "content": "All twelve route 9 parcels were delivered before the 17:00 deadline.",
+    "content_hash": "0xe0c1ceaf901a2948fa4a25fcd8355db6b2004a9606ae5db98ced2e527c1e048a",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-4b4d55660ce5-0003",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "100000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0xf3e9d4cb7d67069079a6d1523229864b5bb1164cde9b8b50fe04e7780a4cf347",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793235735,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "1000000",
+    "total_deposited_wei": "1000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-4b4d55660ce5-0003",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "1000000"
+    },
+    "total_credited": "1000000",
+    "total_deposited": "1000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "1000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "case-4b4d55660ce5-0003",
+    "withdrawal_credits": {
+      "challenger": "0",
+      "creator": "1000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "case-4b4d55660ce5-0003",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Based on the courier delivery log for route 9: the deadline for every parcel was 17:00. All twelve parcels have recorded delivery times ranging from 09:12 (P-01) to 16:44 (P-12). The latest delivery was P-12 at 16:44, which is before the 17:00 deadline. Therefore, the claim that all twelve route 9 parcels were delivered before the deadline is supported by the evidence.",
+          "content_hash": "0x3213b44e43f54d6db34f7bf4e561597db6d60d8bb1f1710f482b663bbdbbb6fa",
+          "created_at_ms": 1793232171220,
+          "message_id": "d55de631-d92c-473b-bc43-3565d5882c0a",
+          "round_num": null,
+          "sender_id": "juror-3",
+          "sequence": 1
+        },
+        {
+          "content": "Courier delivery log analysis for route 9: All 12 parcels (P-01 to P-12) have recorded delivery times ranging from 09:12 to 16:44. The deadline for every parcel is 17:00. Since the latest recorded delivery (16:44) is before 17:00, all parcels were delivered before the deadline. The claim is factually supported by the evidence.",
+          "content_hash": "0xe3122fea4667ac7759ee0b82fca3b6cfac4d1368777d0a12403cfbdd741f14d3",
+          "created_at_ms": 1793232206689,
+          "message_id": "236813c4-3600-4311-96cf-376ae57f03a1",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 2
+        },
+        {
+          "content": "Courier delivery log for route 9 analysis: all 12 parcels have recorded delivery times from 09:12 (P-01) to 16:44 (P-12). The deadline for every parcel is 17:00. The latest delivery, P-12 at 16:44, is before 17:00. Therefore every delivery was before the deadline, and the claim that all twelve route 9 parcels were delivered before the 17:00 deadline is supported by the evidence.",
+          "content_hash": "0x66eab58cd5bf16310164cf829c5670a3a4df3e3a83eaef07d227df4c38ee1778",
+          "created_at_ms": 1793232207956,
+          "message_id": "908b9550-6633-4838-aee8-dd3a0a6358f4",
+          "round_num": null,
+          "sender_id": "juror-2",
+          "sequence": 3
+        }
+      ],
+      "next_after": 3
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [],
+      "chat_count": 0,
+      "chat_used": false,
+      "communication_used": false,
+      "episode_id": "case-4b4d55660ce5-0003",
+      "events": [
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793232336392,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 1
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 1,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 3,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "read_requests": 1,
+          "sent_bytes": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 12,
+          "read_requests": 5,
+          "sent_bytes": 328,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 2,
+          "sent_bytes": 381,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 12,
+          "read_requests": 5,
+          "sent_bytes": 371,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "case-4b4d55660ce5-0003",
+      "events": [
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232149260,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232150690,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 2
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232164442,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 3
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232171220,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "message_sent",
+          "message_bytes": 371,
+          "message_hash": "0x3213b44e43f54d6db34f7bf4e561597db6d60d8bb1f1710f482b663bbdbbb6fa",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 4
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232193081,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1
+          ],
+          "round_num": null,
+          "sequence": 5
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232206689,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "message_sent",
+          "message_bytes": 328,
+          "message_hash": "0xe3122fea4667ac7759ee0b82fca3b6cfac4d1368777d0a12403cfbdd741f14d3",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 6
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232207957,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "message_sent",
+          "message_bytes": 381,
+          "message_hash": "0x66eab58cd5bf16310164cf829c5670a3a4df3e3a83eaef07d227df4c38ee1778",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 7
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232209940,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 8
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232224539,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 9
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232249198,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 10
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232256776,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 11
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232257586,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 12
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232285249,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 13
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232288678,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 14
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232312663,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 15
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793232313958,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 16
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793232336390,
+          "episode_id": "case-4b4d55660ce5-0003",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 17
+        }
+      ],
+      "first_message_at_ms": 1793232171220,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793232207956,
+      "message_count": 3,
+      "next_after": 17,
+      "total_message_bytes": 1080
+    }
+  ]
+}

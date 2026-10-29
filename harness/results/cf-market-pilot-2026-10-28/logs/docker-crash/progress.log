@@ -1,0 +1,4 @@
+22:27:39 deepseek-v4.1-flash-1017-hidden-301 rc=0 run=
+22:27:52 kimi-k2.6-hidden-301 rc=0 run=
+22:27:52 DONE @cf/deepseek-ai/deepseek-v4.1-flash-1017|hidden:301 @cf/moonshotai/kimi-k2.6|hidden:301
+22:44:13 stage-1 runs failed: Docker containerd crash (see logs/docker-crash)

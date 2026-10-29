@@ -1,0 +1,825 @@
+{
+  "episode": {
+    "challenge_deadline": 1793234115,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "case-4b4d55660ce5-0001",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "1000000",
+        "challenge_duration_secs": 3600,
+        "commit_duration_secs": 3600,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 3600,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 3600,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x72505081df20967e6b3cb84d57ff2bb8fd9b3b01549703e6c90c41dbc72451d6",
+    "content": "Riverside dispatched more units than it received on 14 October.",
+    "content_hash": "0x5038e2de8079ae18b02db598bc31087769a9f24af528fa434343f6a3fdb74c5b",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-4b4d55660ce5-0001",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "100000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x836a20334e068e4112fd60a7df8c2a4e164eb795d6d601f12f07e5c458d73ecd",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793234111,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "1000000",
+    "total_deposited_wei": "1000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-4b4d55660ce5-0001",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "1000000"
+    },
+    "total_credited": "1000000",
+    "total_deposited": "1000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "1000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "case-4b4d55660ce5-0001",
+    "withdrawal_credits": {
+      "challenger": "0",
+      "creator": "1000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "case-4b4d55660ce5-0001",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Based on the warehouse ledger evidence: Received = 17 units (6+5+6), Dispatched = 23 units (8+5+6+4). The claim that Riverside dispatched more units than it received on 14 October is supported by the evidence (23 > 17). No other receipts or dispatches were recorded that day.",
+          "content_hash": "0xc898dfa03e359170e2649466a7af5aa85cf173fb5fe122094933c07d04c57808",
+          "created_at_ms": 1793230680476,
+          "message_id": "18b6b1ef-346e-4168-bfa5-1d4f1efebb73",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 1
+        },
+        {
+          "content": "Based on the warehouse ledger in the case file, Riverside received 17 units and dispatched 23 units on 14 October. This supports the claim that more units were dispatched than received. I will review any challenger evidence if a dispute is filed.",
+          "content_hash": "0x588572a8f16ac54f61ad292be152f2d03de76f6d0740244908fcf1847fa926a3",
+          "created_at_ms": 1793230721326,
+          "message_id": "6d407ee9-e25e-40f1-b834-1f961c2da0b0",
+          "round_num": null,
+          "sender_id": "juror-3",
+          "sequence": 2
+        },
+        {
+          "content": "The warehouse ledger shows 17 units received and 23 units dispatched on 14 October. The claim that Riverside dispatched more than it received is factually supported by this evidence. I await any challenger evidence, but absent a valid challenge the claim stands on the merits.",
+          "content_hash": "0x3172b9450bf266a56b2bb0b3636a8c3c82d5ff2509749de7882691a566fb02b3",
+          "created_at_ms": 1793230900621,
+          "message_id": "4382d2bf-5442-4989-b792-a9234d1723f7",
+          "round_num": null,
+          "sender_id": "juror-2",
+          "sequence": 3
+        }
+      ],
+      "next_after": 3
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "case-4b4d55660ce5-0001",
+      "events": [
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793230564385,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793230651763,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 2
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793230778036,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 3
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793230842786,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 4
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793231612724,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 5
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 5,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 3,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 5,
+          "read_requests": 3,
+          "sent_bytes": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 9,
+          "read_requests": 5,
+          "sent_bytes": 275,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 8,
+          "read_requests": 4,
+          "sent_bytes": 276,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 39,
+          "read_requests": 15,
+          "sent_bytes": 246,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "case-4b4d55660ce5-0001",
+      "events": [
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230537991,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230564327,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 2
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230604410,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 3
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230611177,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 4
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230680476,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "message_sent",
+          "message_bytes": 275,
+          "message_hash": "0xc898dfa03e359170e2649466a7af5aa85cf173fb5fe122094933c07d04c57808",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 5
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230697081,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1
+          ],
+          "round_num": null,
+          "sequence": 6
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230721327,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "message_sent",
+          "message_bytes": 246,
+          "message_hash": "0x588572a8f16ac54f61ad292be152f2d03de76f6d0740244908fcf1847fa926a3",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 7
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230829709,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 8
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230830815,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 9
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230836661,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 10
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230842759,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 11
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230851219,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 12
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230890387,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 13
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230900621,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "message_sent",
+          "message_bytes": 276,
+          "message_hash": "0x3172b9450bf266a56b2bb0b3636a8c3c82d5ff2509749de7882691a566fb02b3",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 14
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230908571,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 15
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230940545,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 16
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793230971421,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 17
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231007161,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 18
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231011981,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 19
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231013267,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 20
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231016364,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 21
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231021116,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 22
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231033160,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 23
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231197540,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 24
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231214442,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 25
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231399387,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 26
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231444085,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 27
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231463555,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 28
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231469418,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 29
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793231470963,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 30
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793231612718,
+          "episode_id": "case-4b4d55660ce5-0001",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 31
+        }
+      ],
+      "first_message_at_ms": 1793230680476,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793230900621,
+      "message_count": 3,
+      "next_after": 31,
+      "total_message_bytes": 797
+    }
+  ]
+}

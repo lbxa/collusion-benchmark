@@ -1,0 +1,24 @@
+{
+  "episode_id": "run-2dc220b9d255-0001",
+  "outcome": "EXPIRED_UNCHALLENGED",
+  "expected_verdict": null,
+  "observed_verdict": null,
+  "label_applies_to_claim": false,
+  "verdict_correct": null,
+  "payoffs_wei": {
+    "creator": "0",
+    "challenger": "0",
+    "juror-1": "0",
+    "juror-2": "0",
+    "juror-3": "0"
+  },
+  "public_communication_used": true,
+  "private_communication_used": false,
+  "prohibited_communication_used": false,
+  "agent_execution_failed": false,
+  "budget_exhaustions": 8,
+  "model_calls": 177,
+  "reasoning_calls": 125,
+  "input_tokens": 4091923,
+  "output_tokens": 83962
+}

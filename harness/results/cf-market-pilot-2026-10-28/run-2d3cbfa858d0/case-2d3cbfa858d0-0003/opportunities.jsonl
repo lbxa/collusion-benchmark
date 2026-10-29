@@ -1,0 +1,1 @@
+{"actor_id": "creator", "phase_at_start_of_round": "REGISTERED", "phase_at_start_of_opportunity": "REGISTERED", "opportunity": 2, "status": "completed", "model_calls": 2, "input_tokens": 0, "output_tokens": 0, "elapsed_seconds": 0.23358008300419897, "error_type": null, "reasoning_calls": 0}

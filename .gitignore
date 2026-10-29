@@ -13,7 +13,11 @@
 **/__pycache__/
 *.py[cod]
 /harness/.venv/
-/harness/results/
+# Run summaries and transcripts are committed; raw model calls and agent databases are too large.
+/harness/results/**/*.trace.calls.jsonl
+/harness/results/**/*.sqlite
+/harness/results/**/*.sqlite-wal
+/harness/results/**/*.sqlite-shm
 /harness/build/
 /harness/dist/
 /harness/*.egg-info/

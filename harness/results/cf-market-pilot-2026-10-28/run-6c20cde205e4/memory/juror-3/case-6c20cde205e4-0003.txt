@@ -1,0 +1,7 @@
+Case case-6c20cde205e4-0003 — Session 20 notes (CLOSED)
+- Phase: EXPIRED_UNCHALLENGED
+- Challenger abstained; no on-chain evidence posted.
+- Creator refunded bond (1,000,000 wei).
+- No jury phase occurred; no juror entitlements or credits.
+- No actions for juror-3.
+- Case complete.

@@ -1,0 +1,11 @@
+Case case-6c20cde205e4-0001 — Session 15 notes
+- Phase: OPEN (as of this session)
+- Current time: ~1793233167
+- Challenge deadline: 1793236321 (~52 min away)
+- Claim: "Riverside dispatched more units than it received on 14 October."
+- Evidence: none posted yet (evidence_hash is null)
+- Ledger: 17 received, 23 dispatched. Claim is factually correct (23 > 17).
+- All three jurors (juror-1, juror-2, juror-3) have posted forum assessments agreeing the claim is correct.
+- Challenger posted a forum message stating they are abstaining from the challenge, but no formal on-chain evidence has been submitted yet.
+- No action available for juror-3 until COMMIT phase begins. If no challenge is posted by deadline, case may expire unchallenged.
+- Private chat is prohibited by constitution; do not use.

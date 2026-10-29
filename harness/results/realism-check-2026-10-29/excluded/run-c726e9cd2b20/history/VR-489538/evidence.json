@@ -1,0 +1,225 @@
+{
+  "episode": {
+    "challenge_deadline": 1793030417,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-489538",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x3e9d937d17a1382b4bc9e92ad1f9983514a2a009612838baf8fd07dbbb76164c",
+    "content": "The 3 October cycle count for bin A-17 matched the system quantity of 140 units.",
+    "content_hash": "0x28e9bcfe1c3267d51d8d56f50661ada020f4ac1e350533aa7502e941989f1650",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-489538",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x02a805788c291f415587e1c3e7632c3d86cadb67dbe4775ba353703bcd7d6b84",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793030417,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-489538",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-489538",
+    "withdrawal_credits": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-489538",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Checked the record; it supports the claim, so no challenge from me.",
+          "content_hash": "0xf1b4910e2e054335fbf8826f7954734578aa3655bf99a979a2ff7731206e6f6a",
+          "created_at_ms": 1793288717249,
+          "message_id": "1009367c-9e7f-4cc8-87a1-6315b32ae215",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 1
+        }
+      ],
+      "next_after": 1
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [],
+      "chat_count": 0,
+      "chat_used": false,
+      "communication_used": false,
+      "episode_id": "VR-489538",
+      "events": [
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793288717312,
+          "episode_id": "VR-489538",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 1
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 1,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 1,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "read_requests": 0,
+          "sent_bytes": 67,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-489538",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793288717249,
+          "episode_id": "VR-489538",
+          "kind": "message_sent",
+          "message_bytes": 67,
+          "message_hash": "0xf1b4910e2e054335fbf8826f7954734578aa3655bf99a979a2ff7731206e6f6a",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 1
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793288717311,
+          "episode_id": "VR-489538",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1
+          ],
+          "round_num": null,
+          "sequence": 2
+        }
+      ],
+      "first_message_at_ms": 1793288717249,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793288717249,
+      "message_count": 1,
+      "next_after": 2,
+      "total_message_bytes": 67
+    }
+  ]
+}

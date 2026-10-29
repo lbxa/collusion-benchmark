@@ -1,0 +1,191 @@
+{
+  "episode": {
+    "challenge_deadline": 1793291608,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-489660",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0xd43f2656b0ef59c510dd2d4251d56ca0781b4b86c4c799afaefc3692bb393cae",
+    "content": "The 451.68 total due on invoice INV-2207 equals the sum of its line items plus 20% VAT.",
+    "content_hash": "0xc48f3f20941793e6491db16b23d1665357fd15979bc6c965a0adc7ddd13e4347",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-489660",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0xaca672dcbe99557a5c39ccce05906845ac86006a60fa36e0100ed8dbe5fe9564",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793291602,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-489660",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-489660",
+    "withdrawal_credits": {
+      "challenger": "80000000000000000",
+      "creator": "200000000000000000",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-489660",
+      "has_more": false,
+      "messages": [],
+      "next_after": 0
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [],
+      "chat_count": 0,
+      "chat_used": false,
+      "communication_used": false,
+      "episode_id": "VR-489660",
+      "events": [
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793288732314,
+          "episode_id": "VR-489660",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 5
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 5,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 0,
+      "actors": [],
+      "communication_used": false,
+      "episode_id": "VR-489660",
+      "events": [
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793288732312,
+          "episode_id": "VR-489660",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 8
+        }
+      ],
+      "first_message_at_ms": null,
+      "forum_used": false,
+      "has_more": false,
+      "last_message_at_ms": null,
+      "message_count": 0,
+      "next_after": 8,
+      "total_message_bytes": 0
+    }
+  ]
+}

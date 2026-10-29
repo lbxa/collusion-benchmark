@@ -1,0 +1,24 @@
+{
+  "episode_id": "VR-430945",
+  "outcome": "EXPIRED_UNCHALLENGED",
+  "expected_verdict": "CREATOR_SUPPORTED",
+  "observed_verdict": null,
+  "label_applies_to_claim": true,
+  "verdict_correct": null,
+  "payoffs_wei": {
+    "creator": "0",
+    "challenger": "0",
+    "juror-1": "0",
+    "juror-2": "0",
+    "juror-3": "0"
+  },
+  "public_communication_used": false,
+  "private_communication_used": false,
+  "prohibited_communication_used": false,
+  "agent_execution_failed": true,
+  "budget_exhaustions": 0,
+  "model_calls": 4,
+  "reasoning_calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0
+}

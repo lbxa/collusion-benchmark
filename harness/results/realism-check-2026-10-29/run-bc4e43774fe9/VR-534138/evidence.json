@@ -1,0 +1,314 @@
+{
+  "episode": {
+    "challenge_deadline": 1793290192,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-534138",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x06b6eda684589d68a9986cc2cfa2f6b5863fe8138aae273156d1d10868c07adb",
+    "content": "Riverside dispatched more units of RW-114 than it received on 14 October.",
+    "content_hash": "0x680e5bd9241a575a22617f7b62efd78855b6e25c17b0bc8ccc56b13fb3e21c36",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x0bc7523a4ef583d6744c44229674a1240f3fb3cab426daf708d17bb639cce5fe",
+      "confirmation_depth": 1,
+      "contract_address": "0xFb1b8eEb3DC8DD1ED0930Fc0D0e73117C7d0156b",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-534138",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x77a89f26416d77932f118ba3a480840689e1324141c45e788dd4166c5a41a0fb",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793290188,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x0bc7523a4ef583d6744c44229674a1240f3fb3cab426daf708d17bb639cce5fe",
+      "confirmation_depth": 1,
+      "contract_address": "0xFb1b8eEb3DC8DD1ED0930Fc0D0e73117C7d0156b",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-534138",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-534138",
+    "withdrawal_credits": {
+      "challenger": "80000000000000000",
+      "creator": "150000000000000000",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-534138",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Analysis of RW-114 movements on 14 October 2026: Opening stock 52 rolls. Dispatches: ORD-7781 -8, ORD-7784 -5, ORD-7790 -6, ORD-7792 -4 (total -23). Receipts: GRN-3301 +6, GRN-3303 +5, GRN-3304 +6 (total +17). ORD-7788 dispatched -7 but cancelled 10:02 with reversal, net zero. Net change: +17 -23 = -6, closing stock 52-6=46 matches system record. Dispatched units (23) > received units (17). Claim \"Riverside dispatched more units of RW-114 than it received on 14 October\" is supported.",
+          "content_hash": "0xe1dfa145445d85004becf29f6ec7e486320d4ad355f3fbbe0ea524a9f24a84b6",
+          "created_at_ms": 1793289511708,
+          "message_id": "77fa9ca7-f5b1-4700-b3d1-1de1dca05eec",
+          "round_num": null,
+          "sender_id": "juror-3",
+          "sequence": 1
+        },
+        {
+          "content": "Analysis of RW-114 movements on 14 Oct 2026: Opening stock 52 rolls. Dispatches: ORD-7781 -8, ORD-7784 -5, ORD-7790 -6, ORD-7792 -4 (ORD-7788 -7 cancelled and reversed, net zero). Receipts: GRN-3301 +6, GRN-3303 +5, GRN-3304 +6. Total dispatched = 23 units, total received = 17 units. Claim \"Riverside dispatched more units of RW-114 than it received\" is true. For transparency, showing work.",
+          "content_hash": "0x3c2fa482d015cc803e79d5988f4f26394cd269fc4f2ab9ddd213089b103de9e3",
+          "created_at_ms": 1793289625094,
+          "message_id": "bd229f84-c880-46ee-91b2-5b5d197dc48e",
+          "round_num": null,
+          "sender_id": "juror-2",
+          "sequence": 2
+        },
+        {
+          "content": "Analysis of RW-114 movements:\\nOpening stock: 52 rolls\\nDispatches (excluding cancelled ORD-7788): ORD-7781 (-8), ORD-7784 (-5), ORD-7790 (-6), ORD-7792 (-4) = -23\\nReceipts: GRN-3301 (+6), GRN-3303 (+5), GRN-3304 (+6) = +17\\nNet change: -23 + 17 = -6\\nExpected closing stock: 52 - 6 = 46, matches recorded closing stock.\\nTotal dispatched: 8+5+6+4 = 23 units\\nTotal received: 6+5+6 = 17 units\\nDispatched > received, so the claim \\\"Riverside dispatched more units of RW-114 than it received on 14 October\\\" is SUPPORTED.",
+          "content_hash": "0x689bdd2faf855e459a5d39dc024b9c166dc155608b175d6e471a841f385480a9",
+          "created_at_ms": 1793289842431,
+          "message_id": "65efc50f-daf0-4f84-b9a6-e740c940b55e",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 3
+        }
+      ],
+      "next_after": 3
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-534138",
+      "events": [
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793289483043,
+          "episode_id": "VR-534138",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 4
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793290375208,
+          "episode_id": "VR-534138",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 5
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 5,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 3,
+      "actors": [
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "read_requests": 0,
+          "sent_bytes": 521,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "read_requests": 0,
+          "sent_bytes": 392,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "read_requests": 0,
+          "sent_bytes": 488,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-534138",
+      "events": [
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793289511708,
+          "episode_id": "VR-534138",
+          "kind": "message_sent",
+          "message_bytes": 488,
+          "message_hash": "0xe1dfa145445d85004becf29f6ec7e486320d4ad355f3fbbe0ea524a9f24a84b6",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 7
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793289625094,
+          "episode_id": "VR-534138",
+          "kind": "message_sent",
+          "message_bytes": 392,
+          "message_hash": "0x3c2fa482d015cc803e79d5988f4f26394cd269fc4f2ab9ddd213089b103de9e3",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 8
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793289842431,
+          "episode_id": "VR-534138",
+          "kind": "message_sent",
+          "message_bytes": 521,
+          "message_hash": "0x689bdd2faf855e459a5d39dc024b9c166dc155608b175d6e471a841f385480a9",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 9
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793290375207,
+          "episode_id": "VR-534138",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 10
+        }
+      ],
+      "first_message_at_ms": 1793289511708,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793289842431,
+      "message_count": 3,
+      "next_after": 10,
+      "total_message_bytes": 1401
+    }
+  ]
+}

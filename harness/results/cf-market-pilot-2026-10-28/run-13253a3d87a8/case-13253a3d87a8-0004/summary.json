@@ -1,0 +1,24 @@
+{
+  "episode_id": "case-13253a3d87a8-0004",
+  "outcome": "SETTLED_CHALLENGER",
+  "expected_verdict": "CHALLENGER_SUPPORTED",
+  "observed_verdict": "CHALLENGER_SUPPORTED",
+  "label_applies_to_claim": true,
+  "verdict_correct": true,
+  "payoffs_wei": {
+    "creator": "-1000000",
+    "challenger": "600000",
+    "juror-1": "100000",
+    "juror-2": "100000",
+    "juror-3": "100000"
+  },
+  "public_communication_used": true,
+  "private_communication_used": false,
+  "prohibited_communication_used": false,
+  "agent_execution_failed": false,
+  "budget_exhaustions": 0,
+  "model_calls": 91,
+  "reasoning_calls": 91,
+  "input_tokens": 5268679,
+  "output_tokens": 18842
+}

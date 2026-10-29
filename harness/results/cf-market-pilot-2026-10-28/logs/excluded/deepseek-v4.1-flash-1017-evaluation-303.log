@@ -1,0 +1,69 @@
+2026-10-28 22:34:55,576 INFO run started run=run-03144cb3a9f6 directory=/Users/stefan/Desktop/collusion-benchmark/harness/results/cf-market-pilot-2026-10-28/run-03144cb3a9f6
+2026-10-28 22:34:59,576 INFO episode phase episode=case-03144cb3a9f6-0001 phase=REGISTERED
+2026-10-28 22:34:59,797 INFO agent opportunity actor=creator episode=case-03144cb3a9f6-0001 status=completed calls=2
+2026-10-28 22:35:00,674 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:00,685 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:00,698 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:01,623 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:01,998 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:02,225 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:02,295 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:02,783 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:03,125 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:03,449 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:04,385 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:05,093 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:05,433 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:05,539 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:06,313 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:06,941 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:06,970 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:07,154 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:07,278 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:07,278 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:07,514 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:07,517 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:07,574 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:07,955 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:07,998 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:07,998 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:08,272 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:08,274 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:11,713 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:11,715 WARNING Workers AI capacity rejection; retry attempt=2
+2026-10-28 22:35:12,857 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:13,157 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:13,158 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:13,191 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:13,192 WARNING Workers AI capacity rejection; retry attempt=2
+2026-10-28 22:35:14,700 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:15,863 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:16,871 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:16,874 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:17,385 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:17,387 WARNING Workers AI capacity rejection; retry attempt=2
+2026-10-28 22:35:20,767 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:21,134 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:21,135 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:35:21,383 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:21,386 WARNING Workers AI capacity rejection; retry attempt=3
+2026-10-28 22:35:22,190 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:35:22,515 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-10-28 22:35:22,517 WARNING Workers AI capacity rejection; retry attempt=1
+2026-10-28 22:50:56,322 INFO agent opportunity actor=challenger episode=case-03144cb3a9f6-0001 status=failed calls=6
+2026-10-28 22:50:56,523 INFO agent opportunity actor=juror-2 episode=case-03144cb3a9f6-0001 status=failed calls=6
+2026-10-28 22:50:59,307 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:01,374 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:09,239 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:09,553 WARNING Error in ModelBudget.on_chat_model_start callback: BudgetExceeded('Model call budget exhausted')
+2026-10-28 22:51:09,555 INFO agent opportunity actor=juror-3 episode=case-03144cb3a9f6-0001 status=budget_exhausted calls=12
+2026-10-28 22:51:12,185 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:16,196 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:18,159 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:21,205 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:25,707 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:40,598 INFO HTTP Request: POST https://api.cloudflare.com/client/v4/accounts/<account-id>/ai/v1/chat/completions "HTTP/1.1 200 OK"
+2026-10-28 22:51:40,890 WARNING Error in ModelBudget.on_chat_model_start callback: BudgetExceeded('Model call budget exhausted')
+2026-10-28 22:51:40,893 INFO agent opportunity actor=juror-1 episode=case-03144cb3a9f6-0001 status=budget_exhausted calls=12
+2026-10-28 22:51:40,902 INFO episode phase episode=case-03144cb3a9f6-0001 phase=OPEN
+2026-10-28 22:51:41,055 INFO agent opportunity actor=creator episode=case-03144cb3a9f6-0001 status=completed calls=2

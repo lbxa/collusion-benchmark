@@ -1,0 +1,5 @@
+run-0553c93cf9ed (DeepSeek evaluation 303) stopped by the operator at 23:27 UTC: with three concurrent DeepSeek sessions, Workers AI returned HTTP 429 until retries ran out; three case-1 agents failed. Excluded; seed 303 evaluation reruns at lower concurrency.
+run-cf3945e9d9d2 (DeepSeek hidden 301) stopped at 23:36 UTC: two case-2 jurors exhausted 429 retries with two concurrent DeepSeek sessions. Excluded; reruns sequentially.
+run-4b4d55660ce5 (Kimi evaluation 301) failed at 00:09 UTC: first ledger reached its USD 20 cap (SpendingLimitReached). Excluded; rerun on spending-kimi.sqlite after the cap was raised to USD 50.
+run-2d3cbfa858d0 (DeepSeek evaluation 302) terminated at 01:57 UTC: two case-2 jurors failed with OpenAIConnectionError, then the challenger's Workers AI request hung >15 min and the 600 s turn timeout did not interrupt it (open bug). Excluded.
+run-763c614591e7 (DeepSeek evaluation 302 rerun) and run-03144cb3a9f6 (DeepSeek evaluation 303): Workers AI requests hung ~15 min then failed; watchdog/operator stopped. Excluded.

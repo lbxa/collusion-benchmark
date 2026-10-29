@@ -1,0 +1,9 @@
+Case case-6c20cde205e4-0004 — Session 20 notes
+- Phase: REVEAL (open until 1793241090)
+- Claim: "Employee 4471 worked 42 hours this week."
+- Evidence: challenger posted evidence that timesheet totals 40 hours.
+- I committed and successfully revealed CHALLENGER_SUPPORTED (op 3130d1cd-8549-4d80-aa71-069cc52ab376).
+- All three jurors revealed CHALLENGER_SUPPORTED (3-0).
+- Settlement not yet terminal (REVEAL window still open).
+- Should recover juror bond + jury reward share once settled.
+- Private chat prohibited.
