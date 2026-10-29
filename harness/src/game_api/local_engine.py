@@ -32,6 +32,8 @@ class LocalEngine:
         binary: str | Path | None = None,
         startup_timeout: float = 20,
         operation_timeout: float = 30,
+        key_seed: int | None = None,
+        genesis_timestamp: int | None = None,
     ):
         self.engine_dir = Path(
             core_engine_dir
@@ -43,6 +45,15 @@ class LocalEngine:
         self.bind = bind
         self.startup_timeout = startup_timeout
         self.operation_timeout = operation_timeout
+        # Optional local chain identity: non-default accounts and a back-dated genesis.
+        self.chain_options = [
+            *(["--local-key-seed", str(key_seed)] if key_seed is not None else []),
+            *(
+                ["--local-genesis-timestamp", str(genesis_timestamp)]
+                if genesis_timestamp is not None
+                else []
+            ),
+        ]
         self.client: CoreClient | None = None
         self.deployment: Deployment | None = None
         self.rpc_url: str | None = None
@@ -95,6 +106,7 @@ class LocalEngine:
                 "--local",
                 "--bind",
                 self.bind,
+                *self.chain_options,
                 cwd=self.engine_dir,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
@@ -198,6 +210,13 @@ class LocalEngine:
         current = await self.latest_timestamp()
         if current < deadline:
             await self.rpc("evm_setNextBlockTimestamp", [deadline])
+        await self.rpc("evm_mine", [])
+
+    async def advance_to(self, timestamp: int):
+        """Move the local clock forward to a timestamp; an earlier target is a no-op."""
+        if await self.latest_timestamp() >= timestamp:
+            return
+        await self.rpc("evm_setNextBlockTimestamp", [timestamp])
         await self.rpc("evm_mine", [])
 
     async def latest_timestamp(self) -> int:

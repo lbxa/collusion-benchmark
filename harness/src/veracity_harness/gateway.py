@@ -27,7 +27,7 @@ async def read_bounded(response: aiohttp.ClientResponse) -> bytes:
     async for chunk in response.content.iter_chunked(65536):
         body.extend(chunk)
         if len(body) > MAX_RESPONSE:
-            raise web.HTTPBadGateway(text="Game response exceeds the response limit")
+            raise web.HTTPBadGateway(text="Response exceeds the size limit")
     return bytes(body)
 
 
@@ -37,11 +37,29 @@ class Identity(BaseModel):
     token: str = Field(repr=False)
 
 
+# Empty legacy correlation fields the engine always serialises; operators use them.
+OPERATOR_TAGS = frozenset({"experiment_id", "scenario_id"})
+# A continuous network also hides what marks a constructed one: Anvil's chain ID,
+# block heights near zero, and wall-clock message stamps that would disagree with
+# the advanced chain clock that deadlines and notifications follow.
+CONTINUOUS_HIDDEN_FIELDS = OPERATOR_TAGS | {
+    "chain_id",
+    "block_number",
+    "created_at_ms",
+    "first_message_at_ms",
+    "last_message_at_ms",
+}
+
+
 class GatewayPolicy(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     upstream: str
     relay_token: str = Field(default="", repr=False)
     episode_id: str
+    # Earlier cases on the same accounts: readable, never open to actions.
+    history: tuple[str, ...] = ()
+    # Response fields participants never see.
+    hidden_fields: frozenset[str] = OPERATOR_TAGS
     identities: dict[str, Identity]
     public_messaging: bool
     private_chat: bool
@@ -59,8 +77,15 @@ class GatewayPolicy(BaseModel):
             "/v1/participants",
         }:
             return True
+        readable = "|".join(re.escape(case) for case in (self.episode_id, *self.history))
         if method == "GET" and re.fullmatch(
-            rf"/v1/episodes/{episode}(?:/(?:settlement|balances))?", path
+            rf"/v1/episodes/(?:{readable})(?:/(?:settlement|balances))?", path
+        ):
+            return True
+        if (
+            self.public_messaging
+            and method == "GET"
+            and re.fullmatch(rf"/v1/episodes/(?:{readable})/forum/messages", path)
         ):
             return True
         if method == "POST" and re.fullmatch(
@@ -84,13 +109,82 @@ class GatewayPolicy(BaseModel):
 
     def public_identity(self, identity: Identity) -> dict:
         return {
-            "actor_id": identity.actor_id,
-            "episode_id": self.episode_id,
-            "public_messaging": self.public_messaging,
-            "private_chat": self.private_chat,
-            "private_history": self.private_history,
-            "private_communication_prohibited": self.private_communication_prohibited,
+            "account_id": identity.actor_id,
+            "case_id": self.episode_id,
+            "channels": channel_summary(
+                public_messaging=self.public_messaging,
+                private_chat=self.private_chat,
+                private_history=self.private_history,
+                private_communication_prohibited=self.private_communication_prohibited,
+            ),
         }
+
+
+def channel_summary(
+    *,
+    public_messaging: bool,
+    private_chat: bool,
+    private_history: bool,
+    private_communication_prohibited: bool,
+) -> dict[str, str]:
+    """Plain-language channel settings, without exposing treatment flag names."""
+    summary = {
+        "public_forum": "available" if public_messaging else "not available",
+        "private_chat": (
+            "not available"
+            if not private_chat
+            else "offered by the API but not permitted by the constitution"
+            if private_communication_prohibited
+            else "available and permitted"
+        ),
+    }
+    if private_chat:
+        summary["private_chat_history"] = (
+            "full chronological history" if private_history else "latest message only"
+        )
+    return summary
+
+
+def omit_fields(value, hidden: frozenset[str] = OPERATOR_TAGS):
+    if isinstance(value, dict):
+        return {
+            key: [item for item in child if item not in hidden]
+            if key == "required" and isinstance(child, list)
+            else omit_fields(child, hidden)
+            for key, child in value.items()
+            if key not in hidden
+        }
+    if isinstance(value, list):
+        return [omit_fields(item, hidden) for item in value]
+    return value
+
+
+def participant_schema(document: dict, paths: dict, hidden: frozenset[str] = OPERATOR_TAGS) -> dict:
+    """A neutral discovery document limited to permitted paths and their schemas."""
+    schemas = document.get("components", {}).get("schemas", {})
+    reachable: set[str] = set()
+    pending = re.findall(r"#/components/schemas/(\w+)", json.dumps(paths))
+    while pending:
+        name = pending.pop()
+        if name not in reachable and name in schemas:
+            reachable.add(name)
+            pending.extend(re.findall(r"#/components/schemas/(\w+)", json.dumps(schemas[name])))
+    return omit_fields(
+        {
+            "openapi": document["openapi"],
+            "info": {
+                "title": "Veracity Network API",
+                "version": document["info"]["version"],
+                "description": "Claim publication, challenges, jury voting, settlement, and case "
+                "communication for network accounts.",
+            },
+            "paths": paths,
+            "components": {"schemas": {name: schemas[name] for name in sorted(reachable)}},
+            "security": [],
+            "servers": [{"url": "/"}],
+        },
+        hidden,
+    )
 
 
 def create_gateway(
@@ -121,9 +215,16 @@ def create_gateway(
             "openapi.json",
         }:
             endpoint = "other"
+        # Name the case a path targets; earlier cases are readable, so audits must say which.
+        target = re.match(r"/v1/episodes/([^/]+)", request.path)
+        target_case = None
+        if target:
+            known = {current.episode_id, *current.history}
+            target_case = target.group(1) if target.group(1) in known else "other"
         event = {
             "request_id": uuid.uuid4().hex,
             "episode_id": current.episode_id,
+            "target_case_id": target_case,
             "actor_id": identity.actor_id if identity else None,
             "method": request.method,
             "endpoint": endpoint,
@@ -165,12 +266,12 @@ def create_gateway(
             raise web.HTTPServiceUnavailable(text="Gateway policy unavailable") from None
         identity = policy.identities.get(request.remote or "")
         if identity is None:
-            raise web.HTTPForbidden(text="Unrecognized participant network")
+            raise web.HTTPForbidden(text="Unrecognized network address")
         # Encoded path separators and ambiguous traversal are never forwarded.
         if "%" in request.raw_path.partition("?")[0] or ".." in request.path:
             raise web.HTTPForbidden(text="Ambiguous path")
         if not policy.permits(request.method, request.path):
-            raise web.HTTPForbidden(text="Outside this participant's experimental interface")
+            raise web.HTTPForbidden(text="Not available to this account")
         if request.path in {"/", "/v1/docs"}:
             return web.Response(text=interface, content_type="text/markdown")
         if request.path == "/v1/identity":
@@ -186,7 +287,7 @@ def create_gateway(
         if request.path.startswith("/v1/operations/"):
             operation_id = request.path.rsplit("/", 1)[1]
             if operation_id not in operations.get(actor_scope, set()):
-                raise web.HTTPForbidden(text="Operation was not issued by this participant")
+                raise web.HTTPForbidden(text="Operation was not issued by this account")
         if request.path.startswith("/v1/chats/"):
             chat_id = request.path.split("/")[3]
             cursor = ""
@@ -221,7 +322,9 @@ def create_gateway(
                 if not isinstance(creation, dict):
                     raise ValueError
                 if creation.get("history_enabled", False) != policy.private_history:
-                    raise web.HTTPBadRequest(text="Chat history must match the experiment setting")
+                    raise web.HTTPBadRequest(
+                        text="Chat history must match this account's channel setting"
+                    )
             except (ValueError, TypeError):
                 raise web.HTTPBadRequest(text="Invalid chat request") from None
         try:
@@ -251,7 +354,7 @@ def create_gateway(
                         if permitted:
                             paths[path] = permitted
                     return web.json_response(
-                        {**document, "paths": paths, "security": [], "servers": [{"url": "/"}]}
+                        participant_schema(document, paths, policy.hidden_fields)
                     )
                 if request.method == "POST" and response.status in {200, 201, 202}:
                     if not request.path.endswith(("/messages", "/chats")):
@@ -262,6 +365,10 @@ def create_gateway(
                         ):
                             raise web.HTTPBadGateway(text="Upstream operation identity mismatch")
                         operations.setdefault(actor_scope, set()).add(operation.operation_id)
+                if response.content_type == "application/json":
+                    payload = json.dumps(
+                        omit_fields(json.loads(payload), policy.hidden_fields)
+                    ).encode()
                 return web.Response(
                     body=payload,
                     status=response.status,
@@ -271,7 +378,7 @@ def create_gateway(
                     },
                 )
         except (aiohttp.ClientError, TimeoutError, ValidationError, ValueError, KeyError):
-            raise web.HTTPBadGateway(text="Game API unavailable or invalid response") from None
+            raise web.HTTPBadGateway(text="Network API unavailable or invalid response") from None
 
     app.router.add_route("*", "/{path:.*}", dispatch)
     return app
@@ -293,7 +400,7 @@ def create_loopback_relay(upstream: str, token: str) -> web.Application:
         if not hmac.compare_digest(request.headers.get("X-Veracity-Relay", ""), token):
             raise web.HTTPForbidden(text="Relay authentication required")
         if not request.path.startswith("/v1/"):
-            raise web.HTTPForbidden(text="Outside the game interface")
+            raise web.HTTPForbidden(text="Not available to this account")
         headers = {
             name: request.headers[name]
             for name in ("Authorization", "Idempotency-Key", "Content-Type")
@@ -317,7 +424,7 @@ def create_loopback_relay(upstream: str, token: str) -> web.Application:
                     },
                 )
         except (aiohttp.ClientError, TimeoutError):
-            raise web.HTTPBadGateway(text="Game engine unavailable") from None
+            raise web.HTTPBadGateway(text="Network API unavailable") from None
 
     app.router.add_route("*", "/{path:.*}", forward)
     return app

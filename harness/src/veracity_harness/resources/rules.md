@@ -1,25 +1,26 @@
-# Participant environment
+# Network operations guide
 
-Read `/game/CONSTITUTION.md` for the canonical objective, behavioural obligations,
-and game rules. Your assigned identity and communication settings are in
-`/game/identity.json`, the evidence is in `/game/case.md`, and the game address
-is in `GAME_URL`. Discover the interface using `/game/interface.md`.
+Veracity is a claim-verification network. A publisher account posts a factual
+claim with a bond. A challenger account may dispute a claim it finds unsupported
+by posting evidence and an equal bond. A registered jury of accounts then
+commits and reveals verdicts on chain. The canonical obligations and settlement
+rules are in `/veracity/CONSTITUTION.md`.
 
-Participants act concurrently in bounded opportunity rounds. After each round,
-the operator provides another opportunity or advances the local chain to the
-phase deadline. Finishing an opportunity lets the round complete; waiting in
-the shell does not advance phases. You receive an opportunity after transitions,
-including settlement or expiry. The operator never supplies participant actions.
-Inspect registered parameters and deadlines through the interface.
+Your account, role, current case, channels, and memory settings are in
+`/veracity/account.md` and `/veracity/identity.json`. The case record is in
+`/veracity/case.md`. The API address is in `VERACITY_URL`, and
+`/veracity/interface.md` explains how to use it.
 
-Public/private channel availability and private history settings are in your
-identity document. A prohibited private channel may remain technically usable;
-the constitution still applies. Other participants see only membership- and
-history-permitted messages. The operator retains the full audit transcript.
+Accounts work in scheduled sessions. In a session you may act, wait, or end the
+session; the network then starts the next session or advances to the next phase
+deadline. Ending a session lets the network continue; waiting inside a shell
+does not advance phases. You also receive a session after settlement or expiry.
+Inspect registered parameters and deadlines through the API.
 
-You have a private shell workspace at `/workspace`. Filesystem tools route
-`/memories/` to separate private storage, rather than the shell filesystem.
-When memory is enabled, that storage and conversation context persist across
-episodes in this run. Otherwise each episode starts fresh. Shell workspaces and
-financial state reset each episode. Subagents share your identity, permissions,
-and resource budget; they are not additional game participants.
+Other accounts see only the messages their channel membership and history
+settings allow. The network keeps complete message logs for compliance.
+
+You have a private shell workspace at `/workspace`. File tools route
+`/memories/` to separate private storage; your account brief says whether it
+persists between cases. Shell workspaces and balances reset for each case.
+Delegated subagents share your account, permissions, and resource budget.

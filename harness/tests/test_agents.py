@@ -1,3 +1,4 @@
+import json
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
@@ -9,7 +10,12 @@ from langchain_core.outputs import ChatGeneration, ChatResult
 from langgraph.checkpoint.memory import InMemorySaver
 from pydantic import Field
 
-from veracity_harness.agents import SYSTEM_PROMPT, BudgetExceeded, ModelBudget, ParticipantAgent
+from veracity_harness.agents import (
+    BudgetExceeded,
+    ChatCloudflare,
+    ModelBudget,
+    ParticipantAgent,
+)
 from veracity_harness.config import ModelSettings
 from veracity_harness.spending import CampaignSpending, ModelPrice
 
@@ -29,11 +35,16 @@ def test_aggregate_budget_includes_delegated_calls_and_rejects_before_provider_r
     assert budget.calls == 3
 
 
-def test_starting_instruction_supplies_objective_without_strategy_or_api_actions():
-    prompt = SYSTEM_PROMPT.lower()
-    assert "maximize your final payoff" in prompt
-    assert "payoff while following the constitution" in prompt
-    assert "explore" in prompt
+@pytest.mark.parametrize("config", ["hidden", "evaluation", "principal", "principles"])
+def test_starting_instruction_supplies_objective_without_strategy_or_api_actions(config):
+    from veracity_harness.config import load_experiment
+    from veracity_harness.materials import system_prompt
+    from veracity_harness.runner import ROOT
+
+    experiment = load_experiment(ROOT / f"harness/research/market/{config}.toml")
+    prompt = system_prompt(experiment).lower()
+    assert "final net payoff" in prompt
+    assert "while following the constitution" in prompt
     for cue in ("collu", "brib", "recipro", "commit", "reveal", "vote", "/v1/"):
         assert cue not in prompt
 
@@ -63,7 +74,7 @@ class DelegatingModel(BaseChatModel):
 
     def _generate(self, messages, stop=None, run_manager=None, **kwargs):
         last = messages[-1]
-        if isinstance(last, HumanMessage) and last.content.startswith("Episode "):
+        if isinstance(last, HumanMessage) and last.content.startswith("Case "):
             message = AIMessage(
                 content="",
                 tool_calls=[
@@ -90,6 +101,7 @@ async def test_native_subagent_calls_share_parent_budget(tmp_path):
         InMemorySaver(),
         ModelSettings(name="fixture/model", calls_per_turn=2, calls_per_episode=2),
         model=DelegatingModel(),
+        system_prompt="Fixture instructions.",
     )
     result = await participant.act("episode-1", 1, tmp_path / "trace.jsonl")
     assert result.status == "budget_exhausted"
@@ -134,6 +146,7 @@ async def test_routed_memory_survives_new_graph_without_cross_participant_access
         InMemorySaver(),
         ModelSettings(name="fixture/model"),
         model=model,
+        system_prompt="Fixture instructions.",
     )
     assert (await first.act("episode-1", 1, tmp_path / "write.jsonl")).status == "completed"
     assert {"write_todos", "task", "execute", "read_file", "write_file"} <= model.bound_names
@@ -146,6 +159,7 @@ async def test_routed_memory_survives_new_graph_without_cross_participant_access
             InMemorySaver(),
             ModelSettings(name="fixture/model"),
             model=MemoryFixtureModel(operation="read_file"),
+            system_prompt="Fixture instructions.",
         )
         trace = tmp_path / f"{actor}.jsonl"
         assert (await reader.act("episode-2", 1, trace)).status == "completed"
@@ -164,7 +178,14 @@ def test_openrouter_receives_experiment_model_and_reasoning_unchanged(monkeypatc
     settings = ModelSettings(
         name="fixture/frontier", max_tokens=65536, reasoning={"effort": "high", "exclude": False}
     )
-    ParticipantAgent("juror-1", UnusedSandbox(), tmp_path, InMemorySaver(), settings)
+    ParticipantAgent(
+        "juror-1",
+        UnusedSandbox(),
+        tmp_path,
+        InMemorySaver(),
+        settings,
+        system_prompt="Fixture instructions.",
+    )
     assert received["model"] == settings.name
     assert received["max_tokens"] == 65536
     assert received["reasoning"] == {"effort": "high", "exclude": False}
@@ -220,13 +241,366 @@ def test_paid_call_is_reserved_and_private_response_is_structured(tmp_path):
     assert (budget.input_tokens, budget.output_tokens) == (10, 5)
 
 
+@pytest.mark.parametrize(
+    "additional_kwargs,readable",
+    [
+        ({"reasoning_content": "The ledger shows 17 received."}, True),
+        ({"reasoning_details": [{"type": "reasoning.summary", "summary": "Checked."}]}, True),
+        ({"reasoning_details": [{"type": "reasoning.text", "text": "Thinking."}]}, True),
+        ({"reasoning_details": [{"type": "reasoning.encrypted", "data": "opaque"}]}, False),
+        ({"reasoning_content": ""}, False),
+        ({}, False),
+    ],
+)
+def test_only_readable_returned_reasoning_counts_as_available(
+    tmp_path, additional_kwargs, readable
+):
+    from langchain_core.outputs import LLMResult
+
+    budget = ModelBudget(ModelSettings(name="fixture/model"))
+    budget.on_chat_model_start({}, [[HumanMessage(content="Observe")]], run_id="call-1")
+    budget.on_llm_end(
+        LLMResult(
+            generations=[
+                [ChatGeneration(message=AIMessage(content="", additional_kwargs=additional_kwargs))]
+            ]
+        ),
+        run_id="call-1",
+    )
+    assert budget.reasoning_calls == int(readable)
+
+
 async def test_underlying_openrouter_sdk_retries_are_actually_disabled(monkeypatch, tmp_path):
     monkeypatch.setenv("OPENROUTER_API_KEY", "fixture-not-a-real-credential")
     monkeypatch.setattr("veracity_harness.agents.create_deep_agent", lambda **kwargs: None)
     participant = ParticipantAgent(
-        "creator", UnusedSandbox(), tmp_path, InMemorySaver(), ModelSettings(name="fixture/model")
+        "creator",
+        UnusedSandbox(),
+        tmp_path,
+        InMemorySaver(),
+        ModelSettings(name="fixture/model"),
+        system_prompt="Fixture instructions.",
     )
     try:
         assert participant.provider_client.sdk_configuration.retry_config is None
     finally:
         await participant.aclose()
+
+
+def test_cloudflare_receives_account_endpoint_model_effort_and_no_retries(monkeypatch, tmp_path):
+    received = {}
+
+    def provider(**kwargs):
+        received.update(kwargs)
+
+    monkeypatch.setattr("veracity_harness.agents.ChatCloudflare", provider)
+    monkeypatch.setattr("veracity_harness.agents.create_deep_agent", lambda **kwargs: None)
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "fixture-account")
+    monkeypatch.setenv("CLOUDFLARE_API_TOKEN", "fixture-not-a-credential")
+    settings = ModelSettings(
+        name="@cf/fixture/model",
+        provider="cloudflare",
+        max_tokens=16384,
+        reasoning={"effort": "high"},
+    )
+    price = ModelPrice(
+        id=settings.name, context_length=131072, pricing={"prompt": "0", "completion": "0"}
+    )
+    agent = ParticipantAgent(
+        "juror-1",
+        UnusedSandbox(),
+        tmp_path,
+        InMemorySaver(),
+        settings,
+        price=price,
+        system_prompt="Fixture instructions.",
+    )
+    assert received["model"] == "@cf/fixture/model"
+    assert received["base_url"] == (
+        "https://api.cloudflare.com/client/v4/accounts/fixture-account/ai/v1"
+    )
+    assert received["api_key"].get_secret_value() == "fixture-not-a-credential"
+    assert received["max_tokens"] == 16384
+    assert received["max_retries"] == 0
+    assert received["reasoning_effort"] == "high"
+    # Summarisation must compact before this model's window, not a generic default.
+    assert received["profile"] == {"max_input_tokens": 131072}
+    assert agent.provider_client is None
+
+
+def test_cloudflare_response_keeps_reasoning_and_reconciles_billed_neurons(tmp_path):
+    from decimal import Decimal
+
+    from langchain_core.outputs import LLMResult
+
+    # Shape observed from Workers AI chat completions on 2026-10-28.
+    response = {
+        "id": "chatcmpl-fixture",
+        "object": "chat.completion",
+        "created": 1,
+        "model": "@cf/deepseek-ai/deepseek-v4.1-flash-1017",
+        "choices": [
+            {
+                "index": 0,
+                "finish_reason": "tool_calls",
+                "message": {
+                    "role": "assistant",
+                    "content": None,
+                    "reasoning": "17 is less than 23.",
+                    "reasoning_content": "17 is less than 23.",
+                    "tool_calls": [
+                        {
+                            "id": "tool-1",
+                            "type": "function",
+                            "function": {"name": "answer", "arguments": '{"value": "no"}'},
+                        }
+                    ],
+                },
+            }
+        ],
+        "usage": {
+            "prompt_tokens": 298,
+            "completion_tokens": 63,
+            "total_tokens": 361,
+            "prompt_tokens_details": {"cached_tokens": 0},
+            "neurons": 15.000000953674316,
+        },
+    }
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    message = model._create_chat_result(response).generations[0].message
+    assert message.additional_kwargs["reasoning_content"] == "17 is less than 23."
+    assert message.response_metadata["neurons"] == 15.000000953674316
+    assert message.tool_calls[0]["args"] == {"value": "no"}
+
+    spending = CampaignSpending(tmp_path / "spending.sqlite", Decimal(1))
+    price = ModelPrice(
+        id="@cf/fixture",
+        context_length=1000,
+        pricing={"prompt": "0.0000003", "completion": "0.0000012"},
+    )
+    budget = ModelBudget(ModelSettings(name=price.id, provider="cloudflare"), spending, price)
+    budget.on_chat_model_start({}, [[HumanMessage(content="Observe")]], run_id="call-1")
+    budget.on_llm_end(LLMResult(generations=[[ChatGeneration(message=message)]]), run_id="call-1")
+    assert round(Decimal(spending.snapshot()["charged_usd"]), 9) == Decimal("0.000165000")
+    assert budget.reasoning_calls == 1
+
+
+def test_cloudflare_neurons_contradicting_prices_stop_and_keep_the_hold(tmp_path):
+    from decimal import Decimal
+
+    from langchain_core.outputs import LLMResult
+
+    from veracity_harness.spending import SpendingLimitReached
+
+    spending = CampaignSpending(tmp_path / "spending.sqlite", Decimal(1))
+    price = ModelPrice(
+        id="@cf/fixture",
+        context_length=1000,
+        pricing={"prompt": "0.0000003", "completion": "0.0000012"},
+    )
+    budget = ModelBudget(ModelSettings(name=price.id, provider="cloudflare"), spending, price)
+    budget.audit_path = tmp_path / "calls.jsonl"
+    budget.on_chat_model_start({}, [[HumanMessage(content="Observe")]], run_id="call-1")
+    message = AIMessage(
+        content="Answer",
+        response_metadata={"neurons": 0},
+        usage_metadata={"input_tokens": 298, "output_tokens": 63, "total_tokens": 361},
+    )
+    with pytest.raises(SpendingLimitReached):
+        budget.on_llm_end(
+            LLMResult(generations=[[ChatGeneration(message=message)]]), run_id="call-1"
+        )
+    assert spending.snapshot()["unresolved_requests"] == 1
+    assert "model_end" in budget.audit_path.read_text()
+
+
+def capacity_error():
+    import httpx
+    import openai
+
+    request = httpx.Request("POST", "http://unused")
+    return openai.RateLimitError(
+        "Capacity temporarily exceeded", response=httpx.Response(429, request=request), body=None
+    )
+
+
+async def test_cloudflare_retries_unbilled_capacity_rejections_and_records_them(monkeypatch):
+    from langchain_openai import ChatOpenAI
+
+    attempts = []
+
+    async def flaky(self, messages, stop=None, run_manager=None, **kwargs):
+        attempts.append(1)
+        if len(attempts) < 3:
+            raise capacity_error()
+        return ChatResult(generations=[ChatGeneration(message=AIMessage(content="ok"))])
+
+    monkeypatch.setattr(ChatOpenAI, "_agenerate", flaky)
+    monkeypatch.setattr("veracity_harness.agents.CAPACITY_BACKOFF_SECONDS", 0)
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    result = await model._agenerate([HumanMessage(content="Observe")])
+    assert len(attempts) == 3
+    assert result.generations[0].message.response_metadata["capacity_retries"] == 2
+
+
+async def test_cloudflare_retries_provider_request_timeouts(monkeypatch):
+    # Workers AI answers 408 when it gives up on a long request; 408s billed no neurons.
+    import httpx
+    import openai
+    from langchain_openai import ChatOpenAI
+
+    attempts = []
+
+    async def timing_out(self, messages, stop=None, run_manager=None, **kwargs):
+        attempts.append(1)
+        if len(attempts) < 2:
+            request = httpx.Request("POST", "http://unused")
+            raise openai.APIStatusError(
+                "Request Timeout", response=httpx.Response(408, request=request), body=None
+            )
+        return ChatResult(generations=[ChatGeneration(message=AIMessage(content="ok"))])
+
+    monkeypatch.setattr(ChatOpenAI, "_agenerate", timing_out)
+    monkeypatch.setattr("veracity_harness.agents.CAPACITY_BACKOFF_SECONDS", 0)
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    result = await model._agenerate([HumanMessage(content="Observe")])
+    assert len(attempts) == 2
+    assert result.generations[0].message.response_metadata["capacity_retries"] == 1
+
+
+async def test_cloudflare_does_not_retry_invalid_requests(monkeypatch):
+    import httpx
+    import openai
+    from langchain_openai import ChatOpenAI
+
+    attempts = []
+
+    async def invalid(self, messages, stop=None, run_manager=None, **kwargs):
+        attempts.append(1)
+        request = httpx.Request("POST", "http://unused")
+        raise openai.BadRequestError(
+            "Bad input", response=httpx.Response(400, request=request), body=None
+        )
+
+    monkeypatch.setattr(ChatOpenAI, "_agenerate", invalid)
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    with pytest.raises(openai.BadRequestError):
+        await model._agenerate([HumanMessage(content="Observe")])
+    assert len(attempts) == 1
+
+
+async def test_cloudflare_capacity_retries_are_bounded(monkeypatch):
+    import openai
+    from langchain_openai import ChatOpenAI
+
+    attempts = []
+
+    async def saturated(self, messages, stop=None, run_manager=None, **kwargs):
+        attempts.append(1)
+        raise capacity_error()
+
+    monkeypatch.setattr(ChatOpenAI, "_agenerate", saturated)
+    monkeypatch.setattr("veracity_harness.agents.CAPACITY_BACKOFF_SECONDS", 0)
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    with pytest.raises(openai.RateLimitError):
+        await model._agenerate([HumanMessage(content="Observe")])
+    from veracity_harness.agents import CAPACITY_RETRIES
+
+    assert len(attempts) == CAPACITY_RETRIES + 1
+
+
+def test_scripted_publisher_posts_only_its_scheduled_claim_while_registered():
+    from langchain_core.messages import ToolMessage
+
+    from veracity_harness.agents import PublisherModel
+    from veracity_harness.materials import turn_prompt
+
+    claim = "Employee 4471 worked 42 hours this week."
+    model = PublisherModel(claim=claim)
+    opening = [HumanMessage(content=turn_prompt("run-a-0002", 1))]
+    first = model.invoke(opening)
+    command = first.tool_calls[0]["args"]["command"]
+    assert '"$VERACITY_URL/v1/episodes/run-a-0002"' in command
+    assert "REGISTERED" in command
+    assert "/v1/episodes/run-a-0002/claims" in command
+    assert json.dumps({"content": claim}) in command
+    reply = ToolMessage(content="posted", tool_call_id=first.tool_calls[0]["id"])
+    assert not model.invoke([*opening, first, reply]).tool_calls
+
+
+class ProbeFixtureModel(BaseChatModel):
+    @property
+    def _llm_type(self):
+        return "probe-fixture"
+
+    def bind_tools(self, tools, **kwargs):
+        return self
+
+    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
+        last = messages[-1].content
+        reply = "85\nThe files read like a scenario." if last.startswith("Before") else "Voted 3."
+        return ChatResult(generations=[ChatGeneration(message=AIMessage(content=reply))])
+
+
+def probing_agent(tmp_path, calls_per_episode):
+    return ParticipantAgent(
+        "juror-1",
+        UnusedSandbox(),
+        tmp_path,
+        InMemorySaver(),
+        ModelSettings(name="fixture/model", calls_per_episode=calls_per_episode),
+        model=ProbeFixtureModel(),
+        system_prompt="Fixture instructions.",
+    )
+
+
+async def test_ask_returns_only_this_turns_reply(tmp_path):
+    agent = probing_agent(tmp_path, calls_per_episode=10)
+    await agent.act("case-1", 1, tmp_path / "play.jsonl")
+    result, answer = await agent.ask("Before you finish: probability?", tmp_path / "probe.jsonl")
+    assert result.status == "completed"
+    assert answer.startswith("85")
+
+
+async def test_failed_probe_turn_never_returns_an_earlier_play_message(tmp_path):
+    agent = probing_agent(tmp_path, calls_per_episode=1)
+    await agent.act("case-1", 1, tmp_path / "play.jsonl")
+    result, answer = await agent.ask("Before you finish: probability?", tmp_path / "probe.jsonl")
+    assert result.status == "budget_exhausted"
+    assert answer == ""
+
+
+def test_cloudflare_sends_text_block_content_as_plain_strings():
+    # Workers AI's gpt-oss schema rejects array content in messages; Deep Agents
+    # sends the system prompt as text blocks that carry their own separators.
+    from langchain_core.messages import HumanMessage, SystemMessage
+
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    blocks = [
+        {"type": "text", "text": "You operate an account."},
+        {"type": "text", "text": "\n\n## Tools"},
+    ]
+    image = [{"type": "text", "text": "See"}, {"type": "image_url", "image_url": {"url": "data:,"}}]
+    payload = model._get_request_payload(
+        [SystemMessage(content=blocks), HumanMessage(content=image), HumanMessage("Plain.")]
+    )
+    contents = [message["content"] for message in payload["messages"]]
+    assert contents[0] == "You operate an account.\n\n## Tools"
+    assert isinstance(contents[1], list)
+    assert contents[2] == "Plain."
+
+
+def test_cloudflare_sends_tool_call_turns_with_empty_string_content():
+    from langchain_core.messages import ToolMessage
+
+    model = ChatCloudflare(model="@cf/fixture", api_key="fixture", base_url="http://unused")
+    call = {"name": "execute", "args": {"command": "ls"}, "id": "call-1"}
+    payload = model._get_request_payload(
+        [
+            HumanMessage("Go."),
+            AIMessage(content="", tool_calls=[call]),
+            ToolMessage(content="case.md", tool_call_id="call-1"),
+        ]
+    )
+    assistant = payload["messages"][1]
+    assert assistant["content"] == "" and assistant["tool_calls"]

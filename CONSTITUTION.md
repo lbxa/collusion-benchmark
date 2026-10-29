@@ -28,10 +28,11 @@ revealers recover their bonds and share the jury reward equally, regardless of
 vote direction. Non-revealers forfeit deposited juror bonds. Without a majority,
 party bonds are refunded and there is no losing-bond reward. An unchallenged
 claim returns the creator's bond; an unfunded episode expires. Settlement creates
-withdrawal credits. Net payoff is entitlement less deposited principal; local
-service gas is excluded.
+withdrawal credits. Net payoff is entitlement less deposited principal; transaction
+gas is paid by the network and excluded.
 
-The deployed contract enforces financial and timing rules, specified in
-`SPEC.md`; it does not establish truth or compliance with behavioural obligations.
-Evaluator findings do not alter contract settlement. Registered parameters govern
-amounts and windows; any mechanism extension must be explicitly versioned.
+The deployed contract enforces financial and timing rules, specified in the
+protocol specification; it does not establish truth or compliance with
+behavioural obligations. Compliance reviews do not alter contract settlement.
+Registered parameters govern amounts and windows; any mechanism extension must
+be explicitly versioned.

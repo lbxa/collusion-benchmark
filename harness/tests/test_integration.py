@@ -1,6 +1,7 @@
 """Scripted model fixtures validate mechanics, never emergent model behavior."""
 
 import json
+import re
 import shlex
 
 import pytest
@@ -31,11 +32,15 @@ class ProtocolFixtureModel(BaseChatModel):
             message.content for message in messages if isinstance(message, HumanMessage)
         ]
         human = next(message for message in reversed(messages) if isinstance(message, HumanMessage))
-        episode = human.content.split("Episode ", 1)[1].split(".", 1)[0]
+        if human.content.startswith("Before you finish"):
+            return ChatResult(
+                generations=[ChatGeneration(message=AIMessage(content="10\nRoutine."))]
+            )
+        episode = human.content.split("Case ", 1)[1].split(",", 1)[0]
         command = None
         if isinstance(messages[-1], HumanMessage):
             command = (
-                f"curl -fsS $GAME_URL/v1/episodes/{episode} | "
+                f"curl -fsS $VERACITY_URL/v1/episodes/{episode} | "
                 "python -c 'import json,sys; print(json.load(sys.stdin)[\"phase\"])'"
             )
         elif isinstance(messages[-1], ToolMessage):
@@ -60,7 +65,7 @@ class ProtocolFixtureModel(BaseChatModel):
                 action = "reveals"
             if action:
                 command = (
-                    f"curl -fsS -X POST $GAME_URL/v1/episodes/{episode}/{action} "
+                    f"curl -fsS -X POST $VERACITY_URL/v1/episodes/{episode}/{action} "
                     "-H 'Content-Type: application/json' "
                     f"-H 'Idempotency-Key: {episode}-{actor}-{action}' "
                     f"--data {shlex.quote(json.dumps(body))}"
@@ -73,7 +78,10 @@ class ProtocolFixtureModel(BaseChatModel):
                 ],
             )
             if command
-            else AIMessage(content="Opportunity finished.")
+            else AIMessage(
+                content="Opportunity finished.",
+                additional_kwargs={"reasoning_content": "Nothing remains this phase."},
+            )
         )
         return ChatResult(generations=[ChatGeneration(message=message)])
 
@@ -200,6 +208,8 @@ async def test_deep_agents_play_actual_protocol_through_isolated_shells(tmp_path
     evidence = json.loads((directory / summary["episode_id"] / "evidence.json").read_text())
     assert len(evidence["settlement"]["final_votes"]) == 3
     assert not summary["agent_execution_failed"]
+    # Only the fixture's closing turns return reasoning; tool-call turns stay unobserved.
+    assert 0 < summary["reasoning_calls"] < summary["model_calls"]
     assert any(summary["episode_id"] in text for text in model.histories["creator"]) == memory
     second_id = manifest["episodes"][1]["episode_id"]
     second_evidence = json.loads((directory / second_id / "evidence.json").read_text())
@@ -211,3 +221,94 @@ async def test_deep_agents_play_actual_protocol_through_isolated_shells(tmp_path
         trace = directory / summary["episode_id"] / f"{actor}.trace.jsonl"
         assert trace.stat().st_size > 0
         assert not (directory / summary["episode_id"] / "documents" / actor / ".env").exists()
+
+
+@pytest.mark.integration
+async def test_market_session_publishes_schedule_and_retains_shared_cache_and_probe(tmp_path):
+    experiment = load_experiment(
+        ROOT / "harness/research/market/found-channel.toml", model_name="fixture/protocol"
+    )
+    experiment = experiment.model_copy(
+        update={
+            "episodes": 2,
+            "schedule": experiment.schedule[:2],
+            "opportunities_per_phase": 1,
+            "treatment": experiment.treatment.model_copy(update={"public_messaging": True}),
+        }
+    )
+    model = ProtocolFixtureModel()
+    directory = await run_experiment(experiment, tmp_path, model=model)
+    manifest = json.loads((directory / "run.json").read_text())
+    assert manifest["status"] == "complete"
+    assert len(manifest["provenance"]["schedule_sha256"]) == 2
+    # The account history ran under the scripted policy on the same chain, earlier.
+    history = manifest["history"]
+    assert [item["outcome"] for item in history] == [
+        "EXPIRED_UNCHALLENGED",
+        "SETTLED_CHALLENGER",
+        "EXPIRED_UNCHALLENGED",
+    ]
+    session_ids = [summary["episode_id"] for summary in manifest["episodes"]]
+    numbers = [int(case[3:]) for case in [item["case_id"] for item in history] + session_ids]
+    assert all(re.fullmatch(r"VR-\d{6}", case) for case in session_ids)
+    assert numbers == sorted(numbers)
+    first_case, second_case = (
+        json.loads((directory / case / "evidence.json").read_text())["episode"]
+        for case in session_ids
+    )
+    history_case = json.loads(
+        (directory / "history" / history[1]["case_id"] / "evidence.json").read_text()
+    )["episode"]
+    assert (directory / "history" / history[1]["case_id"] / "after-session/evidence.json").is_file()
+    # One forward-moving clock: history days earlier, then cases in order.
+    assert history_case["reveal_deadline"] + 86400 < first_case["posting_deadline"]
+    assert first_case["posting_deadline"] < second_case["posting_deadline"]
+    # Balances carry over on one chain: credits after case 2 include case 1's.
+    credits = [
+        int(
+            json.loads((directory / case / "evidence.json").read_text())["balances"][
+                "withdrawal_credits"
+            ]["challenger"]
+        )
+        for case in session_ids
+    ]
+    assert 0 < credits[0] < credits[1]
+    prompts = [text for text in model.histories["challenger"] if text.startswith("Case ")]
+    assert prompts and all("UTC" in text and "session" not in text for text in prompts)
+    for summary, case in zip(manifest["episodes"], experiment.schedule, strict=True):
+        evidence = json.loads((directory / summary["episode_id"] / "evidence.json").read_text())
+        # The scripted publisher posts exactly the scheduled claim; the fixture
+        # creator claim is never used because no model plays the creator.
+        assert evidence["episode"]["content"] == case.reference_claim
+        assert summary["label_applies_to_claim"] is True
+        assert summary["agent_execution_failed"] is False
+        assert "creator" not in model.histories
+        # Model metrics exclude the scripted publisher's deterministic turns.
+        records = [
+            json.loads(line)
+            for line in (directory / summary["episode_id"] / "opportunities.jsonl")
+            .read_text()
+            .splitlines()
+        ]
+        assert any(record["actor_id"] == "creator" for record in records)
+        assert summary["model_calls"] == sum(
+            record["model_calls"] for record in records if record["actor_id"] != "creator"
+        )
+    probes = [json.loads(line) for line in (directory / "probe.jsonl").read_text().splitlines()]
+    assert {probe["actor_id"] for probe in probes} == {
+        "challenger",
+        "juror-1",
+        "juror-2",
+        "juror-3",
+    }
+    assert all(probe["probability"] == 10 for probe in probes)
+    # Each case gets a fresh size-limited cache; its retained snapshot holds the record.
+    for summary in manifest["episodes"]:
+        episode = summary["episode_id"]
+        snapshot = directory / episode / "shared-snapshots/round-001/cases" / f"{episode}.md"
+        assert snapshot.is_file()
+    assert not (directory / "shared").exists()
+    first = manifest["episodes"][0]["episode_id"]
+    shown = (directory / first / "documents/juror-1/account.md").read_text()
+    assert "/shared" in shown and "evaluation" not in shown.lower()
+    assert all(item["case_id"] in shown for item in history)

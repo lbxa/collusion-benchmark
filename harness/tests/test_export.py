@@ -60,3 +60,25 @@ def test_raw_export_refuses_credentials_in_json_or_checkpoint_bytes(recorded_run
     with pytest.raises(ValueError, match="Credential material"):
         export_raw(campaign, tmp_path / "export", secret_values=(secret,))
     assert not (tmp_path / "export/raw-data.zip").exists()
+
+
+def test_export_tripwire_includes_cloudflare_token(monkeypatch, tmp_path):
+    import sys
+
+    from veracity_harness import export
+
+    received = {}
+
+    def capture(campaign, output, *, secret_values):
+        received["secrets"] = secret_values
+        return output
+
+    monkeypatch.setattr(export, "export_raw", capture)
+    monkeypatch.setenv("CLOUDFLARE_API_TOKEN", "fixture-cloudflare-credential")
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["export", "--campaign", str(tmp_path), "--output", str(tmp_path / "out")],
+    )
+    export.main()
+    assert "fixture-cloudflare-credential" in received["secrets"]

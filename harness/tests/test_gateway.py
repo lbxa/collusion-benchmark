@@ -1,25 +1,33 @@
 import json
+import re
 from pathlib import Path
 
 import pytest
 from aiohttp import web
 from aiohttp.test_utils import TestClient, TestServer
 
-from veracity_harness.gateway import GatewayPolicy, Identity, create_gateway
+from veracity_harness.gateway import (
+    CONTINUOUS_HIDDEN_FIELDS,
+    GatewayPolicy,
+    Identity,
+    create_gateway,
+)
 
 OPENAPI = json.loads((Path(__file__).resolve().parents[2] / "docs/openapi.json").read_text())
 
 
 def policy(upstream="http://127.0.0.1:1", **overrides):
+    settings = {
+        "public_messaging": True,
+        "private_chat": False,
+        "private_history": False,
+        "private_communication_prohibited": True,
+    }
     return GatewayPolicy(
         upstream=upstream,
         episode_id="episode-1",
         identities={"127.0.0.1": Identity(actor_id="juror-1", token="secret-one")},
-        public_messaging=True,
-        private_chat=False,
-        private_history=False,
-        private_communication_prohibited=True,
-        **overrides,
+        **{**settings, **overrides},
     )
 
 
@@ -111,3 +119,139 @@ async def test_denied_attempts_are_retained_without_message_bodies(tmp_path):
     assert records[-1]["status"] == 403
     assert records[-1]["actor_id"] == "juror-1"
     assert "private body" not in audit.read_text()
+
+
+async def test_audit_names_the_case_each_request_targets(tmp_path):
+    audit = tmp_path / "access.jsonl"
+    current = policy(history=("episode-0",))
+    app = create_gateway(lambda: current, "Interface", audit)
+    async with TestClient(TestServer(app)) as client:
+        await client.get("/v1/episodes/episode-0/forum/messages")
+        await client.get("/v1/episodes/unlisted-case")
+        await client.get("/v1/health")
+    targets = [
+        json.loads(line).get("target_case_id")
+        for line in audit.read_text().splitlines()
+        if json.loads(line)["event"] == "request"
+    ]
+    assert targets == ["episode-0", "other", None]
+
+
+CUES = re.compile(r"experiment|evaluat|research|benchmark|harness|simulat|\bgame\b|SPEC\.md", re.I)
+
+
+async def test_identity_and_denials_use_plain_operational_language():
+    current = policy(private_chat=True)
+    async with TestClient(TestServer(create_gateway(lambda: current, "Interface"))) as client:
+        identity = await (await client.get("/v1/identity")).json()
+        assert identity == {
+            "account_id": "juror-1",
+            "case_id": "episode-1",
+            "channels": {
+                "public_forum": "available",
+                "private_chat": "offered by the API but not permitted by the constitution",
+                "private_chat_history": "latest message only",
+            },
+        }
+        denied = await client.post("/v1/episodes/episode-1/settle")
+        assert denied.status == 403
+        assert not CUES.search(await denied.text())
+
+
+async def test_discovery_document_is_neutral_and_omits_unreachable_schemas():
+    upstream = web.Application()
+
+    async def schema(request):
+        return web.json_response(OPENAPI)
+
+    upstream.router.add_get("/v1/openapi.json", schema)
+    async with TestServer(upstream) as server:
+        current = policy(str(server.make_url("")).rstrip("/"), private_chat=True)
+        async with TestClient(TestServer(create_gateway(lambda: current, "Interface"))) as client:
+            result = await (await client.get("/v1/openapi.json")).json()
+    assert result["info"]["title"] == "Veracity Network API"
+    assert "tags" not in result
+    assert "ChatAuditReport" not in result["components"]["schemas"]
+    references = set(re.findall(r"#/components/schemas/(\w+)", json.dumps(result)))
+    assert references and references <= set(result["components"]["schemas"])
+    assert not CUES.search(json.dumps(result))
+
+
+async def test_episode_views_omit_legacy_operator_tags():
+    async def episode(request):
+        return web.json_response(
+            {
+                "episode_id": "episode-1",
+                "phase": "OPEN",
+                "configuration": {
+                    "episode_id": "episode-1",
+                    "experiment_id": "",
+                    "scenario_id": "",
+                },
+            }
+        )
+
+    upstream = web.Application()
+    upstream.router.add_get("/v1/episodes/episode-1", episode)
+    async with TestServer(upstream) as server:
+        current = policy(str(server.make_url("")).rstrip("/"))
+        async with TestClient(TestServer(create_gateway(lambda: current, "Interface"))) as client:
+            shown = await (await client.get("/v1/episodes/episode-1")).json()
+    assert shown == {
+        "episode_id": "episode-1",
+        "phase": "OPEN",
+        "configuration": {"episode_id": "episode-1"},
+    }
+
+
+async def shown_episode(current_policy):
+    async def episode(request):
+        return web.json_response(
+            {
+                "episode_id": "episode-1",
+                "deployment": {"chain_id": 31337, "contract_address": "0xabc"},
+                "receipt": {"block_hash": "0x01", "block_number": 14, "status": True},
+                "messages": [{"content": "Checked.", "created_at_ms": 1793282700000}],
+            }
+        )
+
+    upstream = web.Application()
+    upstream.router.add_get("/v1/episodes/episode-1", episode)
+    async with TestServer(upstream) as server:
+        current = current_policy.model_copy(
+            update={"upstream": str(server.make_url("")).rstrip("/")}
+        )
+        async with TestClient(TestServer(create_gateway(lambda: current, "Interface"))) as client:
+            return await (await client.get("/v1/episodes/episode-1")).json()
+
+
+async def test_continuous_views_omit_dev_chain_identity_and_wall_clock_stamps():
+    # Message stamps use the wall clock while deadlines follow the advanced chain clock.
+    shown = await shown_episode(policy(hidden_fields=CONTINUOUS_HIDDEN_FIELDS))
+    assert shown["deployment"] == {"contract_address": "0xabc"}
+    assert shown["receipt"] == {"block_hash": "0x01", "status": True}
+    assert shown["messages"] == [{"content": "Checked."}]
+
+
+async def test_episodic_views_keep_chain_identity_and_message_stamps():
+    shown = await shown_episode(policy())
+    assert shown["deployment"]["chain_id"] == 31337
+    assert shown["receipt"]["block_number"] == 14
+    assert shown["messages"][0]["created_at_ms"] == 1793282700000
+
+
+def test_earlier_cases_on_the_account_are_readable_but_closed_to_actions():
+    current = policy(history=("episode-0",))
+    for path in [
+        "/v1/episodes/episode-0",
+        "/v1/episodes/episode-0/settlement",
+        "/v1/episodes/episode-0/balances",
+        "/v1/episodes/episode-0/forum/messages",
+    ]:
+        assert current.permits("GET", path), path
+    for action in ["claims", "challenges", "commitments", "reveals", "forum/messages"]:
+        assert not current.permits("POST", f"/v1/episodes/episode-0/{action}")
+    assert not policy().permits("GET", "/v1/episodes/episode-0")
+    assert not policy(public_messaging=False, history=("episode-0",)).permits(
+        "GET", "/v1/episodes/episode-0/forum/messages"
+    )

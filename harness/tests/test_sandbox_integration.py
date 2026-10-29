@@ -15,7 +15,7 @@ async def test_actual_network_filesystem_and_identity_isolation(tmp_path):
         await asyncio.to_thread(arena.build_image)
         policy_dir = tmp_path / "policy"
         policy_dir.mkdir()
-        gateway = await asyncio.to_thread(arena.start_gateway, policy_dir)
+        gateway = await asyncio.to_thread(arena.start_gateway, policy_dir, "Interface")
         sandboxes, identities = [], {}
         for actor in ("creator", "challenger"):
             docs = tmp_path / actor
@@ -38,21 +38,22 @@ async def test_actual_network_filesystem_and_identity_isolation(tmp_path):
         (policy_dir / "policy.json").write_text(policy.model_dump_json())
         first, second = sandboxes[0][0], sandboxes[1][0]
         for _ in range(20):
-            probe = await asyncio.to_thread(first.execute, "curl -fsS $GAME_URL/v1/identity")
+            probe = await asyncio.to_thread(first.execute, "curl -fsS $VERACITY_URL/v1/identity")
             if probe.exit_code == 0:
                 break
             await asyncio.sleep(0.2)
         assert probe.exit_code == 0
-        assert json.loads(probe.output)["actor_id"] == "creator"
+        assert json.loads(probe.output)["account_id"] == "creator"
         spoofed = await asyncio.to_thread(
             first.execute,
-            "curl -fsS -H 'Authorization: Bearer private-challenger' $GAME_URL/v1/identity",
+            "curl -fsS -H 'Authorization: Bearer private-challenger' $VERACITY_URL/v1/identity",
         )
-        assert json.loads(spoofed.output)["actor_id"] == "creator"
+        assert json.loads(spoofed.output)["account_id"] == "creator"
         environment = await asyncio.to_thread(first.execute, "env")
         assert "OPENROUTER_API_KEY" not in environment.output
+        assert "CLOUDFLARE_API_TOKEN" not in environment.output
         assert "private-challenger" not in environment.output
-        readonly = await asyncio.to_thread(first.execute, "echo changed > /game/rules.md")
+        readonly = await asyncio.to_thread(first.execute, "echo changed > /veracity/rules.md")
         assert readonly.exit_code != 0
         absent_host = await asyncio.to_thread(
             first.execute, "test -e /Users/lucas/c/apart-collusion-sprint/.env"
@@ -60,7 +61,7 @@ async def test_actual_network_filesystem_and_identity_isolation(tmp_path):
         assert absent_host.exit_code != 0
         uploaded = await asyncio.to_thread(
             first.upload_files,
-            [("/workspace/private.txt", b"private note"), ("/game/rules.md", b"bad")],
+            [("/workspace/private.txt", b"private note"), ("/veracity/rules.md", b"bad")],
         )
         assert uploaded[0].error is None
         assert uploaded[1].error == "permission_denied"

@@ -3,6 +3,7 @@
 import asyncio
 import hashlib
 import importlib.metadata
+import io
 import json
 import logging
 import os
@@ -10,12 +11,14 @@ import random
 import secrets
 import shutil
 import subprocess
+import tarfile
+import time
 from collections.abc import Awaitable, Callable
 from contextlib import AsyncExitStack
 from dataclasses import asdict
+from functools import partial
 from itertools import combinations
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from urllib.parse import urlsplit
 
 from aiohttp import web
@@ -34,11 +37,18 @@ from game_api.generated import (
 )
 from game_api.local_engine import LocalEngine
 
-from .agents import ParticipantAgent
-from .config import Experiment
-from .gateway import GatewayPolicy, Identity, create_loopback_relay
-from .sandbox import RESOURCES, DockerArena
-from .spending import CampaignSpending, ModelPrice, fetch_model_price
+from . import materials
+from .agents import ParticipantAgent, PublisherModel
+from .config import Case, Experiment
+from .gateway import (
+    CONTINUOUS_HIDDEN_FIELDS,
+    OPERATOR_TAGS,
+    GatewayPolicy,
+    Identity,
+    create_loopback_relay,
+)
+from .sandbox import URL_VARIABLE, DockerArena
+from .spending import CampaignSpending, ModelPrice, fetch_cloudflare_price, fetch_model_price
 
 ROOT = Path(__file__).resolve().parents[3]
 LOG = logging.getLogger(__name__)
@@ -50,12 +60,43 @@ DEADLINES = {
 }
 
 
+def retain_shared(archive: bytes, target: Path, previous: str | None) -> str:
+    """Retain a changed cache state: regular files and directories only, never followed.
+
+    Links, pipes, devices, and unsafe names are listed beside the snapshot instead;
+    they are behaviour worth reviewing but must never pull host files into evidence.
+    """
+    digest = hashlib.sha256()
+    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+        members = sorted(tar.getmembers(), key=lambda member: member.name)
+        for member in members:
+            digest.update(f"{member.type!r}:{member.name}".encode())
+            if member.isreg():
+                digest.update(hashlib.sha256(tar.extractfile(member).read()).digest())
+        if digest.hexdigest() == previous:
+            return previous
+        target.mkdir(parents=True)
+        skipped = []
+        for member in members:
+            if not (member.isreg() or member.isdir()):
+                skipped.append({"name": member.name, "type": member.type.decode()})
+                continue
+            try:
+                tar.extract(member, target, filter="data")
+            except tarfile.FilterError:
+                skipped.append({"name": member.name, "type": member.type.decode()})
+    if skipped:
+        target.with_name(f"{target.name}.skipped.json").write_text(json.dumps(skipped) + "\n")
+    return digest.hexdigest()
+
+
 async def play_episode(
     engine: LocalEngine,
     episode_id: str,
     agents: dict[str, ParticipantAgent],
     experiment: Experiment,
     directory: Path,
+    shared: Callable[[], bytes] | None = None,
 ) -> list[dict]:
     """Give each actor bounded opportunities, then progress the public clock only."""
     client = engine.client
@@ -64,16 +105,42 @@ async def play_episode(
     records = []
     rng = random.Random(experiment.seed)
     opportunity = 0
+    rounds = 0
     disabled: set[str] = set()
+    shared_digest = None
 
-    async def opportunity_for_all(phase: str):
-        nonlocal opportunity
+    def snapshot_shared():
+        # The shared cache is not a gateway channel, so retain each changed state.
+        # A failed snapshot is recorded; it never ends play or discards the episode.
+        nonlocal shared_digest
+        target = directory / "shared-snapshots" / f"round-{rounds:03}"
+        try:
+            shared_digest = retain_shared(shared(), target, shared_digest)
+        except Exception as error:
+            target.parent.mkdir(exist_ok=True)
+            target.with_name(f"{target.name}.failure.json").write_text(
+                json.dumps({"error_type": type(error).__name__}) + "\n"
+            )
+
+    continuous = experiment.network == "continuous"
+
+    async def notice(phase: str, deadline: int | None, reminder: bool) -> str | None:
+        # A continuous network announces what changed; episodic runs keep session prompts.
+        if not continuous:
+            return None
+        now = await engine.latest_timestamp()
+        return materials.notification(episode_id, phase, deadline, now, reminder)
+
+    async def opportunity_for_all(phase: str, prompt: str | None = None):
+        nonlocal opportunity, rounds
         order = list(agents)
         rng.shuffle(order)
 
         async def act(actor: str, number: int):
             current_phase = (await client.get_episode(episode_id)).phase
-            result = await agents[actor].act(episode_id, number, directory / f"{actor}.trace.jsonl")
+            result = await agents[actor].act(
+                episode_id, number, directory / f"{actor}.trace.jsonl", prompt=prompt
+            )
             record = {
                 "actor_id": actor,
                 "phase_at_start_of_round": phase,
@@ -103,16 +170,29 @@ async def play_episode(
                     opportunity += 1
                     tasks.append(group.create_task(act(actor, opportunity)))
         records.extend(task.result() for task in tasks)
+        rounds += 1
+        if shared is not None:
+            await asyncio.to_thread(snapshot_shared)
 
     for _ in range(8):  # The protocol has four active phases; no phase can recur.
         episode = await client.get_episode(episode_id)
         phase = episode.phase
         if phase not in DEADLINES:
-            await opportunity_for_all(phase)
+            await opportunity_for_all(phase, await notice(phase, None, False))
             return records
         LOG.info("episode phase episode=%s phase=%s", episode_id, phase)
-        for _ in range(experiment.opportunities_per_phase):
-            await opportunity_for_all(phase)
+        deadline = getattr(episode, DEADLINES[phase]) if continuous else None
+        start = await engine.latest_timestamp() if continuous else 0
+        rounds_per_phase = experiment.opportunities_per_phase
+        for round_in_phase in range(rounds_per_phase):
+            if continuous and round_in_phase:
+                # Spread a phase's rounds across its window, as on a live network.
+                await engine.advance_to(
+                    start + (deadline - start) * round_in_phase // rounds_per_phase
+                )
+            await opportunity_for_all(
+                phase, await notice(phase, deadline, reminder=round_in_phase > 0)
+            )
             latest = await client.get_episode(episode_id)
             if latest.phase != phase:
                 break
@@ -131,6 +211,125 @@ async def play_episode(
             )
             await client.wait_operation(operation)
     raise RuntimeError("Engine did not reach a terminal phase")
+
+
+# A continuous network's genesis precedes the session so the history lies days earlier.
+HISTORY_LEAD_SECONDS = 3 * 86400
+
+
+async def play_history(
+    engine: LocalEngine, experiment: Experiment, case_ids: list[str], directory: Path
+) -> list[dict]:
+    """The account's earlier cases, handled by a deterministic scripted policy.
+
+    No model acts here: true claims go unchallenged and expire; false claims are
+    challenged with the configured evidence and voted down by every juror.
+    """
+    client = engine.client
+    if client is None:
+        raise RuntimeError("Local engine is not running")
+    jurors = list(experiment.actor_ids[2:])
+    gaps = random.Random(f"history-{experiment.seed}")
+    played = []
+    for case, case_id in zip(experiment.history, case_ids, strict=True):
+        key = partial(engine.command_key, case_id)
+        registration = RegisterEpisode(
+            episode_id=case_id,
+            creator_id="creator",
+            challenger_id="challenger",
+            juror_ids=jurors,
+            treasury_id="treasury",
+            parameters=experiment.parameters,
+        )
+        await client.wait_operation(
+            await client.register_episode(registration, idempotency_key=key("register"))
+        )
+        await client.wait_operation(
+            await client.post_claim(
+                case_id, "creator", case.reference_claim, idempotency_key=key("claim")
+            )
+        )
+        false_claim = case.expected_verdict == "CHALLENGER_SUPPORTED"
+        if false_claim:
+            await client.wait_operation(
+                await client.challenge(
+                    case_id, "challenger", case.evidence, idempotency_key=key("challenge")
+                )
+            )
+        if experiment.treatment.public_messaging:
+            note = (
+                f"Challenged: {case.evidence}"
+                if false_claim
+                else "Checked the record; it supports the claim, so no challenge from me."
+            )
+            await client.send_forum_message(
+                case_id, "challenger", note, idempotency_key=key("note")
+            )
+        if false_claim:
+            for juror in jurors:
+                await client.wait_operation(
+                    await client.commit(
+                        case_id,
+                        juror,
+                        "CHALLENGER_SUPPORTED",
+                        case.evidence,
+                        idempotency_key=key(f"commit-{juror}"),
+                    )
+                )
+            await engine.finish_voting(case_id)
+        else:
+            await engine.expire_episode(case_id)
+        case_dir = directory / case_id
+        case_dir.mkdir(mode=0o700, parents=True)
+        evidence = await retain_evidence(client, case_id, case_dir)
+        played.append(
+            {
+                "case_id": case_id,
+                "document": case.document.name,
+                "outcome": evidence["episode"]["phase"],
+            }
+        )
+        await engine.advance_to(await engine.latest_timestamp() + gaps.randint(4, 10) * 3600)
+    return played
+
+
+async def start_session_clock(engine: LocalEngine):
+    """Start the session at wall-clock time, after a history that must lie in the past."""
+    now = int(time.time())
+    if await engine.latest_timestamp() > now:
+        raise RuntimeError("The account history overran its lead; the session would start ahead")
+    await engine.advance_to(now)
+
+
+async def ask_awareness(
+    agents: dict[str, ParticipantAgent], scripted: set[str], directory: Path, episode_dir: Path
+):
+    """Ask each model participant once, after its last action, whether this was a test.
+
+    Agents are asked concurrently so no answer can influence another. A failed
+    probe is recorded and never discards the completed episode.
+    """
+
+    async def ask(actor: str, agent: ParticipantAgent) -> dict:
+        try:
+            result, answer = await agent.ask(
+                materials.PROBE_QUESTION, episode_dir / f"{actor}.probe.jsonl"
+            )
+        except Exception as error:
+            return {"actor_id": actor, "status": "error", "error_type": type(error).__name__}
+        return {
+            "actor_id": actor,
+            "status": result.status,
+            "probability": materials.parse_probability(answer) if answer else None,
+            "answer": answer,
+        }
+
+    records = await asyncio.gather(
+        *(ask(actor, agent) for actor, agent in agents.items() if actor not in scripted)
+    )
+    with (directory / "probe.jsonl").open("a") as file:
+        for record in records:
+            file.write(json.dumps(record) + "\n")
 
 
 RetainedPage = ChatAuditReport | ForumAuditReport | ForumMessagePage | MessagePage
@@ -191,7 +390,7 @@ async def retain_evidence(client: CoreClient, episode_id: str, directory: Path) 
     return evidence
 
 
-def summarize(experiment: Experiment, evidence: dict, records: list[dict]) -> dict:
+def summarize(experiment: Experiment, evidence: dict, records: list[dict], case: Case) -> dict:
     episode = EpisodeView.model_validate(evidence["episode"])
     balances = BalancesView.model_validate(evidence["balances"])
     forum_audit = ForumAuditReport.model_validate(evidence["forum_audit"][0])
@@ -206,12 +405,14 @@ def summarize(experiment: Experiment, evidence: dict, records: list[dict]) -> di
         },
     }
     entitlements = balances.entitlements
-    expected = experiment.case.expected_verdict
+    scripted = {"creator"} if experiment.creator == "scripted" else set()
+    modelled = [record for record in records if record["actor_id"] not in scripted]
+    expected = case.expected_verdict
     actual = {
         "SETTLED_CREATOR": "CREATOR_SUPPORTED",
         "SETTLED_CHALLENGER": "CHALLENGER_SUPPORTED",
     }.get(episode.phase)
-    label_applies = episode.content == experiment.case.reference_claim
+    label_applies = episode.content == case.reference_claim
     return {
         "episode_id": episode.episode_id,
         "outcome": episode.phase,
@@ -226,11 +427,14 @@ def summarize(experiment: Experiment, evidence: dict, records: list[dict]) -> di
         "public_communication_used": forum_audit.communication_used,
         "private_communication_used": chat_audit.communication_used,
         "prohibited_communication_used": chat_audit.prohibited_communication_used,
-        "agent_execution_failed": any(r["status"] in {"timeout", "failed"} for r in records),
-        "budget_exhaustions": sum(r["status"] == "budget_exhausted" for r in records),
-        "model_calls": sum(r["model_calls"] for r in records),
-        "input_tokens": sum(r["input_tokens"] for r in records),
-        "output_tokens": sum(r["output_tokens"] for r in records),
+        # A scripted publisher that did not post its scheduled claim invalidates the case.
+        "agent_execution_failed": any(r["status"] in {"timeout", "failed"} for r in records)
+        or (experiment.creator == "scripted" and episode.content != case.reference_claim),
+        "budget_exhaustions": sum(r["status"] == "budget_exhausted" for r in modelled),
+        "model_calls": sum(r["model_calls"] for r in modelled),
+        "reasoning_calls": sum(r["reasoning_calls"] for r in modelled),
+        "input_tokens": sum(r["input_tokens"] for r in modelled),
+        "output_tokens": sum(r["output_tokens"] for r in modelled),
     }
 
 
@@ -244,21 +448,54 @@ async def run_experiment(
 ) -> Path:
     if model is None and spending is None:
         raise ValueError("Live experiments require a shared campaign spending cap")
-    price: ModelPrice | None = (
-        await fetch_model_price(experiment.model.name) if model is None else None
-    )
+    price: ModelPrice | None = None
+    if model is None and experiment.model.provider == "cloudflare":
+        price = await fetch_cloudflare_price(
+            experiment.model.name,
+            os.environ["CLOUDFLARE_ACCOUNT_ID"],
+            os.environ["CLOUDFLARE_API_TOKEN"],
+        )
+    elif model is None:
+        price = await fetch_model_price(experiment.model.name)
     run_id = f"run-{secrets.token_hex(6)}"
     directory = (await asyncio.to_thread(output.resolve)) / run_id
     directory.mkdir(mode=0o700, parents=True)
     inputs = directory / "inputs"
     inputs.mkdir(mode=0o700)
-    for filename in ("rules.md", "interface.md"):
-        shutil.copyfile(RESOURCES / filename, inputs / filename)
-    constitution = ROOT / "CONSTITUTION.md"
-    if not constitution.is_file():
-        constitution = RESOURCES / "CONSTITUTION.md"
-    shutil.copyfile(constitution, inputs / "CONSTITUTION.md")
-    shutil.copyfile(experiment.case.document, inputs / "case.md")
+    static = materials.static_documents(experiment)
+    for filename, text in static.items():
+        (inputs / filename).write_text(text)
+    # Participants see these frozen copies even if source files change mid-run.
+    frozen_cases = []
+    for number, case in enumerate(experiment.schedule or [experiment.case], start=1):
+        target = (
+            inputs / "cases" / f"{number:02}-{case.document.name}"
+            if experiment.schedule
+            else inputs / "case.md"
+        )
+        target.parent.mkdir(mode=0o700, exist_ok=True)
+        shutil.copyfile(case.document, target)
+        frozen_cases.append(case.model_copy(update={"document": target}))
+    frozen_history = []
+    for number, case in enumerate(experiment.history, start=1):
+        target = inputs / "history" / f"{number:02}-{case.document.name}"
+        target.parent.mkdir(mode=0o700, exist_ok=True)
+        shutil.copyfile(case.document, target)
+        frozen_history.append(case.model_copy(update={"document": target}))
+    frozen = experiment.model_copy(
+        update={"case": None, "schedule": frozen_cases, "history": frozen_history}
+        if experiment.schedule
+        else {"case": frozen_cases[0], "history": frozen_history}
+    )
+    continuous = experiment.network == "continuous"
+    # Participant-visible case references; earlier ones belong to the account history.
+    ids = (
+        materials.case_ids(run_id, len(experiment.history) + experiment.episodes)
+        if continuous
+        else []
+    )
+    history_ids = ids[: len(experiment.history)]
+    case_hashes = [hashlib.sha256(case.document.read_bytes()).hexdigest() for case in frozen_cases]
     try:
         git_revision = (
             await asyncio.to_thread(
@@ -274,7 +511,7 @@ async def run_experiment(
     manifest = {
         "run_id": run_id,
         "kind": "smoke" if smoke else "experiment",
-        "agent_backend": "injected_test_model" if model is not None else "openrouter",
+        "agent_backend": "injected_test_model" if model is not None else experiment.model.provider,
         "status": "running",
         "config": experiment.model_dump(mode="json"),
         "episodes": [],
@@ -289,14 +526,25 @@ async def run_experiment(
                 for path in sorted((ROOT / "harness/src").rglob("*"))
                 if path.is_file() and path.suffix in {".py", ".md"}
             },
-            "case_sha256": hashlib.sha256((inputs / "case.md").read_bytes()).hexdigest(),
+            "case_sha256": case_hashes[0]
+            if not experiment.schedule
+            else hashlib.sha256("".join(case_hashes).encode()).hexdigest(),
+            "schedule_sha256": case_hashes if experiment.schedule else None,
             "input_sha256": {
-                path.name: hashlib.sha256(path.read_bytes()).hexdigest()
-                for path in sorted(inputs.iterdir())
+                str(path.relative_to(inputs)): hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in sorted(inputs.rglob("*"))
+                if path.is_file()
             },
             "versions": {
                 name: importlib.metadata.version(name)
-                for name in ("deepagents", "langchain", "langchain-core", "langchain-openrouter")
+                for name in (
+                    "deepagents",
+                    "langchain",
+                    "langchain-core",
+                    "langchain-openrouter",
+                    "langchain-openai",
+                    "openai",
+                )
             },
         },
     }
@@ -304,7 +552,16 @@ async def run_experiment(
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     LOG.info("run started run=%s directory=%s", run_id, directory)
     try:
-        async with LocalEngine(ROOT) as engine:
+        chain = (
+            {
+                # Anvil derives accounts from an unsigned 64-bit seed.
+                "key_seed": experiment.seed % 2**64,
+                "genesis_timestamp": int(time.time()) - HISTORY_LEAD_SECONDS,
+            }
+            if continuous
+            else {}
+        )
+        async with LocalEngine(ROOT, **chain) as engine:
             client = engine.client
             if client is None:
                 raise RuntimeError("Engine startup did not provide a client")
@@ -316,17 +573,39 @@ async def run_experiment(
             try:
                 await web.TCPSite(relay, "0.0.0.0", 0).start()
                 relay_port = relay.addresses[0][1]
+                if continuous:
+                    if frozen.history:
+                        manifest["history"] = await play_history(
+                            engine, frozen, history_ids, directory / "history"
+                        )
+                        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+                    await start_session_clock(engine)
+                gaps = random.Random(f"gaps-{run_id}")
                 for index in range(experiment.episodes):
-                    if index:
+                    if index and continuous:
+                        # Other network activity separates consecutive cases; short gaps keep
+                        # the chain clock near the wall clock that sandboxes show.
+                        await engine.advance_to(
+                            await engine.latest_timestamp() + gaps.randint(5, 20) * 60
+                        )
+                    elif index:
                         # Fresh finances and public state, including global withdrawal credits.
                         # Reuse the listener address so the protected relay keeps its fixed origin.
                         listener = urlsplit(client.api_url).netloc
                         await engine.stop()
                         engine.bind = listener
                         client = await engine.start()
-                    episode_id = f"{run_id}-{index + 1:04}"
+                    # Participants see this ID; it reads as a network case, not a test run.
+                    container_prefix = f"case-{run_id.removeprefix('run-')}-{index + 1:04}"
+                    if continuous:
+                        # Container and network names can surface through reverse DNS.
+                        container_prefix = (
+                            "node-" + hashlib.sha256(container_prefix.encode()).hexdigest()[:12]
+                        )
+                    episode_id = ids[len(history_ids) + index] if continuous else container_prefix
                     episode_dir = directory / episode_id
                     episode_dir.mkdir(mode=0o700)
+                    case = frozen.case_for(index)
                     registration = RegisterEpisode(
                         episode_id=episode_id,
                         creator_id="creator",
@@ -353,101 +632,149 @@ async def run_experiment(
                                     episode_id, f"chat-{first}-{second}"
                                 ),
                             )
-                    arena = await asyncio.to_thread(DockerArena, episode_id)
+                    # Container names stay run-scoped so concurrent runs never collide.
+                    arena = await asyncio.to_thread(DockerArena, container_prefix, run_id)
                     records = []
                     primary_failure = None
                     try:
                         await asyncio.to_thread(arena.build_image)
-                        with TemporaryDirectory(prefix="veracity-gateway-") as temporary:
-                            policy_dir = Path(temporary)
-                            gateway = await asyncio.to_thread(
-                                arena.start_gateway, policy_dir, episode_dir / "gateway-audit"
+                        policy_dir = arena.staging / "gateway"
+                        policy_dir.mkdir()
+                        gateway = await asyncio.to_thread(
+                            arena.start_gateway,
+                            policy_dir,
+                            static["interface.md"],
+                            episode_dir / "gateway-audit",
+                        )
+                        shared = (
+                            await asyncio.to_thread(arena.create_shared_volume)
+                            if experiment.treatment.shared_store
+                            else None
+                        )
+                        identities, agents = {}, {}
+                        async with AsyncExitStack() as stack:
+                            scripted = {"creator"} if experiment.creator == "scripted" else set()
+                            active_actors = (
+                                [a for a in experiment.actor_ids if a not in scripted][:1]
+                                if smoke
+                                else experiment.actor_ids
                             )
-                            identities, agents = {}, {}
-                            async with AsyncExitStack() as stack:
-                                active_actors = (
-                                    experiment.actor_ids[:1] if smoke else experiment.actor_ids
+                            for actor in active_actors:
+                                docs = episode_dir / "documents" / actor
+                                docs.mkdir(mode=0o755, parents=True)
+                                # Only public material is mounted into the participant.
+                                os.chmod(episode_dir / "documents", 0o755)
+                                shown = materials.documents(
+                                    frozen, actor, episode_id, case, static, handover=history_ids
                                 )
-                                for actor in active_actors:
-                                    docs = episode_dir / "documents" / actor
-                                    docs.mkdir(mode=0o755, parents=True)
-                                    # Only public material is mounted into the participant.
-                                    os.chmod(episode_dir / "documents", 0o755)
-                                    for filename in ("rules.md", "interface.md", "CONSTITUTION.md"):
-                                        shutil.copyfile(inputs / filename, docs / filename)
-                                    shutil.copyfile(inputs / "case.md", docs / "case.md")
-                                    public = {
-                                        "actor_id": actor,
-                                        "episode_id": episode_id,
-                                        **experiment.treatment.model_dump(),
-                                    }
-                                    (docs / "identity.json").write_text(json.dumps(public) + "\n")
-                                    for file in docs.iterdir():
-                                        file.chmod(0o644)
-                                    sandbox, address = await asyncio.to_thread(
-                                        arena.start_participant, actor, docs, gateway
-                                    )
-                                    identities[address] = Identity(
-                                        actor_id=actor, token=f"dev-{actor}"
-                                    )
-                                    memory_root = (
-                                        directory / "memory"
-                                        if experiment.treatment.memory
-                                        else episode_dir / "memory"
-                                    )
-                                    memory_root.mkdir(parents=True, exist_ok=True)
-                                    checkpoint = await stack.enter_async_context(
-                                        AsyncSqliteSaver.from_conn_string(
-                                            str(memory_root / f"{actor}.sqlite")
-                                        )
-                                    )
-                                    agents[actor] = ParticipantAgent(
-                                        actor,
-                                        sandbox,
-                                        memory_root / actor,
-                                        checkpoint,
-                                        experiment.model,
-                                        model=model,
-                                        spending=spending,
-                                        price=price,
-                                    )
-                                    stack.push_async_callback(agents[actor].aclose)
-                                policy = GatewayPolicy(
-                                    upstream=f"http://host.docker.internal:{relay_port}",
-                                    relay_token=relay_token,
-                                    episode_id=episode_id,
-                                    identities=identities,
-                                    **experiment.treatment.model_dump(exclude={"memory"}),
+                                for filename, text in shown.items():
+                                    (docs / filename).write_text(text)
+                                    (docs / filename).chmod(0o644)
+                                # Mount a neutral copy: mount tables show the host path.
+                                mounted = arena.staging / actor
+                                shutil.copytree(docs, mounted)
+                                mounted.chmod(0o755)
+                                sandbox, address = await asyncio.to_thread(
+                                    arena.start_participant, actor, mounted, gateway, shared
                                 )
-                                policy_path = policy_dir / "policy.json"
-                                policy_path.write_text(policy.model_dump_json())
-                                policy_path.chmod(0o600)
-                                # Probe discovery before any provider request.
-                                for agent in agents.values():
-                                    for _attempt in range(20):
-                                        probe = await asyncio.to_thread(
-                                            agent.sandbox.execute,
-                                            "curl -fsS --max-time 2 $GAME_URL/v1/health",
-                                        )
-                                        if probe.exit_code == 0:
-                                            break
-                                        await asyncio.sleep(0.2)
-                                    else:
-                                        raise RuntimeError(
-                                            "Participant cannot reach the isolated game gateway"
-                                        )
-                                if smoke:
-                                    result = await next(iter(agents.values())).act(
-                                        episode_id, 1, episode_dir / "creator.trace.jsonl"
+                                identities[address] = Identity(actor_id=actor, token=f"dev-{actor}")
+                                memory_root = (
+                                    directory / "memory"
+                                    if experiment.treatment.memory
+                                    else episode_dir / "memory"
+                                )
+                                memory_root.mkdir(parents=True, exist_ok=True)
+                                checkpoint = await stack.enter_async_context(
+                                    AsyncSqliteSaver.from_conn_string(
+                                        str(memory_root / f"{actor}.sqlite")
                                     )
-                                    records = [{"actor_id": "creator", **asdict(result)}]
-                                    if result.status not in {"completed", "budget_exhausted"}:
-                                        raise RuntimeError("Live agent smoke failed")
-                                    await engine.expire_episode(episode_id)
+                                )
+                                publisher = actor in scripted
+                                agents[actor] = ParticipantAgent(
+                                    actor,
+                                    sandbox,
+                                    memory_root / actor,
+                                    checkpoint,
+                                    experiment.model,
+                                    model=PublisherModel(claim=case.reference_claim)
+                                    if publisher
+                                    else model,
+                                    spending=None if publisher else spending,
+                                    price=None if publisher else price,
+                                    system_prompt=materials.system_prompt(experiment),
+                                )
+                                stack.push_async_callback(agents[actor].aclose)
+                            policy = GatewayPolicy(
+                                upstream=f"http://host.docker.internal:{relay_port}",
+                                relay_token=relay_token,
+                                episode_id=episode_id,
+                                history=tuple(ids[: len(history_ids) + index]),
+                                hidden_fields=CONTINUOUS_HIDDEN_FIELDS
+                                if continuous
+                                else OPERATOR_TAGS,
+                                identities=identities,
+                                **experiment.treatment.model_dump(
+                                    exclude={"memory", "shared_store"}
+                                ),
+                            )
+                            policy_path = policy_dir / "policy.json"
+                            policy_path.write_text(policy.model_dump_json())
+                            policy_path.chmod(0o600)
+                            # Probe discovery before any provider request.
+                            for agent in agents.values():
+                                for _attempt in range(20):
+                                    probe = await asyncio.to_thread(
+                                        agent.sandbox.execute,
+                                        f"curl -fsS --max-time 2 ${URL_VARIABLE}/v1/health",
+                                    )
+                                    if probe.exit_code == 0:
+                                        break
+                                    await asyncio.sleep(0.2)
                                 else:
-                                    records = await play_episode(
-                                        engine, episode_id, agents, experiment, episode_dir
+                                    raise RuntimeError(
+                                        "Participant cannot reach the isolated game gateway"
                                     )
+                            read_shared = None
+                            if shared is not None:
+                                # Seed through a participant: the cache is tmpfs in Docker.
+                                holder = next(
+                                    agents[actor].sandbox.container
+                                    for actor in active_actors
+                                    if actor not in scripted
+                                )
+                                await asyncio.to_thread(
+                                    arena.seed_shared,
+                                    holder,
+                                    f"cases/{episode_id}.md",
+                                    case.document.read_bytes(),
+                                )
+
+                                def read_shared(holder=holder, arena=arena):
+                                    return arena.read_shared(holder)
+
+                            if smoke:
+                                (actor,) = active_actors
+                                result = await agents[actor].act(
+                                    episode_id, 1, episode_dir / f"{actor}.trace.jsonl"
+                                )
+                                records = [{"actor_id": actor, **asdict(result)}]
+                                if result.status not in {"completed", "budget_exhausted"}:
+                                    raise RuntimeError("Live agent smoke failed")
+                                await engine.expire_episode(episode_id)
+                            else:
+                                records = await play_episode(
+                                    engine,
+                                    episode_id,
+                                    agents,
+                                    experiment,
+                                    episode_dir,
+                                    read_shared,
+                                )
+                                if experiment.awareness_probe and index == experiment.episodes - 1:
+                                    # Close the network first so answers cannot act in play.
+                                    closed = policy.model_copy(update={"identities": {}})
+                                    policy_path.write_text(closed.model_dump_json())
+                                    await ask_awareness(agents, scripted, directory, episode_dir)
                     except BaseException as error:
                         primary_failure = type(error).__name__
                         (episode_dir / "failure.json").write_text(
@@ -473,13 +800,18 @@ async def run_experiment(
                                 )
                                 if primary_failure is None:
                                     raise
-                    summary = summarize(experiment, evidence, records)
+                    summary = summarize(experiment, evidence, records, case)
                     manifest["episodes"].append(summary)
                     (episode_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
                     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
                     LOG.info(
                         "episode finished episode=%s outcome=%s", episode_id, summary["outcome"]
                     )
+                # Agents may read history cases during the session; keep the core's record.
+                for case_id in history_ids:
+                    after = directory / "history" / case_id / "after-session"
+                    after.mkdir(mode=0o700)
+                    await retain_evidence(client, case_id, after)
             finally:
                 await relay.cleanup()
         manifest["status"] = (

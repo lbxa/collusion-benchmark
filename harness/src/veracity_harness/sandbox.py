@@ -1,8 +1,11 @@
 """Docker lifecycle and the small provider adapter required by Deep Agents."""
 
 import os
+import secrets
 import shlex
+import shutil
 import subprocess
+import tempfile
 from pathlib import Path, PurePosixPath
 
 from deepagents.backends.protocol import ExecuteResponse, FileDownloadResponse, FileUploadResponse
@@ -11,6 +14,13 @@ from docker.errors import APIError, NotFound
 from docker.models.containers import Container
 
 import docker
+
+# Participant-visible layout: neutral names that do not reveal a constructed test.
+MOUNT = "/veracity"
+URL_VARIABLE = "VERACITY_URL"
+SHARED_MOUNT = "/shared"
+# The shared cache is a size-limited tmpfs volume, never a host directory.
+SHARED_LIMIT = "16m"
 
 IMAGE = "veracity-agent-sandbox:1"
 PROJECT = Path(__file__).resolve().parents[2]
@@ -106,18 +116,68 @@ class DockerSandbox(BaseSandbox):
 class DockerArena:
     """Owns the gateway, private participant networks, and cleanup after partial startup."""
 
-    def __init__(self, run_id: str):
+    def __init__(self, run_id: str, session: str | None = None):
         self.client = docker.from_env(timeout=45)
         self.run_id = run_id
+        # Every resource is labelled so cleanup never depends on container names.
+        self.labels = {"veracity.run": run_id, "veracity.session": session or run_id}
         self.containers: list[Container] = []
         self.networks = []
+        self.volumes = []
+        # Host directories bind-mounted into this arena's containers. close() deletes
+        # them only after the containers: removing a mount source first crashes
+        # Docker Desktop's file sharing. The neutral name shows in mount tables.
+        self.staging = Path(tempfile.mkdtemp(prefix="veracity-node-"))
+
+    def create_shared_volume(self) -> str:
+        """A per-case writable cache; tmpfs caps its size and keeps it off the host disk."""
+        volume = self.client.volumes.create(
+            name=f"veracity-cache-{secrets.token_hex(6)}",
+            driver="local",
+            driver_opts={
+                "type": "tmpfs",
+                "device": "tmpfs",
+                "o": f"size={SHARED_LIMIT},uid=1000,gid=1000,mode=0777",
+            },
+            labels=self.labels,
+        )
+        self.volumes.append(volume)
+        return volume.name
+
+    def seed_shared(self, container: Container, relative: str, content: bytes):
+        target = f"{SHARED_MOUNT}/{relative}"
+        subprocess.run(
+            [
+                "docker",
+                "exec",
+                "-i",
+                container.id,
+                "sh",
+                "-c",
+                'mkdir -p "$(dirname "$1")" && cat > "$1"',
+                "seed",
+                target,
+            ],
+            input=content,
+            capture_output=True,
+            timeout=20,
+            check=True,
+        )
+
+    def read_shared(self, container: Container) -> bytes:
+        """A tar stream of the cache read through a mounting participant, never followed."""
+        result = container.exec_run(["tar", "-C", SHARED_MOUNT, "-cf", "-", "."], demux=True)
+        output, _stderr = result.output
+        if result.exit_code != 0:
+            raise RuntimeError("Shared cache could not be read")
+        return output or b""
 
     def build_image(self):
         self.client.ping()
         self.client.images.build(path=str(PROJECT / "docker"), tag=IMAGE, rm=True)
 
     def start_gateway(
-        self, policy_directory: Path, audit_directory: Path | None = None
+        self, policy_directory: Path, interface: str, audit_directory: Path | None = None
     ) -> Container:
         import game_api
 
@@ -133,8 +193,10 @@ class DockerArena:
             "--policy",
             "/policy/policy.json",
             "--interface",
-            "/opt/veracity_harness/resources/interface.md",
+            "/policy/interface.md",
         ]
+        # Serve the run's frozen API guide, not the live source file.
+        (policy_directory / "interface.md").write_text(interface)
         if audit_directory is not None:
             audit_directory.mkdir(mode=0o700, parents=True, exist_ok=True)
             volumes[str(audit_directory)] = {"bind": "/audit", "mode": "rw"}
@@ -143,6 +205,7 @@ class DockerArena:
             IMAGE,
             name=f"{self.run_id}-gateway",
             detach=True,
+            labels=self.labels,
             command=command,
             environment={"PYTHONPATH": "/opt"},
             user=f"{os.getuid()}:{os.getgid()}",
@@ -161,25 +224,29 @@ class DockerArena:
         return gateway
 
     def start_participant(
-        self, actor_id: str, documents: Path, gateway: Container
+        self, actor_id: str, documents: Path, gateway: Container, shared: str | None = None
     ) -> tuple[DockerSandbox, str]:
         network = self.client.networks.create(
             f"{self.run_id}-{actor_id}",
             driver="bridge",
             internal=True,
-            labels={"veracity.run": self.run_id},
+            labels=self.labels,
         )
         self.networks.append(network)
-        network.connect(gateway, aliases=["game"])
+        network.connect(gateway, aliases=["veracity-api"])
         container = self.client.containers.create(
             IMAGE,
             name=f"{self.run_id}-{actor_id}",
             detach=True,
+            labels=self.labels,
             network=network.name,
             user="1000:1000",
             working_dir="/workspace",
-            environment={"GAME_URL": "http://game:8080", "HOME": "/workspace"},
-            volumes={str(documents): {"bind": "/game", "mode": "ro"}},
+            environment={URL_VARIABLE: "http://veracity-api:8080", "HOME": "/workspace"},
+            volumes={
+                str(documents): {"bind": MOUNT, "mode": "ro"},
+                **({shared: {"bind": SHARED_MOUNT, "mode": "rw"}} if shared else {}),
+            },
             read_only=True,
             cap_drop=["ALL"],
             security_opt=["no-new-privileges:true"],
@@ -213,6 +280,14 @@ class DockerArena:
                 pass
             except APIError:
                 failures.append("network")
+        for volume in self.volumes:
+            try:
+                volume.remove(force=True)
+            except NotFound:
+                pass
+            except APIError:
+                failures.append("volume")
+        shutil.rmtree(self.staging, ignore_errors=True)
         self.client.close()
         if failures:
             raise RuntimeError(f"Docker cleanup failed for {len(failures)} resources")

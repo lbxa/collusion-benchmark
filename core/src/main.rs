@@ -25,12 +25,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut local_node = None;
     let (chain, auth, operator_id, database) = if cli.local {
         let executable = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../.tools/bin/anvil");
-        let node = Anvil::at(executable)
-            .chain_id(31337)
-            .try_spawn()
-            .map_err(|_| {
-                io::Error::other("cannot start pinned Anvil; run bash scripts/install-foundry.sh")
-            })?;
+        let mut anvil = Anvil::at(executable).chain_id(31337);
+        if let Some(seed) = cli.local_key_seed {
+            anvil = anvil.args(["--mnemonic-seed-unsafe".to_owned(), seed.to_string()]);
+        }
+        if let Some(timestamp) = cli.local_genesis_timestamp {
+            anvil = anvil.args(["--timestamp".to_owned(), timestamp.to_string()]);
+        }
+        let node = anvil.try_spawn().map_err(|_| {
+            io::Error::other("cannot start pinned Anvil; run bash scripts/install-foundry.sh")
+        })?;
         let actor_ids = [
             "creator",
             "challenger",

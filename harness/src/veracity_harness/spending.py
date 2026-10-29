@@ -72,6 +72,70 @@ async def fetch_model_price(model_id: str) -> ModelPrice:
     raise ValueError("Selected experiment model is absent from the current catalog")
 
 
+def cloudflare_price(entry: dict) -> ModelPrice:
+    """Workers AI catalog prices are USD per million tokens; cached input is cheaper."""
+    properties = {item["property_id"]: item["value"] for item in entry.get("properties", [])}
+    rates = {
+        item["unit"]: Decimal(str(item["price"])) / 1_000_000
+        for item in properties.get("price") or []
+        if item.get("currency") == "USD"
+    }
+    if "per M input tokens" not in rates or "per M output tokens" not in rates:
+        raise ValueError("Workers AI catalog entry has no per-token USD price")
+    return ModelPrice(
+        id=entry["name"],
+        context_length=int(properties["context_window"]),
+        pricing={
+            "prompt": rates["per M input tokens"],
+            "completion": rates["per M output tokens"],
+        },
+    )
+
+
+CLOUDFLARE_NEURON_USD = Decimal("0.000011")  # Workers AI: USD 0.011 per 1,000 neurons.
+# Observed billing differs from catalog token prices by up to ~1% (Nemotron, 2026-10-28);
+# a changed neuron rate or a zero report falls far outside this band.
+CLOUDFLARE_TOLERANCE = Decimal("0.05")
+
+
+def cloudflare_charge(
+    neurons: float | None, usage: dict | None, price: ModelPrice
+) -> Decimal | None:
+    """Billed neurons, checked against catalog token prices; None keeps the hold.
+
+    Workers AI reports no USD cost. Uncached input and output fix a lower bound;
+    cached input costs at most the uncached rate, which fixes the upper bound.
+    """
+    if neurons is None or usage is None:
+        return None
+    charge = Decimal(str(neurons)) * CLOUDFLARE_NEURON_USD
+    rates = price.maximum_rates
+    cached = (usage.get("input_token_details") or {}).get("cache_read", 0)
+    lower = (usage["input_tokens"] - cached) * rates["prompt"] + usage["output_tokens"] * rates[
+        "completion"
+    ]
+    upper = lower + cached * rates["prompt"]
+    if not lower * (1 - CLOUDFLARE_TOLERANCE) <= charge <= upper * (1 + CLOUDFLARE_TOLERANCE):
+        raise SpendingLimitReached("Workers AI neurons contradict catalog token prices")
+    return charge
+
+
+async def fetch_cloudflare_price(model_id: str, account_id: str, token: str) -> ModelPrice:
+    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/models/search"
+    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30)) as session:
+        async with session.get(
+            url,
+            params={"search": model_id, "per_page": "50"},
+            headers={"Authorization": f"Bearer {token}"},
+        ) as response:
+            response.raise_for_status()
+            catalog = await response.json()
+    for entry in catalog["result"]:
+        if entry["name"] == model_id:
+            return cloudflare_price(entry)
+    raise ValueError("Selected experiment model is absent from the Workers AI catalog")
+
+
 class CampaignSpending:
     """Reserve before dispatch; replace a hold only with a known final charge.
 

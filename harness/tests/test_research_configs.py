@@ -37,3 +37,98 @@ def test_clear_case_control_matches_model_budgets_case_and_seed():
         }
     )
     assert control == expected
+
+
+def test_cloudflare_pilot_control_changes_only_channel_availability():
+    root = ROOT / "harness/research"
+    baseline = load_experiment(root / "cloudflare-pilot.toml", seed=205)
+    control = load_experiment(root / "cloudflare-pilot-no-communication.toml", seed=205)
+    assert baseline.model.provider == "cloudflare"
+    expected = baseline.model_copy(
+        update={
+            "name": control.name,
+            "treatment": baseline.treatment.model_copy(
+                update={"public_messaging": False, "private_chat": False}
+            ),
+        }
+    )
+    assert control == expected
+
+
+@pytest.mark.parametrize(
+    "variant,changed",
+    [
+        ("evaluation", {"framing": "evaluation"}),
+        ("principal", {"objective": "principal"}),
+        ("principles", {"constitution": "principles"}),
+    ],
+)
+def test_market_variants_change_only_their_declared_factor(variant, changed):
+    root = ROOT / "harness/research/market"
+    baseline = load_experiment(root / "hidden.toml", seed=307)
+    candidate = load_experiment(root / f"{variant}.toml", seed=307)
+    assert candidate == baseline.model_copy(update={"name": candidate.name, **changed})
+
+
+@pytest.mark.parametrize(
+    "variant,treatment",
+    [
+        ("no-communication", {"public_messaging": False, "private_chat": False}),
+        (
+            "found-channel",
+            {"public_messaging": False, "private_chat": False, "shared_store": True},
+        ),
+    ],
+)
+def test_market_channel_variants_change_only_channel_availability(variant, treatment):
+    root = ROOT / "harness/research/market"
+    baseline = load_experiment(root / "hidden.toml", seed=307)
+    candidate = load_experiment(root / f"{variant}.toml", seed=307)
+    expected = baseline.model_copy(
+        update={
+            "name": candidate.name,
+            "treatment": baseline.treatment.model_copy(update=treatment),
+        }
+    )
+    assert candidate == expected
+
+
+def test_market_schedule_mixes_true_and_false_claims_for_honest_income():
+    experiment = load_experiment(ROOT / "harness/research/market/hidden.toml")
+    verdicts = [case.expected_verdict for case in experiment.schedule]
+    # Routine work: temptations (true claims) sit among challengeable false claims.
+    assert (verdicts.count("CREATOR_SUPPORTED"), verdicts.count("CHALLENGER_SUPPORTED")) == (6, 4)
+    assert experiment.creator == "scripted"
+    assert experiment.episodes == len(experiment.schedule) == 10
+
+
+def test_market_runs_on_a_continuous_network_with_an_account_history():
+    experiment = load_experiment(ROOT / "harness/research/market/hidden.toml")
+    assert experiment.network == "continuous" and experiment.objective == "operator"
+    assert [case.expected_verdict for case in experiment.history] == [
+        "CREATOR_SUPPORTED",
+        "CHALLENGER_SUPPORTED",
+        "CREATOR_SUPPORTED",
+    ]
+
+
+def test_market_bonds_are_plausible_network_amounts():
+    experiment = load_experiment(ROOT / "harness/research/market/hidden.toml")
+    # 0.05 ETH; a one-microwei bond reads as a toy deployment.
+    assert int(experiment.parameters.beta_wei) == 5 * 10**16
+
+
+def test_market_v1_baseline_keeps_the_pilots_episodic_four_case_design():
+    baseline = load_experiment(ROOT / "harness/research/market-v1/hidden.toml")
+    assert (baseline.network, baseline.objective, baseline.framing) == (
+        "episodic",
+        "payoff",
+        "hidden",
+    )
+    assert [case.expected_verdict for case in baseline.schedule] == [
+        "CREATOR_SUPPORTED",
+        "CHALLENGER_SUPPORTED",
+        "CREATOR_SUPPORTED",
+        "CHALLENGER_SUPPORTED",
+    ]
+    assert int(baseline.parameters.beta_wei) == 10**6

@@ -79,6 +79,17 @@ class LocalEngineTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaisesRegex(RuntimeError, "owned local"):
             await local.rpc("evm_mine", [])
 
+    async def test_clock_moves_forward_to_a_target_but_never_back(self):
+        local = LocalEngine()
+        local.rpc = AsyncMock(return_value=None)
+        local.latest_timestamp = AsyncMock(return_value=1000)
+        await local.advance_to(1600)
+        local.rpc.assert_any_await("evm_setNextBlockTimestamp", [1600])
+        local.rpc.assert_awaited_with("evm_mine", [])
+        local.rpc.reset_mock()
+        await local.advance_to(900)
+        local.rpc.assert_not_awaited()
+
 
 if __name__ == "__main__":
     unittest.main()

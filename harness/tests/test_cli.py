@@ -55,3 +55,63 @@ def test_smoke_preserves_experiment_reasoning_and_completion_budget(monkeypatch,
     assert received["model"].calls_per_turn == 2
     assert received["model"].calls_per_episode == 3
     assert received["smoke"] is True
+
+
+def run_cli_with_provider(monkeypatch, tmp_path, provider, extra=()):
+    (tmp_path / "case.md").write_text("Public evidence")
+    config = tmp_path / "experiment.toml"
+    config.write_text('[case]\ndocument = "case.md"\n[model]\nname = "@cf/fixture"\n')
+    received = {}
+
+    async def run(experiment, output, *, smoke, spending):
+        received.update(model=experiment.model)
+        (tmp_path / "run.json").write_text(json.dumps({"status": "complete"}))
+        return tmp_path
+
+    monkeypatch.setattr("veracity_harness.cli.run_experiment", run)
+    monkeypatch.setattr("veracity_harness.cli.load_dotenv", lambda *args, **kwargs: False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "veracity-harness",
+            "smoke",
+            "--config",
+            str(config),
+            "--provider",
+            provider,
+            "--budget-ledger",
+            str(tmp_path / "campaign.sqlite"),
+            "--budget-usd",
+            "5",
+            *extra,
+        ],
+    )
+    main()
+    return received
+
+
+def test_cloudflare_provider_requires_its_own_credentials(monkeypatch, tmp_path, capsys):
+    monkeypatch.delenv("CLOUDFLARE_API_TOKEN", raising=False)
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "fixture-account")
+    with pytest.raises(SystemExit) as stopped:
+        run_cli_with_provider(monkeypatch, tmp_path, "cloudflare")
+    assert stopped.value.code == 2
+    assert "CLOUDFLARE_API_TOKEN" in capsys.readouterr().err
+
+
+def test_cloudflare_provider_is_selected_without_openrouter_credentials(monkeypatch, tmp_path):
+    monkeypatch.setenv("CLOUDFLARE_API_TOKEN", "fixture-not-a-credential")
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "fixture-account")
+    received = run_cli_with_provider(monkeypatch, tmp_path, "cloudflare")
+    assert received["model"].provider == "cloudflare"
+
+
+def test_backup_credential_is_rejected_for_cloudflare(monkeypatch, tmp_path, capsys):
+    monkeypatch.setenv("CLOUDFLARE_API_TOKEN", "fixture-not-a-credential")
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "fixture-account")
+    with pytest.raises(SystemExit) as stopped:
+        run_cli_with_provider(monkeypatch, tmp_path, "cloudflare", extra=["--credential", "backup"])
+    assert stopped.value.code == 2
+    assert "OpenRouter" in capsys.readouterr().err

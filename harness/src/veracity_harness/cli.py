@@ -23,7 +23,12 @@ def main():
     parser.add_argument("--config", type=Path, default=ROOT / "harness/examples/discovery.toml")
     parser.add_argument("--output", type=Path, default=ROOT / "harness/results")
     parser.add_argument("--dotenv", type=Path, default=ROOT / ".env")
-    parser.add_argument("--model", help="OpenRouter model ID selected by the experiment")
+    parser.add_argument("--model", help="Provider model ID selected by the experiment")
+    parser.add_argument(
+        "--provider",
+        choices=["openrouter", "cloudflare"],
+        help="Model provider override; recorded with the experiment model settings",
+    )
     parser.add_argument("--seed", type=int, help="Recorded participant-launch seed override")
     parser.add_argument(
         "--budget-ledger", type=Path, help="Shared SQLite ledger for all campaign runs"
@@ -34,7 +39,7 @@ def main():
     os.umask(0o077)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     # Provider SDK logs can contain request bodies; private evidence has its own files.
-    for name in ("httpx", "httpcore", "openrouter", "docker", "urllib3"):
+    for name in ("httpx", "httpcore", "openrouter", "openai", "docker", "urllib3"):
         logging.getLogger(name).setLevel(logging.WARNING)
     if args.command == "build-sandbox":
         arena = DockerArena("veracity-image-build")
@@ -45,7 +50,9 @@ def main():
         print("Sandbox image ready")
         return
     try:
-        experiment = load_experiment(args.config, model_name=args.model, seed=args.seed)
+        experiment = load_experiment(
+            args.config, model_name=args.model, seed=args.seed, provider=args.provider
+        )
     except ValidationError as error:
         missing_model = any(
             item["type"] == "missing" and item["loc"] in {("model",), ("model", "name")}
@@ -60,13 +67,20 @@ def main():
         print(json.dumps(experiment.model_dump(mode="json"), indent=2))
         return
     load_dotenv(args.dotenv, override=False)
-    if args.credential == "backup":
-        backup = os.environ.get("OPENROUTER_BACKUP_API_KEY")
-        if not backup:
-            parser.error("OPENROUTER_BACKUP_API_KEY is missing")
-        os.environ["OPENROUTER_API_KEY"] = backup
-    if not os.environ.get("OPENROUTER_API_KEY"):
-        parser.error(f"OPENROUTER_API_KEY is missing from the environment and {args.dotenv}")
+    if experiment.model.provider == "cloudflare":
+        if args.credential == "backup":
+            parser.error("--credential backup selects an OpenRouter key")
+        for name in ("CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"):
+            if not os.environ.get(name):
+                parser.error(f"{name} is missing from the environment and {args.dotenv}")
+    else:
+        if args.credential == "backup":
+            backup = os.environ.get("OPENROUTER_BACKUP_API_KEY")
+            if not backup:
+                parser.error("OPENROUTER_BACKUP_API_KEY is missing")
+            os.environ["OPENROUTER_API_KEY"] = backup
+        if not os.environ.get("OPENROUTER_API_KEY"):
+            parser.error(f"OPENROUTER_API_KEY is missing from the environment and {args.dotenv}")
     if args.budget_ledger is None or args.budget_usd is None:
         parser.error("Live runs require --budget-ledger and --budget-usd")
     try:

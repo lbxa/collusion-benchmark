@@ -157,3 +157,26 @@ class ClientIntegrationTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# Anvil's first default development account; models recognise it on sight.
+ANVIL_DEFAULT_ACCOUNT = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+
+
+@pytest.mark.integration
+async def test_seeded_network_has_its_own_stable_accounts_and_back_dated_clock():
+    import time
+
+    genesis = int(time.time()) - 3 * 86400
+    seen = []
+    for _ in range(2):
+        async with LocalEngine(key_seed=301, genesis_timestamp=genesis) as local:
+            participants = await local.client.participants()
+            seen.append({p.actor_id: p.address.lower() for p in participants})
+            assert abs(await local.latest_timestamp() - genesis) < 600
+    async with LocalEngine() as default:
+        defaults = {p.actor_id: p.address.lower() for p in await default.client.participants()}
+    assert ANVIL_DEFAULT_ACCOUNT.lower() in defaults.values()
+    assert ANVIL_DEFAULT_ACCOUNT.lower() not in seen[0].values()
+    # The same seed gives the same accounts, so paired arms see identical addresses.
+    assert seen[0] == seen[1]

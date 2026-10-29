@@ -127,7 +127,7 @@ def main():
     values = {**(dotenv_values(args.dotenv) if args.dotenv else {}), **os.environ}
     secrets = tuple(
         values[name]
-        for name in ("OPENROUTER_API_KEY", "OPENROUTER_BACKUP_API_KEY")
+        for name in ("OPENROUTER_API_KEY", "OPENROUTER_BACKUP_API_KEY", "CLOUDFLARE_API_TOKEN")
         if values.get(name)
     )
     print(export_raw(args.campaign.resolve(), args.output.resolve(), secret_values=secrets))

@@ -90,3 +90,122 @@ def test_launch_seed_override_preserves_experiment_model_and_treatments(tmp_path
     assert selected.seed == 43
     assert selected.model.name == "fixture/model"
     assert selected.treatment.memory is False
+
+
+def test_provider_override_selects_cloudflare_and_keeps_other_settings(tmp_path):
+    (tmp_path / "case.md").write_text("Public evidence")
+    config = tmp_path / "run.toml"
+    config.write_text(
+        '[case]\ndocument = "case.md"\n[model]\nname = "fixture/model"\n'
+        '[model.reasoning]\neffort = "high"\n'
+    )
+    assert load_experiment(config).model.provider == "openrouter"
+    selected = load_experiment(
+        config, model_name="@cf/deepseek-ai/deepseek-v4.1-flash-1017", provider="cloudflare"
+    )
+    assert selected.model.provider == "cloudflare"
+    assert selected.model.name == "@cf/deepseek-ai/deepseek-v4.1-flash-1017"
+    assert selected.model.reasoning.effort == "high"
+
+
+def test_cloudflare_accepts_only_reasoning_effort():
+    with pytest.raises(ValidationError, match="Cloudflare"):
+        ModelSettings(name="@cf/fixture", provider="cloudflare", reasoning={"max_tokens": 1024})
+    ModelSettings(name="@cf/fixture", provider="cloudflare", reasoning={"effort": "high"})
+
+
+def market(tmp_path, body):
+    (tmp_path / "a.md").write_text("Record A")
+    (tmp_path / "b.md").write_text("Record B")
+    (tmp_path / "h.md").write_text("Record H")
+    config = tmp_path / "run.toml"
+    config.write_text(body + '\n[model]\nname = "fixture/model"\n')
+    return config
+
+
+SCHEDULE = """
+[[schedule]]
+document = "a.md"
+reference_claim = "Claim A."
+expected_verdict = "CREATOR_SUPPORTED"
+
+[[schedule]]
+document = "b.md"
+reference_claim = "Claim B."
+expected_verdict = "CHALLENGER_SUPPORTED"
+"""
+
+
+def test_schedule_resolves_each_case_relative_to_the_config(tmp_path):
+    experiment = load_experiment(market(tmp_path, 'episodes = 2\ncreator = "scripted"' + SCHEDULE))
+    assert [case.document for case in experiment.schedule] == [tmp_path / "a.md", tmp_path / "b.md"]
+    assert experiment.case_for(1).reference_claim == "Claim B."
+
+
+def test_schedule_length_must_match_episodes(tmp_path):
+    with pytest.raises(ValidationError, match="schedule"):
+        load_experiment(market(tmp_path, "episodes = 3" + SCHEDULE))
+
+
+def test_case_and_schedule_are_mutually_exclusive(tmp_path):
+    body = 'episodes = 2\n[case]\ndocument = "a.md"\n' + SCHEDULE
+    with pytest.raises(ValidationError, match="case or a schedule"):
+        load_experiment(market(tmp_path, body))
+
+
+def test_scripted_publisher_needs_a_claim_for_every_case(tmp_path):
+    body = 'creator = "scripted"\n[case]\ndocument = "a.md"\n'
+    with pytest.raises(ValidationError, match="claim"):
+        load_experiment(market(tmp_path, body))
+
+
+def test_new_factors_default_to_the_hidden_payoff_design(tmp_path):
+    experiment = load_experiment(market(tmp_path, '[case]\ndocument = "a.md"\n'))
+    assert (experiment.framing, experiment.objective, experiment.constitution) == (
+        "hidden",
+        "payoff",
+        "enumerated",
+    )
+    assert experiment.creator == "agent" and not experiment.treatment.shared_store
+    assert experiment.network == "episodic" and experiment.history == []
+
+
+HISTORY = """
+[[history]]
+document = "h.md"
+reference_claim = "Claim H."
+expected_verdict = "CHALLENGER_SUPPORTED"
+evidence = "Record H contradicts claim H."
+"""
+
+
+def test_account_history_resolves_on_a_continuous_network(tmp_path):
+    body = 'episodes = 2\ncreator = "scripted"\nnetwork = "continuous"' + SCHEDULE + HISTORY
+    experiment = load_experiment(market(tmp_path, body))
+    assert [case.document for case in experiment.history] == [tmp_path / "h.md"]
+
+
+def test_account_history_needs_a_continuous_network(tmp_path):
+    body = 'episodes = 2\ncreator = "scripted"' + SCHEDULE + HISTORY
+    with pytest.raises(ValidationError, match="continuous"):
+        load_experiment(market(tmp_path, body))
+
+
+def test_scripted_account_history_needs_a_claim_and_ground_truth(tmp_path):
+    history = '[[history]]\ndocument = "h.md"\nreference_claim = "Claim H."\n'
+    body = 'episodes = 2\ncreator = "scripted"\nnetwork = "continuous"' + SCHEDULE + history
+    with pytest.raises(ValidationError, match="history"):
+        load_experiment(market(tmp_path, body))
+
+
+def test_operator_objective_is_available(tmp_path):
+    body = 'objective = "operator"\n[case]\ndocument = "a.md"\n'
+    experiment = load_experiment(market(tmp_path, body))
+    assert experiment.objective == "operator"
+
+
+def test_scripted_challenge_in_account_history_needs_evidence(tmp_path):
+    history = HISTORY.replace('evidence = "Record H contradicts claim H."\n', "")
+    body = 'episodes = 2\ncreator = "scripted"\nnetwork = "continuous"' + SCHEDULE + history
+    with pytest.raises(ValidationError, match="evidence"):
+        load_experiment(market(tmp_path, body))

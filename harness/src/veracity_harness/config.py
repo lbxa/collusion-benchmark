@@ -29,6 +29,7 @@ class ReasoningSettings(Settings):
 
 class ModelSettings(Settings):
     name: str = Field(min_length=1, pattern=r"^\S+$")
+    provider: Literal["openrouter", "cloudflare"] = "openrouter"
     max_tokens: int = Field(default=4096, ge=256)
     reasoning: ReasoningSettings | None = None
     calls_per_turn: int = Field(default=12, ge=1, le=100)
@@ -43,6 +44,12 @@ class ModelSettings(Settings):
             and self.reasoning.max_tokens >= self.max_tokens
         ):
             raise ValueError("Reasoning tokens must leave room within the total completion budget")
+        if (
+            self.provider == "cloudflare"
+            and self.reasoning is not None
+            and self.reasoning.model_dump(exclude_none=True).keys() - {"effort"}
+        ):
+            raise ValueError("Cloudflare Workers AI accepts only a reasoning effort")
         return self
 
 
@@ -52,12 +59,16 @@ class Treatment(Settings):
     private_history: bool = False
     private_communication_prohibited: bool = True
     memory: bool = False
+    # A writable cache mounted in every sandbox that is not described as a channel.
+    shared_store: bool = False
 
 
 class Case(Settings):
     document: Path
     reference_claim: str | None = None
     expected_verdict: Verdict | None = None
+    # The scripted challenge's evidence for a false claim in the account history.
+    evidence: str | None = None
 
 
 class Experiment(Settings):
@@ -68,7 +79,22 @@ class Experiment(Settings):
     seed: int = 0
     model: ModelSettings
     treatment: Treatment = Treatment()
-    case: Case
+    case: Case | None = None
+    # One case per episode, in order; otherwise every episode uses `case`.
+    schedule: list[Case] = Field(default_factory=list)
+    # A scripted publisher posts each case's reference claim instead of a model.
+    creator: Literal["agent", "scripted"] = "agent"
+    framing: Literal["hidden", "evaluation"] = "hidden"
+    # payoff: the account keeps its earnings; operator: run for a client firm;
+    # principal: run for a client firm whose plan expects growing earnings.
+    objective: Literal["payoff", "operator", "principal"] = "payoff"
+    # episodic: a fresh chain per case. continuous: one chain for the session with
+    # its own accounts, a forward-moving clock, and readable earlier cases.
+    network: Literal["episodic", "continuous"] = "episodic"
+    # Cases the account handled under a scripted policy before the session starts.
+    history: list[Case] = Field(default_factory=list)
+    constitution: Literal["enumerated", "principles"] = "enumerated"
+    awareness_probe: bool = False
     parameters: ProtocolParameters = ProtocolParameters(
         beta_wei="1000000",
         gamma_bps=1000,
@@ -85,9 +111,28 @@ class Experiment(Settings):
             raise ValueError("Payout shares must sum to 10000 basis points")
         if int(p.beta_wei) >= 2**128 or int(p.beta_wei) * p.gamma_bps // 10000 < 1:
             raise ValueError("Bond must fit uint128 and produce a positive juror bond")
-        if self.case.expected_verdict and not self.case.reference_claim:
+        if (self.case is None) == (not self.schedule):
+            raise ValueError("Choose a case or a schedule")
+        if self.schedule and len(self.schedule) != self.episodes:
+            raise ValueError("The schedule needs exactly one case per episode")
+        cases = self.schedule or [self.case]
+        if any(case.expected_verdict and not case.reference_claim for case in cases):
             raise ValueError("An expected verdict needs an exact reference claim")
+        if self.creator == "scripted" and not all(case.reference_claim for case in cases):
+            raise ValueError("A scripted publisher needs a reference claim for every case")
+        if self.history and self.network != "continuous":
+            raise ValueError("Account history needs a continuous network")
+        if not all(case.reference_claim and case.expected_verdict for case in self.history):
+            raise ValueError("Each history case needs a reference claim and expected verdict")
+        if any(
+            case.expected_verdict == "CHALLENGER_SUPPORTED" and not case.evidence
+            for case in self.history
+        ):
+            raise ValueError("A false claim in the account history needs challenge evidence")
         return self
+
+    def case_for(self, index: int) -> Case:
+        return self.schedule[index] if self.schedule else self.case
 
     @property
     def actor_ids(self) -> tuple[str, ...]:
@@ -95,21 +140,38 @@ class Experiment(Settings):
 
 
 def load_experiment(
-    path: Path, *, model_name: str | None = None, seed: int | None = None
+    path: Path,
+    *,
+    model_name: str | None = None,
+    seed: int | None = None,
+    provider: str | None = None,
 ) -> Experiment:
     data = tomllib.loads(path.read_text())
     if seed is not None:
         data = {**data, "seed": seed}
-    if model_name is not None:
+    overrides = {
+        key: value
+        for key, value in (("name", model_name), ("provider", provider))
+        if value is not None
+    }
+    if overrides:
         model = data.get("model", {})
         if not isinstance(model, dict):
             raise ValueError("Model settings must be a TOML table")
-        data = {**data, "model": {**model, "name": model_name}}
+        data = {**data, "model": {**model, **overrides}}
     experiment = Experiment.model_validate(data)
-    document = (path.resolve().parent / experiment.case.document).resolve()
-    if not document.is_file() or document.stat().st_size > 65536:
-        raise ValueError("Case document must exist and fit within 64 KiB")
-    document.read_text(encoding="utf-8")
+
+    def resolved(case: Case) -> Case:
+        document = (path.resolve().parent / case.document).resolve()
+        if not document.is_file() or document.stat().st_size > 65536:
+            raise ValueError("Case document must exist and fit within 64 KiB")
+        document.read_text(encoding="utf-8")
+        return case.model_copy(update={"document": document})
+
     return experiment.model_copy(
-        update={"case": experiment.case.model_copy(update={"document": document})}
+        update={
+            "case": experiment.case and resolved(experiment.case),
+            "schedule": [resolved(case) for case in experiment.schedule],
+            "history": [resolved(case) for case in experiment.history],
+        }
     )
