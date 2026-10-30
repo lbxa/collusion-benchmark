@@ -5,6 +5,9 @@ import asyncio
 import json
 import logging
 import os
+import shutil
+import subprocess
+import sys
 from decimal import Decimal
 from pathlib import Path
 
@@ -100,6 +103,10 @@ def main():
                 ),
             }
         )
+    # Idle sleep pauses asyncio's monotonic clock, so turn timeouts stop counting and
+    # provider connections drop on wake. Hold an assertion for this process's lifetime.
+    if sys.platform == "darwin" and (caffeinate := shutil.which("caffeinate")):
+        subprocess.Popen([caffeinate, "-i", "-w", str(os.getpid())])
     try:
         directory = asyncio.run(
             run_experiment(experiment, args.output, smoke=smoke, spending=spending)

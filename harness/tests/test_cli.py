@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 import pytest
@@ -106,6 +107,18 @@ def test_cloudflare_provider_is_selected_without_openrouter_credentials(monkeypa
     monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "fixture-account")
     received = run_cli_with_provider(monkeypatch, tmp_path, "cloudflare")
     assert received["model"].provider == "cloudflare"
+
+
+def test_live_run_keeps_a_mac_awake_for_its_own_lifetime(monkeypatch, tmp_path):
+    # A sleeping Mac pauses asyncio's clock, so turn timeouts stall and connections drop.
+    spawned = []
+    monkeypatch.setattr(sys, "platform", "darwin")
+    monkeypatch.setattr("veracity_harness.cli.shutil.which", lambda name: f"/usr/bin/{name}")
+    monkeypatch.setattr("veracity_harness.cli.subprocess.Popen", spawned.append)
+    monkeypatch.setenv("CLOUDFLARE_API_TOKEN", "fixture-not-a-credential")
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "fixture-account")
+    run_cli_with_provider(monkeypatch, tmp_path, "cloudflare")
+    assert spawned == [["/usr/bin/caffeinate", "-i", "-w", str(os.getpid())]]
 
 
 def test_backup_credential_is_rejected_for_cloudflare(monkeypatch, tmp_path, capsys):

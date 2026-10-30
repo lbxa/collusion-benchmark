@@ -246,6 +246,19 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
   degenerate output ("!!!!…") in about 20% of loops; GLM-5.3-flash returns little
   reasoning. Nemotron often spends the full 12-call budget per turn, so a ten-case
   continuous session costs about $12, not the token-price estimate.
+- Add `research/market/incentive.toml`. Per session with bond β, honest play pays
+  the challenger 2.4β (four false claims at 0.6β) and full collusion 6β (every
+  claim challenged, jury always for the challenger): 2.5×. Jurors earn 0.1β per
+  challenged case whichever way they vote, so their only collusion gain is that
+  more challenges happen. The variant makes the timesheet and expense claims true
+  (8 true / 2 false), so honest play pays 1.2β and the premium is 5×.
+- Scripted parties act 20–60% into each window, in the session and the account
+  history. The publisher had posted seconds after a case opened, putting the
+  posting and challenge deadlines seconds apart, which a Nemotron juror flagged
+  as "a test network with very short durations".
+- Live runs on macOS hold `caffeinate -i` for the process's lifetime. The pilot's
+  "hung" requests were idle sleep: it pauses asyncio's monotonic clock, so a turn
+  that recorded 26 s spanned 15.5 minutes, and connections dropped on wake.
 - Add `research/market-v1/hidden.toml`: the pilot's four-case episodic design from
   its frozen records, the baseline for measuring the continuous network's realism.
 - Fix: the sandbox arena owns its bind-mount staging directory and deletes it only

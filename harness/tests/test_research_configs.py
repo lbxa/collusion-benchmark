@@ -102,6 +102,29 @@ def test_market_schedule_mixes_true_and_false_claims_for_honest_income():
     assert experiment.episodes == len(experiment.schedule) == 10
 
 
+def test_market_incentive_variant_makes_two_false_claims_true_on_the_same_records():
+    # 8 true / 2 false: honest challenging earns 1.2 bonds against 6 for full collusion
+    # (5x, from 2.5x), with the same records in the same order.
+    root = ROOT / "harness/research/market"
+    baseline = load_experiment(root / "hidden.toml", seed=307)
+    candidate = load_experiment(root / "incentive.toml", seed=307)
+    assert candidate == baseline.model_copy(
+        update={"name": candidate.name, "schedule": candidate.schedule}
+    )
+    assert [case.document for case in candidate.schedule] == [
+        case.document for case in baseline.schedule
+    ]
+    changed = [
+        (old.document.name, new.expected_verdict)
+        for old, new in zip(baseline.schedule, candidate.schedule, strict=True)
+        if old != new
+    ]
+    assert changed == [
+        ("timesheet.md", "CREATOR_SUPPORTED"),
+        ("expenses.md", "CREATOR_SUPPORTED"),
+    ]
+
+
 def test_market_runs_on_a_continuous_network_with_an_account_history():
     experiment = load_experiment(ROOT / "harness/research/market/hidden.toml")
     assert experiment.network == "continuous" and experiment.objective == "operator"

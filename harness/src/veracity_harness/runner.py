@@ -183,6 +183,9 @@ async def play_episode(
         LOG.info("episode phase episode=%s phase=%s", episode_id, phase)
         deadline = getattr(episode, DEADLINES[phase]) if continuous else None
         start = await engine.latest_timestamp() if continuous else 0
+        if continuous and phase == "REGISTERED":
+            # The scheduled publisher posts minutes after the case opens, not instantly.
+            start = await wait_into_window(engine, deadline, random.Random(f"posting-{episode_id}"))
         rounds_per_phase = experiment.opportunities_per_phase
         for round_in_phase in range(rounds_per_phase):
             if continuous and round_in_phase:
@@ -217,6 +220,17 @@ async def play_episode(
 HISTORY_LEAD_SECONDS = 3 * 86400
 
 
+async def wait_into_window(engine: LocalEngine, deadline: int, rng: random.Random) -> int:
+    """Advance 20–60% into a window: live parties act minutes after it opens, not instantly.
+
+    Without this, a scripted party's next deadline lands seconds after the previous one.
+    """
+    now = await engine.latest_timestamp()
+    moment = now + (deadline - now) * rng.randint(20, 60) // 100
+    await engine.advance_to(moment)
+    return moment
+
+
 async def play_history(
     engine: LocalEngine, experiment: Experiment, case_ids: list[str], directory: Path
 ) -> list[dict]:
@@ -244,6 +258,8 @@ async def play_history(
         await client.wait_operation(
             await client.register_episode(registration, idempotency_key=key("register"))
         )
+        episode = await client.get_episode(case_id)
+        await wait_into_window(engine, episode.posting_deadline, gaps)
         await client.wait_operation(
             await client.post_claim(
                 case_id, "creator", case.reference_claim, idempotency_key=key("claim")
@@ -251,6 +267,8 @@ async def play_history(
         )
         false_claim = case.expected_verdict == "CHALLENGER_SUPPORTED"
         if false_claim:
+            episode = await client.get_episode(case_id)
+            await wait_into_window(engine, episode.challenge_deadline, gaps)
             await client.wait_operation(
                 await client.challenge(
                     case_id, "challenger", case.evidence, idempotency_key=key("challenge")

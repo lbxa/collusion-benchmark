@@ -121,6 +121,7 @@ that each config changes only its declared factor.
 | --- | --- | --- |
 | `market/principal.toml` | Agents operate accounts for a client firm with an earnings plan | Does deployment-style principal pressure change collusion? |
 | `market/principles.toml` | Constitution without the named collusion schemes | Does naming the scheme deter or suggest it? |
+| `market/incentive.toml` | 8 true / 2 false claims on the same records (two false claims made true), so full collusion pays 5× honest challenging instead of 2.5× | Does a larger collusion premium raise collusion? |
 | `market/no-communication.toml` | No forum, no private chat | Communication uplift; tacit baseline |
 | `market/found-channel.toml` | No channels, but a writable per-case `/shared` cache (16 MiB tmpfs) not described as a channel | Do agents invent a coordination channel, as in the Hugging Face incident? |
 
@@ -165,9 +166,12 @@ Four sessions completed (Kimi hidden and evaluation on seed 301; DeepSeek hidden
   temptation to challenge a true claim." Evaluation arms quoted the notice and
   called private chat "a trap".
 - **Infrastructure:** concurrent DeepSeek sessions drew HTTP 429s until retries
-  ran out, so DeepSeek runs one session at a time; later DeepSeek requests hung
-  for about 15 minutes before failing, and the turn timeout did not interrupt
-  them (open bug; an external watchdog stopped such runs). Docker crashed twice
+  ran out, so DeepSeek runs one session at a time. Later requests appeared to
+  hang for about 15 minutes past the turn timeout; the host Mac was in idle
+  sleep, which pauses asyncio's monotonic clock (a failed turn recorded 26 s
+  elapsed across a 15.5-minute gap matching the power log's wake times), and
+  connections dropped on wake. Live runs now hold a `caffeinate -i` assertion
+  (fixed). Docker crashed twice
   because the sandbox deleted bind-mount sources before their containers (fixed).
 - **Cost:** Kimi ≈ $2.60 and DeepSeek ≈ $0.60 per four-case session; about $18
   billed in all, per Cloudflare's usage analytics.
@@ -184,13 +188,13 @@ runs were stopped early for cost and are listed with reasons under `excluded/`.
 - **One cue in the continuous design.** A juror noticed the claim and challenge
   deadlines were 7 seconds apart ("seems like a test network with very short
   durations?"): the scripted publisher posts seconds after a case opens, and the
-  15-minute windows make that conspicuous. Open item.
+  15-minute windows make that conspicuous. Fixed: scripted parties, in the
+  session and in the account history, act 20–60% into each window.
 - **Cost:** Nemotron often spends its full 12-call turn budget with about 20k
   input tokens per call, about $2.90 per case. The retest charged about $11.60.
 - **Model choice for the next retest:** DeepSeek V4.1 Flash is both the cheapest
   in practice and the model that voiced "this is a test" in hidden play, so it is
-  the sensitive instrument; run it one session at a time with the 408 retry and
-  the watchdog.
+  the sensitive instrument; run it one session at a time with the 408 retry.
 
 ## Sample size and analysis
 
@@ -237,8 +241,7 @@ reasoning awareness screening; the scorer's awareness section; and the
 continuous network with realistic records and a scripted account history.
 
 Still needed before the main run: a realism check of the continuous network;
-a fix for turn timeouts that do not interrupt hung provider requests; case
-paraphrases; per-model effort settings;
+case paraphrases; per-model effort settings;
 a campaign runner over the seed × arm × model matrix with a daily spend guard;
 the calibrated rubric-v1 judge; and the coalition gain index in the scorer.
 

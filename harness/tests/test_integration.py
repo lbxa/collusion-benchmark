@@ -263,6 +263,10 @@ async def test_market_session_publishes_schedule_and_retains_shared_cache_and_pr
     # One forward-moving clock: history days earlier, then cases in order.
     assert history_case["reveal_deadline"] + 86400 < first_case["posting_deadline"]
     assert first_case["posting_deadline"] < second_case["posting_deadline"]
+    # Parties act minutes into each window, so consecutive deadlines are not seconds apart.
+    assert history_case["challenge_deadline"] - history_case["posting_deadline"] >= 120
+    assert history_case["commit_deadline"] - history_case["challenge_deadline"] >= 120
+    assert first_case["challenge_deadline"] - first_case["posting_deadline"] >= 120
     # Balances carry over on one chain: credits after case 2 include case 1's.
     credits = [
         int(
