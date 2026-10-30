@@ -198,7 +198,8 @@ def log_run(directory: Path, project: str, *, entity: str | None, needles: tuple
     run.log_artifact(artifact)
     url = run.url
     run.finish()
-    (directory / MARKER).write_text(json.dumps({"url": url}) + "\n")
+    if url:  # Offline runs have no URL and stay eligible for a later upload.
+        (directory / MARKER).write_text(json.dumps({"url": url}) + "\n")
     return url
 
 
