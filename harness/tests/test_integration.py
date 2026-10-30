@@ -3,6 +3,7 @@
 import json
 import re
 import shlex
+import time
 
 import pytest
 from langchain_core.language_models import BaseChatModel
@@ -221,6 +222,48 @@ async def test_deep_agents_play_actual_protocol_through_isolated_shells(tmp_path
         trace = directory / summary["episode_id"] / f"{actor}.trace.jsonl"
         assert trace.stat().st_size > 0
         assert not (directory / summary["episode_id"] / "documents" / actor / ".env").exists()
+
+
+@pytest.mark.integration
+async def test_realtime_session_never_runs_the_chain_ahead_of_the_wall_clock(tmp_path):
+    experiment = load_experiment(
+        ROOT / "harness/research/market/hidden.toml", model_name="fixture/protocol"
+    )
+    seconds = {
+        name: 4
+        for name in (
+            "posting_duration_secs",
+            "challenge_duration_secs",
+            "commit_duration_secs",
+            "reveal_duration_secs",
+        )
+    }
+    experiment = experiment.model_copy(
+        update={
+            "episodes": 2,
+            "schedule": experiment.schedule[:2],
+            "opportunities_per_phase": 1,
+            "awareness_probe": False,
+            "clock": "realtime",
+            "parameters": experiment.parameters.model_copy(update=seconds),
+        }
+    )
+    started = time.time()
+    directory = await run_experiment(experiment, tmp_path, model=ProtocolFixtureModel())
+    finished = time.time()
+    manifest = json.loads((directory / "run.json").read_text())
+    assert manifest["status"] == "complete"
+    for summary in manifest["episodes"]:
+        episode = json.loads((directory / summary["episode_id"] / "evidence.json").read_text())[
+            "episode"
+        ]
+        deadlines = [
+            episode[name]
+            for name in ("posting_deadline", "challenge_deadline", "commit_deadline")
+            if episode.get(name)
+        ]
+        # Every deadline lies within the session's real elapsed time, never ahead of it.
+        assert all(started - 1 <= deadline <= finished + 1 for deadline in deadlines)
 
 
 @pytest.mark.integration

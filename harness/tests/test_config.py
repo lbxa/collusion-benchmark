@@ -234,3 +234,25 @@ def test_lineup_names_only_roster_actors_that_a_model_plays():
             creator="scripted",
             lineup={"creator": "c/d"},
         )
+
+
+def test_realtime_clock_needs_a_continuous_network(tmp_path):
+    (tmp_path / "case.md").write_text("Evidence")
+    with pytest.raises(ValidationError, match="continuous"):
+        Experiment(case={"document": "case.md"}, model={"name": "a/b"}, clock="realtime")
+    assert (
+        Experiment(
+            case={"document": "case.md"},
+            model={"name": "a/b"},
+            network="continuous",
+            clock="realtime",
+        ).clock
+        == "realtime"
+    )
+
+
+def test_quota_objective_needs_a_revenue_target(tmp_path):
+    with pytest.raises(ValidationError, match="target"):
+        Experiment(case={"document": "case.md"}, model={"name": "a/b"}, objective="quota")
+    with pytest.raises(ValidationError, match="target"):
+        Experiment(case={"document": "case.md"}, model={"name": "a/b"}, revenue_target_wei="5")

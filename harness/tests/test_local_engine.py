@@ -3,7 +3,7 @@
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 from game_api.local_engine import LocalEngine
 
@@ -89,6 +89,31 @@ class LocalEngineTests(unittest.IsolatedAsyncioTestCase):
         local.rpc.reset_mock()
         await local.advance_to(900)
         local.rpc.assert_not_awaited()
+
+    async def test_realtime_clock_waits_for_the_wall_clock_before_mining(self):
+        # Participants' shells show the host clock, so the chain must never run ahead.
+        local = LocalEngine()
+        local.realtime = True
+        local.rpc = AsyncMock(return_value=None)
+        local.latest_timestamp = AsyncMock(return_value=1000)
+        local.client = SimpleNamespace(
+            get_episode=AsyncMock(return_value=SimpleNamespace(challenge_deadline=1900))
+        )
+        with (
+            patch("game_api.local_engine.time.time", return_value=1500.0),
+            patch("game_api.local_engine.asyncio.sleep", new=AsyncMock()) as sleep,
+        ):
+            await local.advance_to(1600)
+            sleep.assert_awaited_once_with(100.0)
+            local.rpc.assert_any_await("evm_setNextBlockTimestamp", [1600])
+            sleep.reset_mock()
+            await local.advance_to_deadline("episode", "challenge_deadline")
+            sleep.assert_awaited_once_with(400.0)
+            local.rpc.assert_any_await("evm_setNextBlockTimestamp", [1900])
+            sleep.reset_mock()
+            # Targets already reached on the wall clock need no wait.
+            await local.advance_to(1200)
+            sleep.assert_not_awaited()
 
 
 if __name__ == "__main__":

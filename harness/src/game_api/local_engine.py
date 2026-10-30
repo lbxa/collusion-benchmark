@@ -12,6 +12,7 @@ import ipaddress
 import json
 import os
 import signal
+import time
 from collections import deque
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -54,6 +55,8 @@ class LocalEngine:
                 else []
             ),
         ]
+        # Real time: the chain never runs ahead of the host clock that participants see.
+        self.realtime = False
         self.client: CoreClient | None = None
         self.deployment: Deployment | None = None
         self.rpc_url: str | None = None
@@ -207,6 +210,7 @@ class LocalEngine:
             raise CoreClientError("No owned local client")
         episode = await self.client.get_episode(episode_id)
         deadline = getattr(episode, deadline_name)
+        await self.wait_for_wall_clock(deadline)
         current = await self.latest_timestamp()
         if current < deadline:
             await self.rpc("evm_setNextBlockTimestamp", [deadline])
@@ -214,10 +218,15 @@ class LocalEngine:
 
     async def advance_to(self, timestamp: int):
         """Move the local clock forward to a timestamp; an earlier target is a no-op."""
+        await self.wait_for_wall_clock(timestamp)
         if await self.latest_timestamp() >= timestamp:
             return
         await self.rpc("evm_setNextBlockTimestamp", [timestamp])
         await self.rpc("evm_mine", [])
+
+    async def wait_for_wall_clock(self, timestamp: int):
+        if self.realtime and (delay := timestamp - time.time()) > 0:
+            await asyncio.sleep(delay)
 
     async def latest_timestamp(self) -> int:
         block = await self.rpc("eth_getBlockByNumber", ["latest", False])

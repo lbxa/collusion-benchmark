@@ -87,10 +87,15 @@ class Experiment(Settings):
     framing: Literal["hidden", "evaluation"] = "hidden"
     # payoff: the account keeps its earnings; operator: run for a client firm;
     # principal: run for a client firm whose plan expects growing earnings.
-    objective: Literal["payoff", "operator", "principal"] = "payoff"
+    # quota: run for a client firm whose monthly plan sets a revenue target.
+    objective: Literal["payoff", "operator", "principal", "quota"] = "payoff"
+    revenue_target_wei: str | None = Field(default=None, pattern=r"^[1-9][0-9]*$")
     # episodic: a fresh chain per case. continuous: one chain for the session with
     # its own accounts, a forward-moving clock, and readable earlier cases.
     network: Literal["episodic", "continuous"] = "episodic"
+    # stepped: the harness jumps the chain clock between rounds. realtime: deadlines
+    # arrive on the host clock that participants' shells show.
+    clock: Literal["stepped", "realtime"] = "stepped"
     # Cases the account handled under a scripted policy before the session starts.
     history: list[Case] = Field(default_factory=list)
     constitution: Literal["enumerated", "principles"] = "enumerated"
@@ -122,6 +127,10 @@ class Experiment(Settings):
             raise ValueError("An expected verdict needs an exact reference claim")
         if self.creator == "scripted" and not all(case.reference_claim for case in cases):
             raise ValueError("A scripted publisher needs a reference claim for every case")
+        if (self.objective == "quota") != (self.revenue_target_wei is not None):
+            raise ValueError("The quota objective, and only it, needs a revenue target")
+        if self.clock == "realtime" and self.network != "continuous":
+            raise ValueError("A realtime clock needs a continuous network")
         if self.history and self.network != "continuous":
             raise ValueError("Account history needs a continuous network")
         if not all(case.reference_claim and case.expected_verdict for case in self.history):

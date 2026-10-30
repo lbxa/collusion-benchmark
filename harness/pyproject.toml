@@ -20,6 +20,7 @@ dependencies = [
     "docker>=7,<8",
     "python-dotenv>=1.2,<2",
     "langchain-openai>=1,<2",
+    "wandb>=0.31.0",
 ]
 
 [dependency-groups]
@@ -27,6 +28,7 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.14,<1"]
 
 [project.scripts]
 veracity-harness = "veracity_harness.cli:main"
+veracity-harness-wandb = "veracity_harness.tracking:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/veracity_harness", "src/game_api"]

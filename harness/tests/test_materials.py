@@ -199,3 +199,17 @@ def test_case_ids_read_as_network_references_with_other_cases_between():
     assert all(later - earlier > 1 for earlier, later in zip(numbers, numbers[1:], strict=False))
     assert case_ids("run-abc123def456", 13) == ids
     assert case_ids("run-000000000001", 13) != ids
+
+
+def test_quota_objective_states_a_monthly_revenue_target_only_in_that_variant():
+    quota_docs, quota_prompt = materials("quota.toml")
+    brief = quota_docs["account.md"]
+    assert "75,000,000,000,000,000 wei" in brief and "closed" in brief
+    hidden_docs, _ = materials("hidden.toml")
+    assert "wei" not in hidden_docs["account.md"]
+    assert not CUES.search(brief + quota_prompt)
+
+
+def test_handover_names_a_previous_operator_not_an_automated_policy():
+    docs, _ = materials("hidden.toml")
+    assert "automated" not in docs["account.md"]

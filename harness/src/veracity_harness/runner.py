@@ -599,13 +599,15 @@ async def run_experiment(
                         )
                         manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
                     await start_session_clock(engine)
+                    engine.realtime = experiment.clock == "realtime"
                 gaps = random.Random(f"gaps-{run_id}")
                 for index in range(experiment.episodes):
                     if index and continuous:
-                        # Other network activity separates consecutive cases; short gaps keep
-                        # the chain clock near the wall clock that sandboxes show.
+                        # Other network activity separates consecutive cases: a third of a
+                        # posting window to a window and a third (5-20 minutes at 900 s).
+                        window = experiment.parameters.posting_duration_secs
                         await engine.advance_to(
-                            await engine.latest_timestamp() + gaps.randint(5, 20) * 60
+                            await engine.latest_timestamp() + window * gaps.randint(33, 133) // 100
                         )
                     elif index:
                         # Fresh finances and public state, including global withdrawal credits.
