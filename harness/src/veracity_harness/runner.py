@@ -189,10 +189,17 @@ async def play_episode(
         rounds_per_phase = experiment.opportunities_per_phase
         for round_in_phase in range(rounds_per_phase):
             if continuous and round_in_phase:
-                # Spread a phase's rounds across its window, as on a live network.
-                await engine.advance_to(
-                    start + (deadline - start) * round_in_phase // rounds_per_phase
+                # A slow round can overrun the window; never restate a passed deadline.
+                now = (
+                    time.time()
+                    if getattr(engine, "realtime", False)
+                    else await engine.latest_timestamp()
                 )
+                if now >= deadline:
+                    break
+                # Spread a phase's rounds across its window, as on a live network.
+                target = start + (deadline - start) * round_in_phase // rounds_per_phase
+                await engine.advance_to(max(target, int(now)))
             await opportunity_for_all(
                 phase, await notice(phase, deadline, reminder=round_in_phase > 0)
             )

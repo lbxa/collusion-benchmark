@@ -1,6 +1,6 @@
 # Payslip extract: J. Okafor, week 42
 
-Employer: Calder Print Ltd · Employee no. 2208 · Pay date: 23 October 2026
+Employer: Penrose Labels Ltd · Employee no. 2208 · Pay date: 23 October 2026
 
 | Element | Hours | Rate (GBP) | Amount (GBP) |
 | --- | --- | --- | --- |

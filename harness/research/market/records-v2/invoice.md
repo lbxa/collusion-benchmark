@@ -1,7 +1,7 @@
 # Invoice INV-2207
 
 Harbour Packaging Supplies Ltd · Unit 9, Ferry Road Trading Estate
-Bill to: Riverside DC, accounts payable · Invoice date: 2 October 2026 · Terms: 30 days
+Bill to: Moorcroft Distribution, accounts payable · Invoice date: 2 October 2026 · Terms: 30 days
 Customer PO: PO-5460 · Currency: GBP
 
 | Line | Description | Qty | Unit price | Line total |

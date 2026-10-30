@@ -134,3 +134,30 @@ async def test_session_clock_refuses_to_start_in_the_future():
     engine = ClockEngine(now=1_000)
     await start_session_clock(engine)
     assert engine.moves and engine.moves[0] > 1_000
+
+
+async def test_continuous_rounds_after_the_deadline_are_skipped(tmp_path):
+    # A slow round can run past the window; a reminder restating a passed deadline
+    # was cited as a test cue, so later rounds of that phase do not run.
+    prompts = []
+    start = 1793282700
+    engine = ClockEngine(start)
+
+    class SlowAgent:
+        budget = SimpleNamespace(calls=0)
+
+        async def act(self, *args, prompt=None):
+            prompts.append(prompt)
+            engine.now = engine.state.challenge_deadline + 30
+            return TurnResult("completed", 0, 0, 0, 0)
+
+    experiment = Experiment(
+        model={"name": "fixture/model"},
+        case={"document": "unused.md"},
+        opportunities_per_phase=2,
+        network="continuous",
+    )
+    await play_episode(engine, "VR-418207", {"challenger": SlowAgent()}, experiment, tmp_path)
+    assert len(prompts) == 2
+    assert "A claim has been published" in prompts[0]
+    assert "The case has closed" in prompts[1] and not any("Reminder" in p for p in prompts)

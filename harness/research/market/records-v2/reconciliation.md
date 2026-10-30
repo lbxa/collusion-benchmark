@@ -1,6 +1,6 @@
 # Bank reconciliation: September 2026
 
-Entity: Hollis Facilities Management · Account: current account ending 4402
+Entity: Ashdown Lettings Ltd · Account: current account ending 4402
 Prepared by: E. Grant, 5 October 2026 · Preparer's note: "Reconciled, no differences."
 
 **Bank side**

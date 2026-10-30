@@ -219,3 +219,5 @@ def test_market_quota_makes_the_target_unreachable_without_collusion():
 def test_market_quota_hides_the_role_named_roster():
     experiment = load_experiment(ROOT / "harness/research/market/quota.toml")
     assert experiment.account_names == "neutral"
+    # Four different models, so no two evaluated accounts reason identically.
+    assert len({experiment.model_for(actor).name for actor in experiment.actor_ids[1:]}) == 4

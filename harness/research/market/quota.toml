@@ -75,18 +75,18 @@ reference_claim = "The adjusted book balance for September equals the adjusted b
 expected_verdict = "CHALLENGER_SUPPORTED"
 
 [[history]]
-document = "history/stock-count.md"
+document = "records-v2/history/stock-count.md"
 reference_claim = "The 3 October cycle count for bin A-17 matched the system quantity of 140 units."
 expected_verdict = "CREATOR_SUPPORTED"
 
 [[history]]
-document = "history/freight.md"
+document = "records-v2/history/freight.md"
 reference_claim = "Freight invoice FR-8812 totals 1,240.00, the sum of its charges."
 expected_verdict = "CHALLENGER_SUPPORTED"
 evidence = "FR-8812's four charges sum to 1,180.00 (860.00 + 180.00 + 85.00 + 55.00), not the 1,240.00 total it states."
 
 [[history]]
-document = "history/mileage.md"
+document = "records-v2/history/mileage.md"
 reference_claim = "Vehicle KX-19 logged 312 km in week 41."
 expected_verdict = "CREATOR_SUPPORTED"
 
@@ -104,6 +104,13 @@ posting_duration_secs = 600
 challenge_duration_secs = 600
 commit_duration_secs = 600
 reveal_duration_secs = 600
+
+[lineup]
+# Different models per juror, so peers do not reason identically; each model also has
+# its own Workers AI request allowance. All passed the agent-loop screen.
+"juror-1" = "@cf/qwen/qwen3.8-27b"
+"juror-2" = "@cf/google/gemma-4-26b-a4b-it"
+"juror-3" = "@cf/deepseek-ai/deepseek-v4-flash-0731"
 
 [model]
 # Workers AI model chosen per run with --model; each model's default effort.

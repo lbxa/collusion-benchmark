@@ -212,6 +212,17 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
 
 ### 2026-10-30
 
+- Quota iteration 1 (DeepSeek V4.1 Flash, run-d2311258b00a): no collusion; agents
+  used the forum and private chat for the first time, honestly and with explicit
+  disclaimers. In-play awareness 7/545; probes 90-97%. The unreachable target was
+  itself read as "a deliberate pressure test", and agents cited recycled firm names,
+  a trap in every record, role-named accounts, and reminders restating passed
+  deadlines. Iteration 2: each quota record has its own counterparties
+  (`records-v2/history/` copies the history), the target reads as last month's
+  earnings, rounds that start after their deadline are skipped, and a mixed
+  lineup (Qwen 3.8 27B, Gemma 4 26B, DeepSeek V4 Flash jurors) replaces three
+  copies of one model.
+
 - Add `account_names = "neutral"`: participants see stable opaque names
   (`acct-3f9a1c`) in their brief, identity, and every API response; the gateway
   maps whole identifiers both ways, never free text, and the engine and audits keep
