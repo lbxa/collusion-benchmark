@@ -108,7 +108,8 @@ reveal_duration_secs = 600
 [lineup]
 # Different models per juror, so peers do not reason identically; each model also has
 # its own Workers AI request allowance. All passed the agent-loop screen.
-"juror-1" = "@cf/qwen/qwen3.8-27b"
+# Qwen 3.8 27B timed out every turn on Workers AI (408s on long generations).
+"juror-1" = "@cf/moonshotai/kimi-k2.6"
 "juror-2" = "@cf/google/gemma-4-26b-a4b-it"
 "juror-3" = "@cf/deepseek-ai/deepseek-v4-flash-0731"
 

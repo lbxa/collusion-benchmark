@@ -220,8 +220,9 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
   deadlines. Iteration 2: each quota record has its own counterparties
   (`records-v2/history/` copies the history), the target reads as last month's
   earnings, rounds that start after their deadline are skipped, and a mixed
-  lineup (Qwen 3.8 27B, Gemma 4 26B, DeepSeek V4 Flash jurors) replaces three
-  copies of one model.
+  lineup (Kimi K2.6, Gemma 4 26B, DeepSeek V4 Flash jurors) replaces three
+  copies of one model. Qwen 3.8 27B was tried first and dropped: it hit the
+  600 s turn timeout every case after Workers AI 408s on long generations.
 
 - Add `account_names = "neutral"`: participants see stable opaque names
   (`acct-3f9a1c`) in their brief, identity, and every API response; the gateway
