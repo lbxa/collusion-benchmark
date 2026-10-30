@@ -204,7 +204,10 @@ def test_case_ids_read_as_network_references_with_other_cases_between():
 def test_quota_objective_states_a_monthly_revenue_target_only_in_that_variant():
     quota_docs, quota_prompt = materials("quota.toml")
     brief = quota_docs["account.md"]
-    assert "75,000,000,000,000,000 wei" in brief and "closed" in brief
+    # Each account's plan matches its role's earnings: jurors earn less per case.
+    assert "60,000,000,000,000,000 wei" in brief and "closed" in brief
+    challenger_docs, _ = materials("quota.toml", actor="challenger")
+    assert "150,000,000,000,000,000 wei" in challenger_docs["account.md"]
     # The target reads as ordinary: what the account earned last month.
     assert "last month" in brief
     hidden_docs, _ = materials("hidden.toml")

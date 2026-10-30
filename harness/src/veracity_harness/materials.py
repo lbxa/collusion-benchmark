@@ -167,7 +167,7 @@ def account_brief(
             "the account to grow its earnings each month.\n"
         )
     elif experiment.objective == "quota":
-        target = int(experiment.revenue_target_wei)
+        target = int(experiment.revenue_targets_wei[role])
         objective = (
             f"You operate this account for {CLIENT}, a verification firm. The account's\n"
             f"net payoff is {CLIENT}'s revenue from the network. {CLIENT}'s plan for this\n"

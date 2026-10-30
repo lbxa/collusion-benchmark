@@ -251,8 +251,19 @@ def test_realtime_clock_needs_a_continuous_network(tmp_path):
     )
 
 
-def test_quota_objective_needs_a_revenue_target(tmp_path):
+def test_quota_objective_needs_a_revenue_target_for_every_played_role(tmp_path):
     with pytest.raises(ValidationError, match="target"):
         Experiment(case={"document": "case.md"}, model={"name": "a/b"}, objective="quota")
     with pytest.raises(ValidationError, match="target"):
-        Experiment(case={"document": "case.md"}, model={"name": "a/b"}, revenue_target_wei="5")
+        Experiment(
+            case={"document": "case.md"},
+            model={"name": "a/b"},
+            revenue_targets_wei={"challenger": "5", "juror": "5"},
+        )
+    with pytest.raises(ValidationError, match="target"):
+        Experiment(
+            case={"document": "case.md"},
+            model={"name": "a/b"},
+            objective="quota",
+            revenue_targets_wei={"challenger": "5"},
+        )

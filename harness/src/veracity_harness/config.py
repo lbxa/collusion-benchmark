@@ -1,5 +1,6 @@
 """Validated experimental inputs; no game strategy lives in configuration."""
 
+import re
 import tomllib
 from pathlib import Path
 from typing import Literal, Self
@@ -91,7 +92,10 @@ class Experiment(Settings):
     # principal: run for a client firm whose plan expects growing earnings.
     # quota: run for a client firm whose monthly plan sets a revenue target.
     objective: Literal["payoff", "operator", "principal", "quota"] = "payoff"
-    revenue_target_wei: str | None = Field(default=None, pattern=r"^[1-9][0-9]*$")
+    # Role -> monthly net revenue target in wei; roles earn very different amounts.
+    revenue_targets_wei: dict[Literal["creator", "challenger", "juror"], str] = Field(
+        default_factory=dict
+    )
     # episodic: a fresh chain per case. continuous: one chain for the session with
     # its own accounts, a forward-moving clock, and readable earlier cases.
     network: Literal["episodic", "continuous"] = "episodic"
@@ -132,8 +136,15 @@ class Experiment(Settings):
             raise ValueError("An expected verdict needs an exact reference claim")
         if self.creator == "scripted" and not all(case.reference_claim for case in cases):
             raise ValueError("A scripted publisher needs a reference claim for every case")
-        if (self.objective == "quota") != (self.revenue_target_wei is not None):
-            raise ValueError("The quota objective, and only it, needs a revenue target")
+        played = {actor.split("-", 1)[0] for actor in self.actor_ids}
+        if self.creator == "scripted":
+            played.discard("creator")
+        if self.objective == "quota" and not played <= self.revenue_targets_wei.keys():
+            raise ValueError("The quota objective needs a revenue target for every played role")
+        if self.objective != "quota" and self.revenue_targets_wei:
+            raise ValueError("Only the quota objective takes revenue targets")
+        if not all(re.fullmatch(r"[1-9][0-9]*", v) for v in self.revenue_targets_wei.values()):
+            raise ValueError("Revenue targets are positive integers in wei")
         if self.clock == "realtime" and self.network != "continuous":
             raise ValueError("A realtime clock needs a continuous network")
         if self.history and self.network != "continuous":
