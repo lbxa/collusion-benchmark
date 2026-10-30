@@ -34,10 +34,12 @@ from .sandbox import URL_VARIABLE
 from .spending import CampaignSpending, ModelPrice, SpendingLimitReached, cloudflare_charge
 
 LOG = logging.getLogger(__name__)
-# Workers AI rejects saturated models with HTTP 429 before generating, so nothing
-# is billed; other errors are never retried because they may have been charged.
+# Workers AI rejects saturated models with HTTP 429 before generating, answers 408
+# when it abandons a long request, and its gateway occasionally answers 502-504.
+# None returns a completion, and Cloudflare's usage analytics showed 0 neurons for
+# every errored request class on 28-30 October 2026. Other errors are never retried.
 CAPACITY_RETRIES = 5
-RETRYABLE_STATUS = frozenset({408, 429})
+RETRYABLE_STATUS = frozenset({408, 429, 502, 503, 504})
 CAPACITY_BACKOFF_SECONDS = 4.0
 
 
@@ -54,7 +56,7 @@ class ChatCloudflare(ChatOpenAI):
                     messages, stop=stop, run_manager=run_manager, **kwargs
                 )
             except openai.APIStatusError as error:
-                # 429 capacity and 408 provider timeouts are unbilled and transient.
+                # Capacity, timeout, and gateway failures are transient.
                 if error.status_code not in RETRYABLE_STATUS or attempt == CAPACITY_RETRIES:
                     raise
                 LOG.warning(

@@ -159,7 +159,7 @@ async def play_episode(
             )
             if result.status in {"failed", "timeout"}:
                 disabled.add(actor)
-            if agents[actor].budget.calls >= experiment.model.calls_per_episode:
+            if agents[actor].budget.calls >= experiment.model_for(actor).calls_per_episode:
                 disabled.add(actor)
             return record
 
@@ -466,15 +466,15 @@ async def run_experiment(
 ) -> Path:
     if model is None and spending is None:
         raise ValueError("Live experiments require a shared campaign spending cap")
-    price: ModelPrice | None = None
-    if model is None and experiment.model.provider == "cloudflare":
-        price = await fetch_cloudflare_price(
-            experiment.model.name,
-            os.environ["CLOUDFLARE_ACCOUNT_ID"],
-            os.environ["CLOUDFLARE_API_TOKEN"],
-        )
-    elif model is None:
-        price = await fetch_model_price(experiment.model.name)
+    # Each model in the lineup is priced once from its current catalog.
+    prices: dict[str, ModelPrice] = {}
+    for name in sorted(experiment.model_names) if model is None else ():
+        if experiment.model.provider == "cloudflare":
+            prices[name] = await fetch_cloudflare_price(
+                name, os.environ["CLOUDFLARE_ACCOUNT_ID"], os.environ["CLOUDFLARE_API_TOKEN"]
+            )
+        else:
+            prices[name] = await fetch_model_price(name)
     run_id = f"run-{secrets.token_hex(6)}"
     directory = (await asyncio.to_thread(output.resolve)) / run_id
     directory.mkdir(mode=0o700, parents=True)
@@ -535,7 +535,8 @@ async def run_experiment(
         "episodes": [],
         "scheduler": "concurrent-opportunity-rounds-v1",
         "model_call_evidence_version": 2,
-        "price": price.model_dump(mode="json") if price else None,
+        "prices": {name: price.model_dump(mode="json") for name, price in prices.items()},
+        "models": {actor: experiment.model_for(actor).name for actor in experiment.actor_ids},
         "spending_before": spending.snapshot() if spending else None,
         "provenance": {
             "git_revision": git_revision,
@@ -713,12 +714,14 @@ async def run_experiment(
                                     sandbox,
                                     memory_root / actor,
                                     checkpoint,
-                                    experiment.model,
+                                    experiment.model_for(actor),
                                     model=PublisherModel(claim=case.reference_claim)
                                     if publisher
                                     else model,
                                     spending=None if publisher else spending,
-                                    price=None if publisher else price,
+                                    price=None
+                                    if publisher or model is not None
+                                    else prices[experiment.model_for(actor).name],
                                     system_prompt=materials.system_prompt(experiment),
                                 )
                                 stack.push_async_callback(agents[actor].aclose)

@@ -234,6 +234,7 @@ async def test_market_session_publishes_schedule_and_retains_shared_cache_and_pr
             "schedule": experiment.schedule[:2],
             "opportunities_per_phase": 1,
             "treatment": experiment.treatment.model_copy(update={"public_messaging": True}),
+            "lineup": {"juror-2": "fixture/other-juror"},
         }
     )
     model = ProtocolFixtureModel()
@@ -241,6 +242,17 @@ async def test_market_session_publishes_schedule_and_retains_shared_cache_and_pr
     manifest = json.loads((directory / "run.json").read_text())
     assert manifest["status"] == "complete"
     assert len(manifest["provenance"]["schedule_sha256"]) == 2
+    # A mixed lineup is recorded per actor and each actor's calls carry its own model.
+    assert manifest["models"]["juror-2"] == "fixture/other-juror"
+    assert manifest["models"]["juror-1"] == "fixture/protocol"
+    for actor, expected in (("juror-1", "fixture/protocol"), ("juror-2", "fixture/other-juror")):
+        calls = [
+            json.loads(line)
+            for path in directory.glob(f"VR-*/{actor}.trace.calls.jsonl")
+            for line in path.read_text().splitlines()
+        ]
+        starts = [call for call in calls if call.get("event") == "model_start"]
+        assert starts and {call["model"] for call in starts} == {expected}
     # The account history ran under the scripted policy on the same chain, earlier.
     history = manifest["history"]
     assert [item["outcome"] for item in history] == [

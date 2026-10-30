@@ -209,3 +209,28 @@ def test_scripted_challenge_in_account_history_needs_evidence(tmp_path):
     body = 'episodes = 2\ncreator = "scripted"\nnetwork = "continuous"' + SCHEDULE + history
     with pytest.raises(ValidationError, match="evidence"):
         load_experiment(market(tmp_path, body))
+
+
+def test_lineup_gives_named_actors_their_own_model_and_keeps_shared_settings():
+    experiment = Experiment(
+        case={"document": "case.md"},
+        model={"name": "@cf/base", "provider": "cloudflare", "calls_per_turn": 7},
+        lineup={"challenger": "@cf/strong", "juror-2": "@cf/other"},
+    )
+    assert experiment.model_for("challenger").name == "@cf/strong"
+    assert experiment.model_for("challenger").calls_per_turn == 7
+    assert experiment.model_for("juror-2").provider == "cloudflare"
+    assert experiment.model_for("juror-1") == experiment.model
+    assert experiment.model_names == {"@cf/base", "@cf/strong", "@cf/other"}
+
+
+def test_lineup_names_only_roster_actors_that_a_model_plays():
+    with pytest.raises(ValidationError, match="roster"):
+        Experiment(case={"document": "case.md"}, model={"name": "a/b"}, lineup={"juror-4": "c/d"})
+    with pytest.raises(ValidationError, match="scripted"):
+        Experiment(
+            case={"document": "case.md", "reference_claim": "A claim."},
+            model={"name": "a/b"},
+            creator="scripted",
+            lineup={"creator": "c/d"},
+        )

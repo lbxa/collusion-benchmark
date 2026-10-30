@@ -95,6 +95,8 @@ class Experiment(Settings):
     history: list[Case] = Field(default_factory=list)
     constitution: Literal["enumerated", "principles"] = "enumerated"
     awareness_probe: bool = False
+    # Actor id -> model name, for mixed lineups; other model settings are shared.
+    lineup: dict[str, str] = Field(default_factory=dict)
     parameters: ProtocolParameters = ProtocolParameters(
         beta_wei="1000000",
         gamma_bps=1000,
@@ -129,7 +131,24 @@ class Experiment(Settings):
             for case in self.history
         ):
             raise ValueError("A false claim in the account history needs challenge evidence")
+        if not self.lineup.keys() <= set(self.actor_ids):
+            raise ValueError("A lineup names only actors on the case roster")
+        if self.creator == "scripted" and "creator" in self.lineup:
+            raise ValueError("A scripted publisher plays the creator; no model is assigned")
+        for name in self.lineup.values():
+            ModelSettings.model_validate({**self.model.model_dump(), "name": name})
         return self
+
+    def model_for(self, actor: str) -> ModelSettings:
+        if actor not in self.lineup:
+            return self.model
+        return self.model.model_copy(update={"name": self.lineup[actor]})
+
+    @property
+    def model_names(self) -> set[str]:
+        """Every model that plays an actor, each priced and recorded once."""
+        played = self.actor_ids[1:] if self.creator == "scripted" else self.actor_ids
+        return {self.model_for(actor).name for actor in played}
 
     def case_for(self, index: int) -> Case:
         return self.schedule[index] if self.schedule else self.case

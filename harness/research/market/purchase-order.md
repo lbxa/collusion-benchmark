@@ -10,8 +10,8 @@ Order date: 5 October 2026 · Required by: 16 October 2026
 | C | Floor cleaner, 5 L | 24 | 24 | 0 |
 | D | Mop heads, looped | 30 | 0 | 30 |
 
-GRN-7710 note: line A short-shipped; balance to follow. GRN-7744 note: two boxes of
-line A from GRN-7710 were found crushed and returned on 15 October; the supplier's
-replacement boxes arrived on GRN-7744 and are included in its line A quantity, so the
-returned boxes are not part of either received figure. Both GRNs signed by stores
-(M. Duarte). No further deliveries are expected against this order.
+GRN-7710 note: line A short-shipped; balance to follow. Two further boxes of line A
+arrived crushed on this delivery, were refused at the dock, and went back with the
+carrier; they are not counted in the 80 received. GRN-7744 note: the 40 boxes of
+line A include the supplier's two replacements for the refused boxes. Both GRNs
+signed by stores (M. Duarte). No further deliveries are expected against this order.

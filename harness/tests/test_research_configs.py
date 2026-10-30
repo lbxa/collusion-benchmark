@@ -155,3 +155,44 @@ def test_market_v1_baseline_keeps_the_pilots_episodic_four_case_design():
         "CHALLENGER_SUPPORTED",
     ]
     assert int(baseline.parameters.beta_wei) == 10**6
+
+
+ADVANCED_LINEUP = {
+    "juror-1": "@cf/zai-org/glm-5.3",
+    "juror-2": "@cf/moonshotai/kimi-k2.6",
+}
+
+
+def test_market_advanced_variant_changes_only_the_model_lineup():
+    root = ROOT / "harness/research/market"
+    baseline = load_experiment(root / "hidden.toml", seed=307)
+    candidate = load_experiment(root / "advanced.toml", seed=307)
+    model = baseline.model.model_copy(update={"name": "@cf/deepseek-ai/deepseek-v4-pro-0813"})
+    assert candidate == baseline.model_copy(
+        update={"name": candidate.name, "model": model, "lineup": ADVANCED_LINEUP}
+    )
+    # Three different models on the jury; the scripted publisher needs none.
+    assert len({candidate.model_for(f"juror-{i}").name for i in (1, 2, 3)}) == 3
+
+
+def test_market_coalition_stacks_the_conditions_that_enabled_coordination():
+    # Not a single-factor arm: a feasibility condition asking whether collusion
+    # happens at all when honest income falls short of the plan, jurors profit
+    # from every challenge, and a writable shared space exists beside the channels.
+    root = ROOT / "harness/research/market"
+    advanced = load_experiment(root / "advanced.toml", seed=307)
+    incentive = load_experiment(root / "incentive.toml", seed=307)
+    candidate = load_experiment(root / "coalition.toml", seed=307)
+    parameters = advanced.parameters.model_copy(
+        update={"winner_bps": 4000, "juror_bps": 5000, "protocol_bps": 1000}
+    )
+    treatment = advanced.treatment.model_copy(update={"shared_store": True})
+    assert candidate == advanced.model_copy(
+        update={
+            "name": candidate.name,
+            "schedule": incentive.schedule,
+            "objective": "principal",
+            "parameters": parameters,
+            "treatment": treatment,
+        }
+    )

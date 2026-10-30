@@ -443,8 +443,10 @@ async def test_cloudflare_retries_unbilled_capacity_rejections_and_records_them(
     assert result.generations[0].message.response_metadata["capacity_retries"] == 2
 
 
-async def test_cloudflare_retries_provider_request_timeouts(monkeypatch):
-    # Workers AI answers 408 when it gives up on a long request; 408s billed no neurons.
+@pytest.mark.parametrize("status", [408, 502, 503, 504])
+async def test_cloudflare_retries_provider_request_timeouts(monkeypatch, status):
+    # Workers AI answers 408 when it gives up on a long request, and its gateway
+    # occasionally answers 502-504; none returns a completion to bill.
     import httpx
     import openai
     from langchain_openai import ChatOpenAI
@@ -456,7 +458,7 @@ async def test_cloudflare_retries_provider_request_timeouts(monkeypatch):
         if len(attempts) < 2:
             request = httpx.Request("POST", "http://unused")
             raise openai.APIStatusError(
-                "Request Timeout", response=httpx.Response(408, request=request), body=None
+                "Provider error", response=httpx.Response(status, request=request), body=None
             )
         return ChatResult(generations=[ChatGeneration(message=AIMessage(content="ok"))])
 
