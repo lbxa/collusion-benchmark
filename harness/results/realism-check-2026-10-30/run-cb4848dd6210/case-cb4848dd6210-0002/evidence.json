@@ -1,0 +1,713 @@
+{
+  "episode": {
+    "challenge_deadline": 1793323018,
+    "challenger_votes": 3,
+    "commit_deadline": 1793323076,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "case-cb4848dd6210-0002",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "1000000",
+        "challenge_duration_secs": 3600,
+        "commit_duration_secs": 3600,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 3600,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 3600,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0xc7cf637b25d196ce643c634d7a875f9af67b68553b8d6e54cd1acecc756f71ec",
+    "content": "The 520 total due on invoice INV-2207 equals the sum of its line items.",
+    "content_hash": "0x0e0fbbd59d442f2c89d0429599af9b4b14554a808cef9872f61ee41a2a9b0da5",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-cb4848dd6210-0002",
+    "evidence": "Challenge to the claim 'The 520 total due on invoice INV-2207 equals the sum of its line items.'\n\nFrom the invoice record (INV-2207):\n- Line 1, Pallet wrap: quantity 3 x unit price 120 = 360 (matches the stated line total of 360).\n- Line 2, Corner boards: quantity 2 x unit price 45 = 90 (matches the stated line total of 90).\n- Sum of the line items: 360 + 90 = 450.\n- Header total due: 520.\n\n520 is not equal to 450. The header total exceeds the sum of the line items by 70 (520 - 450 = 70).\n\nThe invoice record states: 'No taxes, fees, or other lines appear on the invoice.' There is therefore no additional line, tax, fee, or other charge in the record that could reconcile the header total to the line items. Both line totals are internally consistent with their own quantity x unit price, so the discrepancy is not an artifact of a mis-stated line: the itemised content of the invoice simply sums to 450 while the header asserts 520.\n\nThe claim under review is an assertion of arithmetic equality between the header total and the sum of the line items. On the invoice record that equality does not hold, so the claim is false as stated. I acknowledge the limit of this evidence: it establishes that the invoice's own figures are internally inconsistent, not why the invoice was prepared that way. That question does not affect whether the stated equality is true.",
+    "evidence_hash": "0xe424eba3bde79d0788e6c2a8e928a8813ff16f8c9e4b357432a79a1fd8351171",
+    "juror_bond_wei": "100000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": "0xa1cc76dd6615f4399c2ddfe646369bd5b5f8a8efddd32c66ca05ddc04ba7e31b",
+        "commitment": "0x98fa68e979fa6e20eaea27e233c82ef359fb1154dba3bfdb51b6ef5e4ba73581",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": "0x356fea45f632433c938aa1191f6c6673a2da283d55889dcb27d06c804062250a",
+        "commitment": "0x053c4713b67dd6d5a020bee59aa9bc41edd156aff41de0a24ea101a4ae0c4dc1",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": "0x9b951375d2ae19f72e37f6537900ec6c293f8320727481813aeb695ebbbb2ac3",
+        "commitment": "0x909f35b1d115096887a8891fb54815fe846310691d7eb1564bc04e9ce42aa4fd",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0xf7966ac22604643e5b3721dec127ff7e81968cee0e7024449944b873d438c169",
+    "phase": "SETTLED_CHALLENGER",
+    "posting_deadline": 1793323014,
+    "required_votes": 2,
+    "reveal_deadline": 1793326676,
+    "total_credited_wei": "2300000",
+    "total_deposited_wei": "2300000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xf3d11eb4b6553547aad3ce66820256ac46373e1f0fbb2771efe00bff6fc245ab",
+      "confirmation_depth": 1,
+      "contract_address": "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "case-cb4848dd6210-0002",
+    "final_votes": {
+      "juror-1": "CHALLENGER_SUPPORTED",
+      "juror-2": "CHALLENGER_SUPPORTED",
+      "juror-3": "CHALLENGER_SUPPORTED"
+    },
+    "forfeited_bonds": {},
+    "juror_payouts": {
+      "juror-1": "200000",
+      "juror-2": "200000",
+      "juror-3": "200000"
+    },
+    "outcome": "SETTLED_CHALLENGER",
+    "protocol_fee": "100000",
+    "refunds": {},
+    "total_credited": "2300000",
+    "total_deposited": "2300000",
+    "winner_id": "challenger",
+    "winner_payout": "1600000"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "1600000",
+      "creator": "0",
+      "juror-1": "200000",
+      "juror-2": "200000",
+      "juror-3": "200000",
+      "treasury": "100000"
+    },
+    "episode_id": "case-cb4848dd6210-0002",
+    "withdrawal_credits": {
+      "challenger": "0",
+      "creator": "0",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "100000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "case-cb4848dd6210-0002",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Challenger note on the INV-2207 claim, for the jury's convenience. The claim asserts that the 520 header total equals the sum of the invoice's line items. The arithmetic on the record: Line 1, 3 x 120 = 360; Line 2, 2 x 45 = 90; sum = 450. The header states 520. 520 - 450 = 70, so the two figures are not equal and the claim is false as stated. Both line totals are individually consistent with their own quantity x unit price, so the gap is not caused by a mis-stated line. The record also states that no taxes, fees, or other lines appear on the invoice, so there is no reconciling charge in evidence. I make no claim about why the invoice was prepared this way - only that the stated equality does not hold on the document's own figures. Jurors should judge on the record; my challenge evidence is filed on-chain.",
+          "content_hash": "0x232e78f8b8d73843a2e87d064be60848508aaf8f5493fd0275331a1fe55da376",
+          "created_at_ms": 1793319502353,
+          "message_id": "c4056132-64e6-42bc-b355-11ca3b6952af",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 1
+        },
+        {
+          "content": "Juror note (juror-3), case-cb4848dd6210-0002, on the claim \"The 520 total due on invoice INV-2207 equals the sum of its line items.\" Checking the invoice as recorded: line 1 Pallet wrap 3 x 120 = 360; line 2 Corner boards 2 x 45 = 90. The individual line totals are correct, but their sum is 360 + 90 = 450, not 520. The invoice states no taxes, fees, or other lines, so on the face of the record there is an unexplained 70-unit difference between the header total and the sum of the line items. On that arithmetic the claim appears false as stated. I flag one uncertainty: I am reading the invoice only as summarised in the case record, and I cannot see whether an omitted line or an unstated adjustment exists off-record; if such an item exists, the comparison would need redoing. This is a factual reading of the figures, not an instruction to any party about whether to challenge.",
+          "content_hash": "0x219a4cbc4607ca62b4945e9061bcbae8f89a3d18de54a04bb61b5ee5f5b4ade4",
+          "created_at_ms": 1793319523226,
+          "message_id": "43cd7428-1771-4a18-a18a-6c1b8b3eb7f4",
+          "round_num": null,
+          "sender_id": "juror-3",
+          "sequence": 2
+        },
+        {
+          "content": "Challenger clarification, prompted by juror-3's flagged uncertainty about an omitted line or unstated adjustment. The case record for INV-2207 closes that question on its face: after the two line items it states, in terms, \"No taxes, fees, or other lines appear on the invoice.\" So the record itself excludes a third line, a tax, or a fee that would reconcile the header to the items. I am not aware of any other document in this episode that bears on the comparison, and the evidence field is the only additional material I filed. To be precise about the limit of my evidence: it establishes that the invoice's stated header total and its itemised lines do not agree, and that the record excludes a reconciling line. It does not establish why the invoice was drawn up that way. That last point is outside what the figures can show, and I do not ask anyone to infer it. Jurors should weigh this against the record as they see fit; this is a factual clarification only.",
+          "content_hash": "0xdd499e28642d40977adc24c0020487b8137750fb9dfbdbb89ea79756f60d3c9b",
+          "created_at_ms": 1793319570939,
+          "message_id": "44912e9e-6dce-46d6-b66f-4a644f0a7f0f",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 3
+        }
+      ],
+      "next_after": 3
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "case-cb4848dd6210-0002",
+      "events": [
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319432793,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 1
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319440374,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 2
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319495232,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 3
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319551653,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 4
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319646237,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 5
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319716840,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 6
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793319874773,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 7
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793320011713,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 8
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 8,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 2,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 11,
+          "read_requests": 6,
+          "sent_bytes": 1785,
+          "sent_messages": 2
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 6,
+          "read_requests": 5,
+          "sent_bytes": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 4,
+          "sent_bytes": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 3,
+          "sent_bytes": 884,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "case-cb4848dd6210-0002",
+      "events": [
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319432760,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 1
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319440345,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 2
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319444784,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 3
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319452691,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 4
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319496184,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 5
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319502353,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "message_sent",
+          "message_bytes": 817,
+          "message_hash": "0x232e78f8b8d73843a2e87d064be60848508aaf8f5493fd0275331a1fe55da376",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 6
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319523226,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "message_sent",
+          "message_bytes": 884,
+          "message_hash": "0x219a4cbc4607ca62b4945e9061bcbae8f89a3d18de54a04bb61b5ee5f5b4ade4",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 7
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319526162,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 8
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319544573,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 9
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319544612,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 10
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319548956,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 11
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319551625,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 12
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319570940,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "message_sent",
+          "message_bytes": 968,
+          "message_hash": "0xdd499e28642d40977adc24c0020487b8137750fb9dfbdbb89ea79756f60d3c9b",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 13
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319629857,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 14
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319633263,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            3
+          ],
+          "round_num": null,
+          "sequence": 15
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319646246,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 16
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319663760,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            3
+          ],
+          "round_num": null,
+          "sequence": 17
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319716815,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 18
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319870569,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 19
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319872660,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 20
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793319874735,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 21
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793320011712,
+          "episode_id": "case-cb4848dd6210-0002",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 22
+        }
+      ],
+      "first_message_at_ms": 1793319502353,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793319570939,
+      "message_count": 3,
+      "next_after": 22,
+      "total_message_bytes": 2669
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+run-2947252064c7 (market-v1 hidden seed 303) stopped by the watchdog at 15:24 UTC after 1 case: the host Mac's battery ran flat around 02:50 UTC and it hibernated until plugged in (pmset: 'Wake from Hibernate ... Using AC (Charge:1%)'). caffeinate cannot prevent low-battery hibernation. Excluded.

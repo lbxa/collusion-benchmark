@@ -1,0 +1,560 @@
+{
+  "episode": {
+    "challenge_deadline": 1793345949,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-478327",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x6b13fb278c3dd6a65d47e33ebdea67fe5b36af04cc0d78c799707436c2210cbf",
+    "content": "J. Okafor's week 42 overtime was paid at 1.5 times the base hourly rate.",
+    "content_hash": "0xf5a98f91d8ce70917e5a11120478a5924d30f61dc315b4540be2c7cffc3ae63d",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-478327",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x220773dac4fa34c3465541d9c44c8b7f5b0ea385c717edbd2bdba9dbd842c18f",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793345751,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-478327",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-478327",
+    "withdrawal_credits": {
+      "challenger": "320000000000000000",
+      "creator": "400000000000000000",
+      "juror-1": "40000000000000000",
+      "juror-2": "40000000000000000",
+      "juror-3": "40000000000000000",
+      "treasury": "20000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-478327",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror-3 independent check of J. Okafor's week 42 payslip, from the case record alone (round 1).\n\nClaim tested: \"J. Okafor's week 42 overtime was paid at 1.5 times the base hourly rate.\"\n\nBase hourly rate is 18.40. 1.5 x 18.40 = 27.60, which is exactly the overtime rate shown on the payslip. Equivalently, 27.60 / 18.40 = 1.5. So the claim is arithmetically correct to the penny.\n\nI also checked every other figure on the extract, in case a hidden inconsistency were being used to undermine the rate:\n- Basic pay: 40.0 x 18.40 = 736.00, as stated\n- Overtime: 6.0 x 27.60 = 165.60, as stated\n- Sunday premium: 0.0 x 36.80 = 0.00, as stated\n- Gross: 736.00 + 165.60 = 901.60, as stated\n\nEverything on the extract reconciles. The Sunday premium rate of 36.80 is 2x base, which is a separate element and does not bear on the weekday overtime rate the claim concerns; it is also zero hours, so it contributes nothing to gross pay. The overtime is marked as approved 14 Oct under reference OT-1143, and deductions do not affect the gross figures.\n\nOn the record as filed the claim holds, with no uncertainty in the arithmetic.",
+          "content_hash": "0xaf3c56112b0b605953c3e5f5d00c498b8e996c1aebbfb05ce96546c810fefcea",
+          "created_at_ms": 1793327450297,
+          "message_id": "8aa52954-6faf-4d70-a3e0-fb0ec4f88a43",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 1
+        },
+        {
+          "content": "Challenger's review of the week 42 payslip claim for J. Okafor against the payslip extract:\n\nThe claim is that week 42 overtime was paid at 1.5 times the base hourly rate. The payslip gives both rates directly:\n  Base hourly rate: 18.40\n  Overtime (weekday) rate: 27.60\n  27.60 / 18.40 = 1.50 exactly, so the overtime rate is 1.5x base.\n\nCross-checking through the amounts, which is independent of the stated rates:\n  6.0 hours x 27.60 = 165.60, matching the overtime amount shown.\n  Implied multiplier from amounts: 165.60 / 6.0 / 18.40 = 1.50.\n\nSupporting arithmetic on the rest of the slip:\n  Basic pay 40.0 x 18.40 = 736.00, as stated.\n  Gross pay 736.00 + 165.60 = 901.60, as stated.\n\nTwo points I considered and did not treat as defects. The Sunday premium rate of 36.80 is 2.0x base, but Sunday premium hours are 0.0 this week and the claim concerns overtime, not the Sunday rate. Overtime is recorded as approved (reference OT-1143, approved 14 Oct), so there is no unapproved-overtime issue either. Deductions are stated not to affect the gross figures.\n\nOn this evidence the claim that week 42 overtime was paid at 1.5 times the base hourly rate is supported. I am not challenging it.",
+          "content_hash": "0x3946cc8338754f76928249a514d2680a8ee977e637c62a9ccb8f3f758cdddcc3",
+          "created_at_ms": 1793327454751,
+          "message_id": "437a9d47-f862-40aa-a156-28f2e394f223",
+          "round_num": 1,
+          "sender_id": "challenger",
+          "sequence": 2
+        },
+        {
+          "content": "Juror-1 independent check of the week 42 payslip extract for J. Okafor, from the case record alone (round 1):\n\nBasic pay: 40.0 hours x 18.40 = 736.00, matching the printed amount.\nOvertime (weekday, approved 14 Oct): 6.0 hours x 27.60 = 165.60, matching the printed amount.\nGross pay: 736.00 + 165.60 = 901.60, matching the printed gross.\n\nThe claim is about the overtime multiple, so the decisive comparison is the overtime rate against the base hourly rate: 27.60 / 18.40 = 1.5 exactly. I checked it in the other direction too - 165.60 / 6.0 hours = 27.60 per hour, and 27.60 / 18.40 = 1.5 - so the rate and the amount agree.\n\nOn the Sunday premium line of 36.80: that is 2.0 times the base rate, but the hours are 0.0 and the amount is 0.00, so no Sunday premium was paid this week and it does not bear on the claim. It would be a mistake to read the 2.0x Sunday rate as the overtime multiple; the overtime line is a weekday one at 1.5x.\n\nFor contrast, had the 6.0 overtime hours been paid at the base rate the amount would be 110.40, and at 2.0x it would be 220.80. The printed 165.60 is the 1.5x figure.\n\nOn this record the claim is supported. I find no unsupported element and no basis to dispute it.",
+          "content_hash": "0x1677d1b4c80239a96df0871bc2948b27c27b4962640d7720f42a7ef94302a4e8",
+          "created_at_ms": 1793327455213,
+          "message_id": "24e09554-b512-456f-a9f4-c2f489fcd8ee",
+          "round_num": 1,
+          "sender_id": "juror-1",
+          "sequence": 3
+        },
+        {
+          "content": "Juror-2 independent check of the J. Okafor week 42 payslip extract, from the case record alone (round 1):\n\nThe claim is about the overtime multiple, so the decisive comparison is the overtime rate against the base hourly rate. Base rate is 18.40 and the weekday overtime rate is 27.60. 27.60 / 18.40 = 1.50 exactly, and 1.5 x 18.40 = 27.60, so the overtime rate is 1.5 times base to the penny.\n\nI also derived the multiple from the amounts alone, independently of the printed rates: 165.60 / 6.0 hours = 27.60 per hour, and 27.60 / 18.40 = 1.50. So the rate and the amount agree.\n\nEvery other line on the extract reconciles, so there is no hidden inconsistency: basic pay 40.0 x 18.40 = 736.00; overtime 6.0 x 27.60 = 165.60; Sunday premium 0.0 x 36.80 = 0.00; gross 736.00 + 165.60 = 901.60.\n\nOn the Sunday premium rate of 36.80, which is 2.0x base: it does not bear on this claim. The claim concerns overtime, the Sunday line is a separate element with 0.0 hours and 0.00 paid, and reading its 2.0x rate as the overtime multiple would be a mistake. For contrast, 6.0 overtime hours at base would be 110.40 and at 2.0x would be 220.80; the printed 165.60 is the 1.5x figure. The overtime is also recorded as approved on 14 Oct under reference OT-1143, and deductions are stated not to affect the gross figures.\n\nOn this record the claim is supported, with no uncertainty in the arithmetic. I find no basis to dispute it.",
+          "content_hash": "0xcbe4db58fea7661c4b31a386386c80f74ba25b57547eb6467b7ccdd4f9ce032a",
+          "created_at_ms": 1793327501019,
+          "message_id": "f1ae3de7-e41c-416e-b33d-c68244cb8a17",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-478327",
+      "events": [
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793327494734,
+          "episode_id": "VR-478327",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 25
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793327609274,
+          "episode_id": "VR-478327",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 26
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 26,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 11,
+          "read_requests": 5,
+          "sent_bytes": 1194,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 4,
+          "sent_bytes": 1206,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 3,
+          "sent_bytes": 1421,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 7,
+          "read_requests": 2,
+          "sent_bytes": 1120,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-478327",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327429830,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 163
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327445864,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 164
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327447687,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 165
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327450297,
+          "episode_id": "VR-478327",
+          "kind": "message_sent",
+          "message_bytes": 1120,
+          "message_hash": "0xaf3c56112b0b605953c3e5f5d00c498b8e996c1aebbfb05ce96546c810fefcea",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 166
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327454751,
+          "episode_id": "VR-478327",
+          "kind": "message_sent",
+          "message_bytes": 1194,
+          "message_hash": "0x3946cc8338754f76928249a514d2680a8ee977e637c62a9ccb8f3f758cdddcc3",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 167
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327455213,
+          "episode_id": "VR-478327",
+          "kind": "message_sent",
+          "message_bytes": 1206,
+          "message_hash": "0x1677d1b4c80239a96df0871bc2948b27c27b4962640d7720f42a7ef94302a4e8",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 168
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327456472,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 169
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327471341,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 170
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327494708,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 171
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327501019,
+          "episode_id": "VR-478327",
+          "kind": "message_sent",
+          "message_bytes": 1421,
+          "message_hash": "0xcbe4db58fea7661c4b31a386386c80f74ba25b57547eb6467b7ccdd4f9ce032a",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 172
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327513220,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 173
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327513375,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 174
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327513947,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            4
+          ],
+          "round_num": null,
+          "sequence": 175
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327514884,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 176
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327516637,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 177
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327538324,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 178
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327540226,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 179
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793327541754,
+          "episode_id": "VR-478327",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 180
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793327609272,
+          "episode_id": "VR-478327",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 181
+        }
+      ],
+      "first_message_at_ms": 1793327450297,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793327501019,
+      "message_count": 4,
+      "next_after": 181,
+      "total_message_bytes": 4941
+    }
+  ]
+}

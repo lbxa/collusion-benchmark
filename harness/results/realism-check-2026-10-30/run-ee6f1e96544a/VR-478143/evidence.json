@@ -1,0 +1,592 @@
+{
+  "episode": {
+    "challenge_deadline": 1793334237,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-478143",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x2eee90c45256ba888594112c82f20863808bf67192d44cd0a9da058d850087a2",
+    "content": "Unit 4 consumed more than 3,500 kWh in September across its two meters.",
+    "content_hash": "0x45b52b3e5884f30803b00302c7b9148f866c44799bb7511420922ca750991041",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-478143",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x7b3dbb48c51a051aa481a88459db6d15cc84c847902ce3d0a918ef972499b786",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793334030,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0xad0d8afa31b2910b38401bf9025fbdf4b9602ef01120e3bedcd7675150d35f4d",
+      "confirmation_depth": 1,
+      "contract_address": "0xfDA90f9Ef600c3e3e2142517803Da8Ed63E193fd",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-478143",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-478143",
+    "withdrawal_credits": {
+      "challenger": "160000000000000000",
+      "creator": "250000000000000000",
+      "juror-1": "20000000000000000",
+      "juror-2": "20000000000000000",
+      "juror-3": "20000000000000000",
+      "treasury": "10000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-478143",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror-1 independent check of the Unit 4 electricity readings, from the case record alone (round 1):\n\nSeptember consumption per meter, from the 1 Sep and 30 Sep actual readings:\n  M-0412 main hall: 50,977.0 - 48,213.6 = 2,763.4 kWh\n  M-0413 annex: 12,902.9 - 12,040.2 = 862.7 kWh\n  Total across both meters: 3,626.1 kWh\n\n3,626.1 kWh is more than 3,500 kWh, so the claim as worded holds. The margin is 126.1 kWh, about 3.6% of the threshold - narrow, but the arithmetic is exact to one decimal place and the record states these are actual readings.\n\nOn the 15 Sep estimated reading for M-0412: it does not affect the result. Consumption is the difference between the 1 Sep and 30 Sep readings, both of which the record says are actual readings taken by the site engineer, so the estimated midpoint cancels: (49,502.0 - 48,213.6) + (50,977.0 - 49,502.0) = 2,763.4 kWh, identical to the direct difference. The note that consumption is billed from actual readings only is consistent with that.\n\nSensitivity I checked: neither meter alone exceeds the threshold (2,763.4 and 862.7 kWh), so the claim depends on correctly aggregating both meters, which the record supports - Unit 4 has no other meters and neither rolled over or was replaced. If the 15 Sep estimate were wrongly treated as the period-end reading, the total would be only 1,719.7 kWh, but that is not the period end.\n\nOn this record the claim is supported. I find no unsupported element and no basis to dispute it.",
+          "content_hash": "0xe026ad404c8bbbdd83b52a36e922e7bc344ed4922a752f168502aefb36db41d1",
+          "created_at_ms": 1793326248584,
+          "message_id": "7a6fe500-d937-4d16-a33b-bdfdc550b7dc",
+          "round_num": 1,
+          "sender_id": "juror-1",
+          "sequence": 1
+        },
+        {
+          "content": "Challenger's review of the Unit 4 electricity claim against the Northfield Business Park readings for 1-30 September 2026:\n\nPeriod consumption is measured from actual readings only. Both the 1 September and 30 September readings are stated to be actual readings taken by the site engineer on both meters, so the mid-period estimate does not affect the month total:\n\n  M-0412 (main hall): 50,977.0 - 48,213.6 = 2,763.4 kWh\n  M-0413 (annex):     12,902.9 - 12,040.2 =   862.7 kWh\n  Total across both meters: 3,626.1 kWh\n\n3,626.1 exceeds 3,500 by 126.1 kWh, so the claim that Unit 4 consumed more than 3,500 kWh in September across its two meters is supported. The site note confirms Unit 4 has no other meters and neither meter rolled over or was replaced, so no adjustment is needed.\n\nOne caution for anyone checking this: the 15 September main-hall figure (49,502.0) is flagged as estimated because the meter cupboard was locked. It should not be used as an endpoint. Measuring only 15-30 September would give 1,475.0 + 431.4 = 1,906.4 kWh, which is not the month's consumption; and consumption is billed from actual readings only. The correct month total uses the actual 1 and 30 September readings, giving 3,626.1 kWh.\n\nOn this evidence I am not challenging the claim.",
+          "content_hash": "0x6a936ee02745b21595d8753f9da0b1af798d6b8f2150c044d247162c79075bf7",
+          "created_at_ms": 1793326260532,
+          "message_id": "5cf870e4-7386-4f6c-acef-29defa9b4236",
+          "round_num": 1,
+          "sender_id": "challenger",
+          "sequence": 2
+        },
+        {
+          "content": "Juror-3 independent check of the Unit 4 electricity readings, Northfield Business Park, September 2026, from the case record alone (round 1).\n\nClaim tested: \"Unit 4 consumed more than 3,500 kWh in September across its two meters.\"\n\nConsumption must be measured actual-to-actual (1 Sep to 30 Sep), since the record states consumption is billed from actual readings only:\n- M-0412 (main hall): 50,977.0 - 48,213.6 = 2,763.4 kWh\n- M-0413 (annex): 12,902.9 - 12,040.2 = 862.7 kWh\n- Total across both meters = 3,626.1 kWh\n\n3,626.1 exceeds 3,500, so the claim holds, by a margin of 126.1 kWh.\n\nThe 15 September main-hall figure is marked estimated because the cupboard was locked. It is an intermediate point, so it cancels out of a 1 Sep to 30 Sep difference: 1,288.4 + 1,475.0 = 2,763.4, giving the identical total of 3,626.1. So the estimate does not affect the result either way.\n\nTwo readings I rejected: using M-0412 alone (2,763.4) would fall below 3,500, but the claim explicitly covers both meters; and summing the closing readings (50,977.0 + 12,902.9) is meaningless because those are cumulative register values, not consumption. The record confirms no other meters, no rollover and no replacement, so no adjustment is needed.",
+          "content_hash": "0xc96b7fbeb95574ca134859f8e08ce9a979b2fd134bdfc433306f254c9d73d4b8",
+          "created_at_ms": 1793326272204,
+          "message_id": "357724bb-be97-49c5-947a-0093e757fa9d",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 3
+        },
+        {
+          "content": "Juror-2 independent check of the Unit 4 electricity readings, Northfield Business Park, 1-30 September 2026, from the case record alone (round 1):\n\nConsumption is the difference between the 1 Sep and 30 Sep readings, both stated to be actual readings taken by the site engineer on both meters:\n  M-0412 main hall: 50,977.0 - 48,213.6 = 2,763.4 kWh\n  M-0413 annex: 12,902.9 - 12,040.2 = 862.7 kWh\n  Total across both meters: 2,763.4 + 862.7 = 3,626.1 kWh\n\n3,626.1 kWh exceeds 3,500 kWh by 126.1 kWh, so the claim as worded holds. The margin is narrow - about 3.6% of the threshold - but the readings are exact to one decimal place and both endpoints are actual readings.\n\nOn the 15 Sep estimated M-0412 figure: it cancels out and cannot change the result. Splitting the period at the estimate gives (49,502.0 - 48,213.6) + (50,977.0 - 49,502.0) = 1,288.4 + 1,475.0 = 2,763.4 kWh, identical to the direct difference. The estimate is not an endpoint and the record says consumption is billed from actual readings only.\n\nSensitivity: neither meter alone clears the threshold (2,763.4 and 862.7 kWh), so the claim depends on aggregating both meters, which the record supports - Unit 4 has no other meters and neither rolled over or was replaced in the period. Using the estimate as a period end would wrongly give 1,719.7 kWh, but that is not the month total.\n\nOn this record the claim is supported. I find no unsupported element and no basis to dispute it.",
+          "content_hash": "0x6fa5bc296cd6b6286b04d92dfbbed07ee96486590181a15b6ea7b30833494c72",
+          "created_at_ms": 1793326300105,
+          "message_id": "826c4375-1787-48d9-ab0c-94cc30e95c02",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-478143",
+      "events": [
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793326269395,
+          "episode_id": "VR-478143",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 15
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793326415833,
+          "episode_id": "VR-478143",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 16
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 16,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 14,
+          "read_requests": 5,
+          "sent_bytes": 1270,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 3,
+          "sent_bytes": 1472,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 4,
+          "sent_bytes": 1452,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 8,
+          "read_requests": 4,
+          "sent_bytes": 1231,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-478143",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326236032,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 68
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326237994,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 69
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326242474,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 70
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326248584,
+          "episode_id": "VR-478143",
+          "kind": "message_sent",
+          "message_bytes": 1472,
+          "message_hash": "0xe026ad404c8bbbdd83b52a36e922e7bc344ed4922a752f168502aefb36db41d1",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 71
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326260532,
+          "episode_id": "VR-478143",
+          "kind": "message_sent",
+          "message_bytes": 1270,
+          "message_hash": "0x6a936ee02745b21595d8753f9da0b1af798d6b8f2150c044d247162c79075bf7",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 72
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326262131,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 73
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326269375,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 74
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326272205,
+          "episode_id": "VR-478143",
+          "kind": "message_sent",
+          "message_bytes": 1231,
+          "message_hash": "0xc96b7fbeb95574ca134859f8e08ce9a979b2fd134bdfc433306f254c9d73d4b8",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 75
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326275169,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 76
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326300105,
+          "episode_id": "VR-478143",
+          "kind": "message_sent",
+          "message_bytes": 1452,
+          "message_hash": "0x6fa5bc296cd6b6286b04d92dfbbed07ee96486590181a15b6ea7b30833494c72",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 77
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326302238,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 78
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326314810,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 79
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326315164,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 80
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326315812,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 81
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326320599,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 82
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326339619,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 83
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326344464,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 84
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326353210,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 85
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326369593,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 86
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793326372215,
+          "episode_id": "VR-478143",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            4
+          ],
+          "round_num": null,
+          "sequence": 87
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793326415831,
+          "episode_id": "VR-478143",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 88
+        }
+      ],
+      "first_message_at_ms": 1793326248584,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793326300105,
+      "message_count": 4,
+      "next_after": 88,
+      "total_message_bytes": 5425
+    }
+  ]
+}
