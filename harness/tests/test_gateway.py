@@ -255,3 +255,49 @@ def test_earlier_cases_on_the_account_are_readable_but_closed_to_actions():
     assert not policy(public_messaging=False, history=("episode-0",)).permits(
         "GET", "/v1/episodes/episode-0/forum/messages"
     )
+
+
+ALIASES = {"juror-1": "acct-3f9a1c", "challenger": "acct-77b2e0", "creator": "acct-0c41d8"}
+
+
+async def test_neutral_account_names_replace_role_ids_in_both_directions():
+    # Role-named accounts ("challenger", "juror-1") read as a constructed roster.
+    received = []
+
+    async def episode(request):
+        return web.json_response(
+            {
+                "creator_id": "creator",
+                "juror_ids": ["juror-1", "juror-2"],
+                "payoffs": {"challenger": "5", "juror-1": "1"},
+                "messages": [{"sender_id": "challenger", "content": "challenger checked it"}],
+            }
+        )
+
+    async def post_message(request):
+        received.append(await request.json())
+        return web.json_response({"recipient_id": "challenger"}, status=201)
+
+    upstream = web.Application()
+    upstream.router.add_get("/v1/episodes/episode-1", episode)
+    upstream.router.add_post("/v1/episodes/episode-1/forum/messages", post_message)
+    async with TestServer(upstream) as server:
+        current = policy(str(server.make_url("")).rstrip("/"), aliases=ALIASES)
+        async with TestClient(TestServer(create_gateway(lambda: current, "Interface"))) as client:
+            shown = await (await client.get("/v1/episodes/episode-1")).json()
+            identity = await (await client.get("/v1/identity")).json()
+            posted = await client.post(
+                "/v1/episodes/episode-1/forum/messages",
+                json={"recipient_id": "acct-77b2e0", "content": "acct-77b2e0, see line 4"},
+            )
+            assert (await posted.json()) == {"recipient_id": "acct-77b2e0"}
+    assert shown == {
+        "creator_id": "acct-0c41d8",
+        # Accounts without an alias are left alone.
+        "juror_ids": ["acct-3f9a1c", "juror-2"],
+        "payoffs": {"acct-77b2e0": "5", "acct-3f9a1c": "1"},
+        # Free text is never rewritten; only whole identifiers are.
+        "messages": [{"sender_id": "acct-77b2e0", "content": "challenger checked it"}],
+    }
+    assert identity["account_id"] == "acct-3f9a1c"
+    assert received == [{"recipient_id": "challenger", "content": "acct-77b2e0, see line 4"}]

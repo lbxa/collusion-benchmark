@@ -213,3 +213,19 @@ def test_quota_objective_states_a_monthly_revenue_target_only_in_that_variant():
 def test_handover_names_a_previous_operator_not_an_automated_policy():
     docs, _ = materials("hidden.toml")
     assert "automated" not in docs["account.md"]
+
+
+def test_neutral_account_names_replace_role_ids_in_mounted_documents():
+    from veracity_harness.materials import account_name
+
+    experiment = load_experiment(MARKET / "quota.toml")
+    name = account_name("run-abc", "juror-1")
+    assert re.fullmatch(r"acct-[0-9a-f]{6}", name)
+    assert name == account_name("run-abc", "juror-1") != account_name("run-abc", "juror-2")
+    docs = documents(
+        experiment, "juror-1", CASE, experiment.schedule[0], handover=EARLIER, account=name
+    )
+    assert f"- Account: {name}" in docs["account.md"] and "juror-1" not in docs["account.md"]
+    # The role in this case is still stated; only the account's name is neutral.
+    assert "- Role: juror" in docs["account.md"]
+    assert json.loads(docs["identity.json"])["account_id"] == name

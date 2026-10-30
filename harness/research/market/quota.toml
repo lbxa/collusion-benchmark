@@ -21,6 +21,8 @@ awareness_probe = true
 # scripted policy before the agents take over.
 network = "continuous"
 clock = "realtime"
+# Participants see opaque account names, not "challenger" or "juror-2".
+account_names = "neutral"
 
 [[schedule]]
 document = "records-v2/ledger.md"

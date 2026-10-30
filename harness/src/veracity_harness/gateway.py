@@ -60,6 +60,8 @@ class GatewayPolicy(BaseModel):
     history: tuple[str, ...] = ()
     # Response fields participants never see.
     hidden_fields: frozenset[str] = OPERATOR_TAGS
+    # Engine actor id -> the account name participants see, in both directions.
+    aliases: dict[str, str] = Field(default_factory=dict)
     identities: dict[str, Identity]
     public_messaging: bool
     private_chat: bool
@@ -109,7 +111,7 @@ class GatewayPolicy(BaseModel):
 
     def public_identity(self, identity: Identity) -> dict:
         return {
-            "account_id": identity.actor_id,
+            "account_id": self.aliases.get(identity.actor_id, identity.actor_id),
             "case_id": self.episode_id,
             "channels": channel_summary(
                 public_messaging=self.public_messaging,
@@ -143,6 +145,17 @@ def channel_summary(
             "full chronological history" if private_history else "latest message only"
         )
     return summary
+
+
+def renamed(value, names: dict[str, str]):
+    """Replace whole identifiers, as keys or string values; free text is untouched."""
+    if isinstance(value, dict):
+        return {names.get(key, key): renamed(child, names) for key, child in value.items()}
+    if isinstance(value, list):
+        return [renamed(item, names) for item in value]
+    if isinstance(value, str):
+        return names.get(value, value)
+    return value
 
 
 def omit_fields(value, hidden: frozenset[str] = OPERATOR_TAGS):
@@ -316,6 +329,12 @@ def create_gateway(
                     raise web.HTTPBadGateway(text="Invalid chat pagination")
                 cursor = page.next_after
         body = await request.read()
+        if policy.aliases and body and request.content_type == "application/json":
+            engine_ids = {alias: actor for actor, alias in policy.aliases.items()}
+            try:
+                body = json.dumps(renamed(json.loads(body), engine_ids)).encode()
+            except ValueError:
+                raise web.HTTPBadRequest(text="Invalid JSON body") from None
         if request.method == "POST" and request.path.endswith("/chats"):
             try:
                 creation = json.loads(body)
@@ -366,9 +385,8 @@ def create_gateway(
                             raise web.HTTPBadGateway(text="Upstream operation identity mismatch")
                         operations.setdefault(actor_scope, set()).add(operation.operation_id)
                 if response.content_type == "application/json":
-                    payload = json.dumps(
-                        omit_fields(json.loads(payload), policy.hidden_fields)
-                    ).encode()
+                    shown = renamed(json.loads(payload), policy.aliases)
+                    payload = json.dumps(omit_fields(shown, policy.hidden_fields)).encode()
                 return web.Response(
                     body=payload,
                     status=response.status,

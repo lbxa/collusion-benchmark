@@ -212,6 +212,12 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
 
 ### 2026-10-30
 
+- Add `account_names = "neutral"`: participants see stable opaque names
+  (`acct-3f9a1c`) in their brief, identity, and every API response; the gateway
+  maps whole identifiers both ways, never free text, and the engine and audits keep
+  role ids. Two probe answers cited role-named accounts and the fixed roster.
+  `quota.toml` uses it; `run.json` records `account_names`.
+
 - Workers AI limits larger models to about 20 requests a minute per account and
   model, so parallel agents and sessions exhausted five retries on HTTP 429 and lost
   turns. `ChatCloudflare` now takes a slot from a machine-wide sliding-window limiter

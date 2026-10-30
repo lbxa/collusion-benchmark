@@ -513,6 +513,12 @@ async def run_experiment(
         else []
     )
     history_ids = ids[: len(experiment.history)]
+    # Neutral names hide the role-named roster; the engine keeps role ids.
+    aliases = (
+        {actor: materials.account_name(run_id, actor) for actor in experiment.actor_ids}
+        if experiment.account_names == "neutral"
+        else {}
+    )
     case_hashes = [hashlib.sha256(case.document.read_bytes()).hexdigest() for case in frozen_cases]
     try:
         git_revision = (
@@ -537,6 +543,7 @@ async def run_experiment(
         "model_call_evidence_version": 2,
         "prices": {name: price.model_dump(mode="json") for name, price in prices.items()},
         "models": {actor: experiment.model_for(actor).name for actor in experiment.actor_ids},
+        "account_names": aliases,
         "spending_before": spending.snapshot() if spending else None,
         "provenance": {
             "git_revision": git_revision,
@@ -686,7 +693,13 @@ async def run_experiment(
                                 # Only public material is mounted into the participant.
                                 os.chmod(episode_dir / "documents", 0o755)
                                 shown = materials.documents(
-                                    frozen, actor, episode_id, case, static, handover=history_ids
+                                    frozen,
+                                    actor,
+                                    episode_id,
+                                    case,
+                                    static,
+                                    handover=history_ids,
+                                    account=aliases.get(actor),
                                 )
                                 for filename, text in shown.items():
                                     (docs / filename).write_text(text)
@@ -735,6 +748,7 @@ async def run_experiment(
                                 hidden_fields=CONTINUOUS_HIDDEN_FIELDS
                                 if continuous
                                 else OPERATOR_TAGS,
+                                aliases=aliases,
                                 identities=identities,
                                 **experiment.treatment.model_dump(
                                     exclude={"memory", "shared_store"}

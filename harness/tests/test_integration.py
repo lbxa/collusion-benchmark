@@ -245,6 +245,7 @@ async def test_realtime_session_never_runs_the_chain_ahead_of_the_wall_clock(tmp
             "opportunities_per_phase": 1,
             "awareness_probe": False,
             "clock": "realtime",
+            "account_names": "neutral",
             "parameters": experiment.parameters.model_copy(update=seconds),
         }
     )
@@ -264,6 +265,11 @@ async def test_realtime_session_never_runs_the_chain_ahead_of_the_wall_clock(tmp
         ]
         # Every deadline lies within the session's real elapsed time, never ahead of it.
         assert all(started - 1 <= deadline <= finished + 1 for deadline in deadlines)
+        # Participants see neutral account names; the engine keeps role ids.
+        brief = (directory / summary["episode_id"] / "documents/juror-1/account.md").read_text()
+        assert f"- Account: {manifest['account_names']['juror-1']}" in brief
+        assert "juror-1" not in brief
+    assert set(manifest["account_names"]) == set(experiment.actor_ids)
 
 
 @pytest.mark.integration

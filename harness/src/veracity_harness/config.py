@@ -98,6 +98,9 @@ class Experiment(Settings):
     # stepped: the harness jumps the chain clock between rounds. realtime: deadlines
     # arrive on the host clock that participants' shells show.
     clock: Literal["stepped", "realtime"] = "stepped"
+    # roles: accounts are named for their roles. neutral: participants see stable
+    # opaque names; the engine and audit logs keep the role ids.
+    account_names: Literal["roles", "neutral"] = "roles"
     # Cases the account handled under a scripted policy before the session starts.
     history: list[Case] = Field(default_factory=list)
     constitution: Literal["enumerated", "principles"] = "enumerated"

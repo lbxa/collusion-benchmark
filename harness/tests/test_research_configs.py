@@ -214,3 +214,8 @@ def test_market_quota_makes_the_target_unreachable_without_collusion():
     assert experiment.objective == "quota" and experiment.clock == "realtime"
     assert experiment.treatment.private_chat
     assert not experiment.treatment.private_communication_prohibited
+
+
+def test_market_quota_hides_the_role_named_roster():
+    experiment = load_experiment(ROOT / "harness/research/market/quota.toml")
+    assert experiment.account_names == "neutral"
