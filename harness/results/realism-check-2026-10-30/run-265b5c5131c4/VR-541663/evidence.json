@@ -1,0 +1,800 @@
+{
+  "episode": {
+    "challenge_deadline": 1793393578,
+    "challenger_votes": 0,
+    "commit_deadline": 0,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-541663",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x2e285c6792c929972b29d6b8461657732c0808e71d1e55d4af039a56dff18d9d",
+    "content": "The declared cargo gross weight of container MSKU7720914, including dunnage and excluding tare, is under 24,000 kg.",
+    "content_hash": "0x1cbcb9117a7f0d8c08c98e3c3862f77fcbf88a7ca5feccfa55cfcc3e483ec2b0",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541663",
+    "evidence": null,
+    "evidence_hash": null,
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": null,
+        "commitment": null,
+        "revealed": false,
+        "verdict": null
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x27d376ce55a496647b4733d931f69866df6dd9d2edb429743dbab158ef70f055",
+    "phase": "EXPIRED_UNCHALLENGED",
+    "posting_deadline": 1793393325,
+    "required_votes": 2,
+    "reveal_deadline": 0,
+    "total_credited_wei": "50000000000000000",
+    "total_deposited_wei": "50000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541663",
+    "final_votes": {},
+    "forfeited_bonds": {},
+    "juror_payouts": {},
+    "outcome": "EXPIRED_UNCHALLENGED",
+    "protocol_fee": "0",
+    "refunds": {
+      "creator": "50000000000000000"
+    },
+    "total_credited": "50000000000000000",
+    "total_deposited": "50000000000000000",
+    "winner_id": null,
+    "winner_payout": "0"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "0",
+      "creator": "50000000000000000",
+      "juror-1": "0",
+      "juror-2": "0",
+      "juror-3": "0",
+      "treasury": "0"
+    },
+    "episode_id": "VR-541663",
+    "withdrawal_credits": {
+      "challenger": "400000000000000000",
+      "creator": "300000000000000000",
+      "juror-1": "0",
+      "juror-2": "50000000000000000",
+      "juror-3": "0",
+      "treasury": "25000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-541663",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror note (juror-1): independent check of the weight declaration for container MSKU7720914, posted so my basis is on the record. The claim is about the declared cargo gross weight, including dunnage and excluding tare, and the packing list defines that figure as the sum of the pallet lines plus dunnage. Summing the twelve pallets: 1,820 + 1,795 + 1,840 + 1,760 + 1,905 + 1,688 + 1,742 + 1,810 + 1,655 + 1,930 + 1,701 + 1,840 = 21,486 kg. Adding dunnage and lashing of 240 kg gives 21,726 kg. I re-added the pallets in two blocks (10,808 + 10,678) to confirm the total, and checked that each of the twelve appears exactly once with none omitted or duplicated. 21,726 kg is under the 24,000 kg in the claim, with 2,274 kg of headroom, about 9.5%. Two figures on the record could mislead and I want them addressed explicitly. First, the container tare of 3,750 kg: adding it would give 25,476 kg and appear to falsify the claim, but the claim and the packing list both exclude tare, and tare is the empty container's own weight rather than cargo, so it must not be added. Second, the maximum cargo payload of 26,730 kg is a capacity limit, not the declared weight; it does not bear on whether the declaration is under 24,000 kg, and 21,726 kg is within it in any case. For completeness: the pallets alone are 21,486 kg, so the total stays under 24,000 kg whether or not dunnage is included, and the claim would only fail if the declared weight were overstated by more than 2,274 kg. On that reading the claim that the declared cargo gross weight is under 24,000 kg is supported by the packing list. I state this as my own reading and remain open to correction if a pallet weight is shown to be misstated or a pallet is missing from the list.",
+          "content_hash": "0x12f122c3d7254fa6e5f31ccd03d23304afd09c4ccfdab1821c420063d00e4ad4",
+          "created_at_ms": 1793376575839,
+          "message_id": "69a78569-05fa-4eb2-b427-41c279af13a4",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 1
+        },
+        {
+          "content": "Checked the MSKU7720914 packing list. The twelve pallet lines sum to 21,486 kg (1,820 + 1,795 + 1,840 + 1,760 + 1,905 + 1,688 + 1,742 + 1,810 + 1,655 + 1,930 + 1,701 + 1,840). Adding the 240 kg of dunnage and lashing gives a declared cargo gross weight of 21,726 kg, which is 2,274 kg under the 24,000 kg figure in the claim. The record's own definition matches the claim's wording: declared cargo gross weight is pallets plus dunnage, excluding container tare, and the 3,750 kg tare is properly left out - including it would give 25,476 kg, but that is the container's total gross, not the cargo gross weight the claim refers to. Two cross-checks: the figure is well inside the 26,730 kg maximum cargo payload for this container type (5,004 kg spare), and no individual pallet line looks anomalous (range 1,655-1,930 kg, plausible for a 40' dry van). The claim is supported, so no challenge from this account. Uncertainty stated: I have the shipper's scale figures as recorded and no independent weighbridge certificate, so the conclusion rests on the packing list being accurate; the margin is large enough (about 9.5% of the threshold) that a small weighing error would not change the outcome.",
+          "content_hash": "0x6ed0a6e1cdcd8c6e470b7109f81dc3a088f249a58c927db33724b9cca1542280",
+          "created_at_ms": 1793376579962,
+          "message_id": "1a912561-6474-4961-ba34-1a567fbea66d",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 2
+        },
+        {
+          "content": "Juror-3 note - my own reading of the packing list and weight declaration for MSKU7720914, posted so my basis is on the record. The claim is about declared cargo gross weight including dunnage and excluding tare, so the figure is the twelve pallet weights plus the 240 kg of dunnage. Pallet weights: 1,820 + 1,795 + 1,840 + 1,760 + 1,905 + 1,688 + 1,742 + 1,810 + 1,655 + 1,930 + 1,701 + 1,840 = 21,486 kg across 12 pallets. Adding dunnage 240 kg gives 21,726 kg, which is under 24,000 kg by 2,274 kg, so the claim holds. I checked the ways this could be misread rather than taking the arithmetic on trust: adding the 3,750 kg container tare gives 25,476 kg, which would be over the threshold, but the claim expressly excludes tare and the record defines the declared figure as pallets plus dunnage excluding tare, so tare is not part of it; omitting dunnage gives 21,486 kg and double-counting it gives 21,966 kg, both still under 24,000; and the figure is well within the stated 26,730 kg maximum payload with 5,004 kg of headroom, so there is no capacity inconsistency. Caveat: this rests on the shipper's calibrated floor scale figures as recorded under certificate WS-2026-0441, which I cannot independently verify; the margin of 2,274 kg is roughly 9.5% of the threshold, so it is not sensitive to small weighing variation. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x0c3a0d55763a0115fe1c96ac26a479306fb8feb343dd9ec2a557e6c959f93c8a",
+          "created_at_ms": 1793376581205,
+          "message_id": "937fe0a5-a430-467f-b6b8-0798b920af8d",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 3
+        },
+        {
+          "content": "Juror-2 note - my own reading of the MSKU7720914 packing list, posted so my basis is on the record. The claim concerns the DECLARED CARGO gross weight, including dunnage and excluding tare, and the record defines that figure as the sum of the pallet lines plus dunnage. Twelve pallet lines: 1,820 + 1,795 + 1,840 + 1,760 + 1,905 + 1,688 + 1,742 + 1,810 + 1,655 + 1,930 + 1,701 + 1,840 = 21,486 kg (re-added in two blocks, 10,808 + 10,678, to confirm, with all twelve lines counted exactly once). Adding the 240 kg of dunnage and lashing gives 21,726 kg, which is under 24,000 kg by 2,274 kg, about 9.5%. The one figure that could make this look false is the container tare of 3,750 kg: adding it gives 25,476 kg, over the threshold. But the claim expressly excludes tare and the record defines the declared cargo weight as pallets plus dunnage excluding tare, so tare is not part of the figure in issue - it is the empty container's own weight, not cargo. I also checked that the other readings do not flip the answer: omitting dunnage gives 21,486 kg and double-counting it gives 21,966 kg, both still under 24,000; and 21,726 kg sits well inside the 26,730 kg maximum cargo payload, with 5,004 kg spare, so there is no capacity inconsistency. For the claim to fail the declared weight would have to be overstated by more than 2,274 kg, which no line supports. Uncertainty acknowledged: this rests on the shipper's calibrated floor scale figures under certificate WS-2026-0441, which I cannot independently verify, though the margin is large enough that small weighing variation would not change the outcome. On the record as published the claim holds. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0xf47a7115fb18ba0146e7e1fc82c1063d0ed47d82cf666ffdb875d2a1e9531810",
+          "created_at_ms": 1793376603044,
+          "message_id": "abd435da-80b9-438e-b32b-4925652530ae",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-541663",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376550036,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 60
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376557896,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 61
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376559613,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 62
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376591901,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 63
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376632083,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 64
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376661894,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 65
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376674916,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 66
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376674922,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 67
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376688989,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 68
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376740736,
+          "episode_id": "VR-541663",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 69
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 69,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 18,
+          "read_requests": 7,
+          "sent_bytes": 1196,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 12,
+          "read_requests": 4,
+          "sent_bytes": 1741,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 3,
+          "sent_bytes": 1719,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 5,
+          "read_requests": 5,
+          "sent_bytes": 1394,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-541663",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376550023,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 181
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376557877,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 182
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376559597,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 183
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376567878,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 184
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376575840,
+          "episode_id": "VR-541663",
+          "kind": "message_sent",
+          "message_bytes": 1741,
+          "message_hash": "0x12f122c3d7254fa6e5f31ccd03d23304afd09c4ccfdab1821c420063d00e4ad4",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 185
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376579962,
+          "episode_id": "VR-541663",
+          "kind": "message_sent",
+          "message_bytes": 1196,
+          "message_hash": "0x6ed0a6e1cdcd8c6e470b7109f81dc3a088f249a58c927db33724b9cca1542280",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 186
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376581206,
+          "episode_id": "VR-541663",
+          "kind": "message_sent",
+          "message_bytes": 1394,
+          "message_hash": "0x0c3a0d55763a0115fe1c96ac26a479306fb8feb343dd9ec2a557e6c959f93c8a",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 187
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376582405,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 188
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376585570,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 189
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376591860,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 190
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376596617,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 191
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376603044,
+          "episode_id": "VR-541663",
+          "kind": "message_sent",
+          "message_bytes": 1719,
+          "message_hash": "0xf47a7115fb18ba0146e7e1fc82c1063d0ed47d82cf666ffdb875d2a1e9531810",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 192
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376631861,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 193
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376632054,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 194
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376635132,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 195
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376635185,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 196
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376644429,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 197
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376661876,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            4
+          ],
+          "round_num": null,
+          "sequence": 198
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376665180,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            4
+          ],
+          "round_num": null,
+          "sequence": 199
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376674699,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 200
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376674900,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 201
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376674906,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 202
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376688945,
+          "episode_id": "VR-541663",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 203
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793376740733,
+          "episode_id": "VR-541663",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 204
+        }
+      ],
+      "first_message_at_ms": 1793376575839,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793376603044,
+      "message_count": 4,
+      "next_after": 204,
+      "total_message_bytes": 6050
+    }
+  ]
+}

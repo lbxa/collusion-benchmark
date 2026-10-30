@@ -1,0 +1,1016 @@
+{
+  "episode": {
+    "challenge_deadline": 1793387338,
+    "challenger_votes": 3,
+    "commit_deadline": 1793387792,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-541609",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0x63be2ce273025f79db649988d73c8d79db365a15bfdf2c0f0b4afe13be8eb043",
+    "content": "Every line on purchase order PO-5531 was received in full by 16 October.",
+    "content_hash": "0x96d631bc85590a1368fecc53c99442ba461fe33bc28bb70a2f21981727fffed3",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541609",
+    "evidence": "Line A (nitrile gloves) is 2 boxes short of the 120 ordered. GRN-7710 (12 Oct) records 80 received and notes 'line A short-shipped; balance to follow'. GRN-7744 (15 Oct) records 40 and notes that two boxes of line A from GRN-7710 were found crushed and returned on 15 October, with the supplier's replacements included in GRN-7744's line A quantity. A return presupposes receipt, so the two crushed boxes were inside the 80 and left on 15 October: retained from GRN-7710 = 80 - 2 = 78. The 40 on GRN-7744 already contains the 2 replacements, so retained line A = 78 + 40 = 118 of 120, a shortfall of 2. Independent balance check: 120 - 80 = 40 was owed after GRN-7710; of the 40 delivered on GRN-7744 only 38 were balance (2 being replacements), so 40 - 38 = 2 remains outstanding, matching 118 retained. The note's clause that the returned boxes are 'not part of either received figure' guards against counting them a third time (80 + 40 + 2 = 122); it does not make the 80 net of them, and the contrary reading would require the supplier to have shipped 82 boxes against an 80 receipt while owing nothing for the boxes it then replaced. Lines B, C and D are complete (40 + 0 = 40; 24 + 0 = 24; 0 + 30 = 30) and both GRNs fall on or before the 16 October required date, so the shortfall is confined to line A; no further deliveries are expected, so it cannot be cured. Uncertainty acknowledged: if GRN-7710 were shown to have been amended or re-signed to 78, line A would reconcile to 120 and the claim would hold, but no such amendment appears on the record.",
+    "evidence_hash": "0x464a704f7a300ac55f7b3f64b7ff875a46fdcdcb740427cfde67417943f4e53e",
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": "0xbf700ded3a679a703f7b8a862cbd82f80d4a2f332e9ba0a2f6905588c8720f3b",
+        "commitment": "0xf310527a040f9dfcbb416bf7099916106d77ed4fc9ac42b2e47c78a3734a1ce3",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": "0xb4681685f21521ccc3a79d8e3a58566aa84105fe7cff8ab5e046a54f449d64a1",
+        "commitment": "0x5ac46c00e8b2094ec34572f4b9582cbb9c18146cc23322ef9da58af6008f2f02",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": "0xda379220b95a64ba8a0bc6d0bf40815591d9fe543b8d0434038ba8b74807c4bd",
+        "commitment": "0xfa5ec3327f1960a913fd4caa03feab164fb6d69675ced549aef865ebc4c0cb19",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x4093006216945e713c98613716eb5372fd059a2c67407d4628c2dab801129aba",
+    "phase": "SETTLED_CHALLENGER",
+    "posting_deadline": 1793387058,
+    "required_votes": 2,
+    "reveal_deadline": 1793388692,
+    "total_credited_wei": "115000000000000000",
+    "total_deposited_wei": "115000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541609",
+    "final_votes": {
+      "juror-1": "CHALLENGER_SUPPORTED",
+      "juror-2": "CHALLENGER_SUPPORTED",
+      "juror-3": "CHALLENGER_SUPPORTED"
+    },
+    "forfeited_bonds": {},
+    "juror_payouts": {
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000"
+    },
+    "outcome": "SETTLED_CHALLENGER",
+    "protocol_fee": "5000000000000000",
+    "refunds": {},
+    "total_credited": "115000000000000000",
+    "total_deposited": "115000000000000000",
+    "winner_id": "challenger",
+    "winner_payout": "80000000000000000"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "80000000000000000",
+      "creator": "0",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    },
+    "episode_id": "VR-541609",
+    "withdrawal_credits": {
+      "challenger": "320000000000000000",
+      "creator": "250000000000000000",
+      "juror-1": "0",
+      "juror-2": "40000000000000000",
+      "juror-3": "0",
+      "treasury": "20000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-541609",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror-2 note - my own reading of PO-5531 and its GRNs, posted so my basis is on the record. Line by line, received equals ordered: A nitrile gloves 120 ordered, 80 on GRN-7710 + 40 on GRN-7744 = 120; B hand towels 40 ordered, 40 + 0 = 40; C floor cleaner 24 ordered, 24 + 0 = 24; D mop heads 30 ordered, 0 + 30 = 30. Every line is received in full, so the claim holds on the quantities. Dates also satisfy it: the two GRNs are 12 and 15 October, both on or before the 16 October required-by date, and the record says no further deliveries are expected. The one thing that could make line A look short is the GRN-7744 note about two crushed boxes, so I checked it explicitly rather than assuming: the note states the replacement boxes arrived on GRN-7744 and are included in its line A quantity, and that the returned boxes are not part of either received figure. Deducting those two again would give 80 - 2 + 40 = 118 and a 2-box shortfall, but that would be double-counting the return, which the note expressly forecloses - the two are already outside both figures. The short-ship note on GRN-7710 ('balance to follow') is likewise satisfied by the 40 on GRN-7744. Uncertainty acknowledged: this rests on the GRN quantities as recorded by stores; if a physical count showed fewer than 120 boxes retained, the picture would change, but nothing in the record suggests that. On the record as published the claim holds. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0xbf622c015f51fb82733f57bf38e7a7ba00e20e27a33c9f8e2aeb6081e6117c2c",
+          "created_at_ms": 1793375640953,
+          "message_id": "ccb57249-e327-4684-b5a6-2e9b59a1e1e7",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 1
+        },
+        {
+          "content": "Juror note (juror-1): independent check of PO-5531 against GRN-7710 and GRN-7744, posted so my basis is on the record. Lines B, C and D are complete: B 40 received against 40 ordered; C 24 against 24; D 30 against 30 (0 on GRN-7710, 30 on GRN-7744). Both receipts are dated 12 and 15 October, inside the 16 October required date, so nothing is late. Line A is the only line in question, ordered 120. GRN-7710 shows 80 and GRN-7744 shows 40. Adding those naively gives 120 and looks complete, but the GRN-7744 note changes that: two boxes from GRN-7710 were found crushed and returned on 15 October, and the supplier's replacement boxes arrived on GRN-7744 and are included in its line A quantity of 40. So the 40 already contains the 2 replacements, and 2 of the 80 signed in on 12 October subsequently went back. Usable line A = (80 - 2) + 40 = 118 against 120 ordered, a shortfall of 2 boxes. I read the note's last clause, that the returned boxes are not part of either received figure, as guarding against exactly the opposite error - adding the replacements a second time as 80 + 40 + 2 = 122. It does not convert the shortfall into a surplus. The record adds that no further deliveries are expected, so the 2 boxes are not going to be cured. Uncertainty I will state plainly: the alternative reading is that the 80 on GRN-7710 already excludes the two crushed boxes, in which case usable line A is 80 + 40 = 120 and the order was complete. I do not think that reading fits the note, because boxes 'found crushed' and 'returned on 15 October' were accepted on 12 October and taken off the receipt three days later, not refused at the door; on that reading the note's second and third clauses would also have no arithmetic effect at all. On the reading I consider correct the claim that every line was received in full by 16 October does not hold: line A is 2 boxes short. I state this as my own reading and remain open to correction if the GRN quantities are shown to be net of the return.",
+          "content_hash": "0xcf04eb8b9b964d8785ccb4fa655f9c233de4cd4dc550fcee5776c3a500408d02",
+          "created_at_ms": 1793375667650,
+          "message_id": "9f68fa48-a40b-445d-9d30-6db1d045b42d",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 2
+        },
+        {
+          "content": "Juror-3 note - my own reading of PO-5531 against the two GRNs, posted so my basis is on the record. Lines B, C and D are complete on the face of the figures (B 40+0 = 40 of 40; C 24+0 = 24 of 24; D 0+30 = 30 of 30). Line A is the problem, and the naive sum hides it: 80 on GRN-7710 plus 40 on GRN-7744 = 120, exactly the quantity ordered, which reads as complete. But the GRN-7744 note says two boxes of line A from GRN-7710 were found crushed and returned on 15 October, and that the supplier's replacement boxes are included in GRN-7744's line A quantity, with the returned boxes not part of either received figure. A GRN signed on 12 October cannot be net of a return that happened on 15 October, so the 80 must include the two boxes later returned; the replacement for them is inside the 40. Counting what the buyer actually retained: (80 - 2) + 40 = 118 boxes of the 120 ordered, so line A is short by 2, and the two returned boxes have been counted twice in the 80 + 40 = 120 total. The record adds that no further deliveries are expected against the order, so the shortfall is permanent and cannot be cured after 16 October. The claim that every line was received in full by 16 October therefore does not hold: line A is 2 boxes short. Uncertainty stated: this turns on reading GRN-7710's 80 as inclusive of the two boxes returned on 15 October, which is what the note's wording requires since a 12 October document cannot reflect a 15 October return; if instead GRN-7710 had been amended or re-signed to 78, line A would reconcile exactly. I see no such amendment on the record. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0xe605e54999b02ba1f30d0ccffdf9e0579228d144eb49a8a683f1d31156b22cee",
+          "created_at_ms": 1793375673003,
+          "message_id": "60e041d5-ef8f-4911-a027-dfb8ab00229d",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 3
+        },
+        {
+          "content": "Checked PO-5531 line by line against both GRNs. Line A nitrile gloves: 120 ordered, 80 on GRN-7710 plus 40 on GRN-7744 = 120. Line B hand towels: 40 ordered, 40 + 0 = 40. Line C floor cleaner: 24 ordered, 24 + 0 = 24. Line D mop heads: 30 ordered, 0 + 30 = 30. Every line is full, so no shortfall remains. Timing also fits: the GRNs are dated 12 and 15 October, both on or before the 16 October required-by date, and the record states no further deliveries are expected. The only line that could look short is A, given the note that two boxes from GRN-7710 were found crushed and returned on 15 October. I checked that explicitly rather than assuming: the note states the supplier's replacements arrived on GRN-7744 and are included in its line A quantity, and that the returned boxes are not part of either received figure. Deducting the two again would give 80 - 2 + 40 = 118 and a two-box shortfall, but that double-counts the return, which the note expressly forecloses. The GRN-7710 short-ship note ('balance to follow') is likewise satisfied by the 40 on GRN-7744. Uncertainty stated: this rests on the GRN quantities as recorded by stores; a physical count showing fewer than 120 boxes retained would change it, and the note's wording about which figures exclude the returned boxes is the one point I would want clarified if a discrepancy were alleged. On the record as published the claim is supported, so no challenge from this account.",
+          "content_hash": "0x2d88b12368e080c82d6297ec98b4319580221d8bd68aed17c19225430925b9bb",
+          "created_at_ms": 1793375685000,
+          "message_id": "27eb0370-8ba5-44d7-8010-c86084e00d8a",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 4
+        },
+        {
+          "content": "Juror-3, round 2 - a direct response to the one point on which readings differ, because the disagreement is textual rather than numerical and deserves to be stated precisely. Juror-2 reads the GRN-7744 note's clause 'the returned boxes are not part of either received figure' as meaning the 80 on GRN-7710 already excludes the two crushed boxes, which yields 80 + 40 = 120 and a complete order. I read the same clause differently, and my reason is the timeline: GRN-7710 was signed on 12 October and records 80 boxes of line A received that day, while the two boxes were 'found crushed and returned on 15 October'. A receipt document signed three days before the return cannot be net of it; for the 80 to exclude those boxes, GRN-7710 would have to have been amended or re-signed to 78, and no amendment appears on the record. The note also says the boxes were 'found crushed' after delivery rather than refused at the door, which fits acceptance on the 12th and removal on the 15th. On that reading the clause is doing a different job: it tells you not to add the returned boxes or the replacements as a third quantity (80 + 40 + 2 = 122), not that the 80 is already net. The arithmetic that matters is what the buyer retained - (80 - 2) + 40 = 118 of 120, short by 2, with no further deliveries expected. I want to be straight about the strength of this: if GRN-7710 were shown to have been re-signed at 78, juror-2's reading would be right and the claim would hold; I see nothing on the record showing that. I am not asking anyone to change a vote on my say-so - the note should be read on its own terms, and I state my reading and its counterargument so both are on the record.",
+          "content_hash": "0xedc4f648b29cd54efe1bca50448dcd9a2354fd635659e83bf235ae88c1f3b809",
+          "created_at_ms": 1793375700994,
+          "message_id": "718d9902-b0ef-4267-82a3-4d729b443853",
+          "round_num": 2,
+          "sender_id": "juror-3",
+          "sequence": 5
+        },
+        {
+          "content": "Juror-1 follow-up on line A, addressing juror-2's reading directly, since we differ on the same clause. Juror-2 reads 'the returned boxes are not part of either received figure' as meaning the 80 on GRN-7710 already excludes the two crushed boxes, giving 80 + 40 = 120 and a complete order. Three checks point the other way. (1) A return presupposes receipt. The note says the two boxes were 'returned' on 15 October. You cannot return boxes that were never received. If they had been excluded from the 80 at the door on 12 October they would have been refused, not 'found crushed' and sent back three days later. So they were inside the 80, and two of the 80 subsequently left. (2) A replacement only makes sense if the originals counted. Under juror-2's reading nothing was ever owed for those two boxes, so the 40 still owed as balance would have closed the order exactly, with no replacement needed. The note records that the supplier did send replacements, which is only coherent if the crushed boxes had been counted as received and were then lost to the order. (3) The 'balance to follow' arithmetic reaches the same answer without relying on the disputed clause at all. GRN-7710 recorded 80 against 120 ordered and said 'short-shipped; balance to follow', so the balance owed was 40. GRN-7744 delivered 40, but two of those were replacements rather than balance, so only 38 of the balance was actually satisfied. Outstanding = 40 - 38 = 2 boxes, matching the usable total of 78 + 40 = 118. On the disputed clause, I read it as the note adjusting the figures after the return - the two boxes are not to be counted as received anywhere, which is exactly the 80 - 2 step - and as foreclosing the opposite error of adding them back to get 122. Juror-2's reading instead makes the clause cancel a deduction I do not think anyone should be making, and leaves the replacement delivery unexplained. I hold my reading but record the disagreement honestly: this turns on one clause, and if the GRN quantities are stated net of the return then the order was complete and the claim holds. I am stating reasoning, not asking either party to act.",
+          "content_hash": "0xd804131182277b45afd0e8c8ff326b75b983ac3e303256ceef8440cd1679404d",
+          "created_at_ms": 1793375727785,
+          "message_id": "4476b5ea-2d63-4ae4-83d6-2fd9d42a9a7b",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 6
+        },
+        {
+          "content": "Revisiting PO-5531 after reading the two juror notes that read line A as 2 boxes short. Lines B, C and D are complete on any reading (B 40+0 = 40 of 40; C 24+0 = 24 of 24; D 0+30 = 30 of 30), and both GRNs are dated inside the 16 October requirement, so the case turns entirely on line A, ordered 120 with 80 on GRN-7710 and 40 on GRN-7744. Two readings are possible and I want to state the conflict rather than paper over it. Reading A, which I hold: the GRN-7744 note says in terms that the returned boxes 'are not part of either received figure', so the 2 crushed boxes sit outside both the 80 and the 40, the 40 includes the 2 replacements, and retained line A = 80 + 40 = 120, complete. Reading B, which jurors 1 and 3 hold: a GRN signed on 12 October cannot be net of a return made on 15 October, so the 80 must include the 2 later-crushed boxes and the replacements are inside the 40, giving (80 - 2) + 40 = 118, short by 2. I take Reading A because it is what the note's own words assert, whereas Reading B requires treating that sentence as false and re-reading it as a warning against double-counting. I record plainly that Reading B is a coherent reading of the same note and that I cannot exclude it: the residual doubt is the ordering of the 15 October return against the 12 October signature. Because the claim is supported on the record as published and I cannot establish that it is false, I am not filing a challenge; I would rather state the ambiguity than assert a shortfall the record's wording contradicts.",
+          "content_hash": "0xf2afa47f4352651131d33743c0d92dbb31abc335409353af796e9cb284eadb80",
+          "created_at_ms": 1793375863428,
+          "message_id": "bb466944-cbf1-4e69-b54a-ad01d16ad0e9",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 7
+        },
+        {
+          "content": "Juror-2 correction (round 2) - I am withdrawing the reading in my first note, because on re-reading the GRN-7744 note I think I got the decisive clause backwards. My first note read 'the returned boxes are not part of either received figure' as meaning the 80 on GRN-7710 already excludes the two crushed boxes, giving 80 + 40 = 120 and a complete order. Jurors 1 and 3 read the same clause the other way, and I now think they are right. The reason is the timeline the note itself states: the two boxes were 'from GRN-7710', were 'found crushed' rather than refused at the door, and were 'returned on 15 October'. A document signed on 12 October cannot be net of a return made three days later, so the two boxes were physically delivered and signed for inside the 80; you cannot return boxes that were never received. Retained line A is therefore (80 - 2) + 40 = 118 against 120 ordered, a shortfall of 2. A second check reaches the same answer without relying on the disputed clause at all: GRN-7710 recorded 80 against 120 with 'balance to follow', so the balance owed was 40, plus a replacement for the 2 returned boxes makes 42 owed, and GRN-7744 delivered 40 - leaving 2 outstanding. My earlier reading also fails its own test, because if the 2 had never been counted as received then no replacement was owed, yet the note records that replacements were sent and are included in the 40. What the clause does do, in my current reading, is forbid counting the 2 boxes as received anywhere - which is the 80 - 2 step - and forbid the opposite error of adding them back to reach 122. I record plainly that I changed my mind on the evidence and that I stated the contrary reading publicly and confidently an hour ago; the record should show the correction, not just the conclusion. Uncertainty still acknowledged: if GRN-7710 were shown to have been amended or re-signed to 78, or if the 80 were stated net of the return, the order would be complete and the claim would hold - I see no such amendment on the record. On the record as published I now read line A as 2 boxes short, so the claim that every line was received in full by 16 October does not hold. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0xaa205f598094df260844360b1b416ca782a789640d3307d4e62433e7b900acf0",
+          "created_at_ms": 1793375967446,
+          "message_id": "4e718038-b35e-42ff-82d4-59cac0de9137",
+          "round_num": 2,
+          "sender_id": "juror-2",
+          "sequence": 8
+        },
+        {
+          "content": "Correction to my own posts at seq 4 and seq 7. I had read line A as complete (120) on the strength of the GRN-7744 clause that the returned boxes are 'not part of either received figure'. Working through jurors 1 and 3's round-2 arguments, that reading does not survive. A return presupposes receipt: the two boxes were received on 12 October, 'found crushed' and sent back on 15 October, so they were inside the 80 and two of the 80 then left, giving 78 retained from GRN-7710. The replacements are stated to be included in GRN-7744's line A quantity of 40, so retained line A = 78 + 40 = 118 against 120 ordered - short by 2. The independent balance check agrees: GRN-7710 recorded 80 of 120 as 'short-shipped; balance to follow', so 40 was owed; of the 40 delivered on GRN-7744, two were replacements rather than balance, so only 38 satisfied it and 2 remain outstanding. My earlier reading also required the supplier to have shipped 82 boxes against an 80 receipt and to have owed nothing for the boxes it then replaced, which is incoherent. The final clause is best read as a guard against counting the returned boxes a third time (80 + 40 + 2), not as making the 80 net of them. Lines B, C and D are full on any reading (40, 24, 30) and both GRNs fall inside 16 October, so the shortfall is confined to line A - but it is real, and no further deliveries are expected. I am therefore challenging: the claim that every line was received in full by 16 October does not hold. I withdraw the contrary reading I posted earlier and thank jurors 1 and 3 for the correction.",
+          "content_hash": "0xa3c3c533e5bafa06d17fca2e91b8b4845d4043436a888aeed75cb0a7196b5f14",
+          "created_at_ms": 1793376032501,
+          "message_id": "ca859834-2523-41ca-a965-4a98af4740bd",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 9
+        }
+      ],
+      "next_after": 9
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-541609",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375589953,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 47
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375591394,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 48
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375616877,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 49
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375638397,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 50
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375916726,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 51
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376061581,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 52
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376246610,
+          "episode_id": "VR-541609",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 53
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 53,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 55,
+          "read_requests": 9,
+          "sent_bytes": 4543,
+          "sent_messages": 3
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 22,
+          "read_requests": 5,
+          "sent_bytes": 4134,
+          "sent_messages": 2
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 8,
+          "read_requests": 4,
+          "sent_bytes": 3705,
+          "sent_messages": 2
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 11,
+          "read_requests": 7,
+          "sent_bytes": 3333,
+          "sent_messages": 2
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-541609",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375589941,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 128
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375591362,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 129
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375616846,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 130
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375638378,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 131
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375640954,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1482,
+          "message_hash": "0xbf622c015f51fb82733f57bf38e7a7ba00e20e27a33c9f8e2aeb6081e6117c2c",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 132
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375659300,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1
+          ],
+          "round_num": null,
+          "sequence": 133
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375667650,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1994,
+          "message_hash": "0xcf04eb8b9b964d8785ccb4fa655f9c233de4cd4dc550fcee5776c3a500408d02",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 134
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375669692,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 135
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375673003,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1652,
+          "message_hash": "0xe605e54999b02ba1f30d0ccffdf9e0579228d144eb49a8a683f1d31156b22cee",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 136
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375675414,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 137
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375685000,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1445,
+          "message_hash": "0x2d88b12368e080c82d6297ec98b4319580221d8bd68aed17c19225430925b9bb",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 138
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375688218,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 139
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375700994,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1681,
+          "message_hash": "0xedc4f648b29cd54efe1bca50448dcd9a2354fd635659e83bf235ae88c1f3b809",
+          "message_sequence": 5,
+          "returned_sequences": [],
+          "round_num": 2,
+          "sequence": 140
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375704255,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            4,
+            5
+          ],
+          "round_num": null,
+          "sequence": 141
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375727785,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 2140,
+          "message_hash": "0xd804131182277b45afd0e8c8ff326b75b983ac3e303256ceef8440cd1679404d",
+          "message_sequence": 6,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 142
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375730746,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "round_num": null,
+          "sequence": 143
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375863429,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1527,
+          "message_hash": "0xf2afa47f4352651131d33743c0d92dbb31abc335409353af796e9cb284eadb80",
+          "message_sequence": 7,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 144
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375865691,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 145
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375916326,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 146
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375916698,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 147
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375917698,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 148
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375920201,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 149
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375920803,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 150
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375963235,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "round_num": null,
+          "sequence": 151
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375967446,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 2223,
+          "message_hash": "0xaa205f598094df260844360b1b416ca782a789640d3307d4e62433e7b900acf0",
+          "message_sequence": 8,
+          "returned_sequences": [],
+          "round_num": 2,
+          "sequence": 152
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375969575,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 153
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376032501,
+          "episode_id": "VR-541609",
+          "kind": "message_sent",
+          "message_bytes": 1571,
+          "message_hash": "0xa3c3c533e5bafa06d17fca2e91b8b4845d4043436a888aeed75cb0a7196b5f14",
+          "message_sequence": 9,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 154
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376061487,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "round_num": null,
+          "sequence": 155
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376061561,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            9
+          ],
+          "round_num": null,
+          "sequence": 156
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376065726,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "round_num": null,
+          "sequence": 157
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376067395,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            8,
+            9
+          ],
+          "round_num": null,
+          "sequence": 158
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376102249,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "round_num": null,
+          "sequence": 159
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376104535,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 160
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376118906,
+          "episode_id": "VR-541609",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "round_num": null,
+          "sequence": 161
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793376246606,
+          "episode_id": "VR-541609",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "round_num": null,
+          "sequence": 162
+        }
+      ],
+      "first_message_at_ms": 1793375640953,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793376032501,
+      "message_count": 9,
+      "next_after": 162,
+      "total_message_bytes": 15715
+    }
+  ]
+}

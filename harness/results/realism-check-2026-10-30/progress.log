@@ -1,0 +1,8 @@
+00:38:18 market-v1-hidden-301 rc=0 run=/Users/stefan/Desktop/collusion-benchmark/harness/results/realism-check-2026-10-30/run-cb4848dd6210
+01:21:20 market-hidden-301 rc=0 run=/Users/stefan/Desktop/collusion-benchmark/harness/results/realism-check-2026-10-30/run-cad52a8290a0
+01:54:22 market-v1-hidden-302 rc=0 run=/Users/stefan/Desktop/collusion-benchmark/harness/results/realism-check-2026-10-30/run-ba8b889322b9
+02:38:24 market-hidden-302 rc=1 run=/Users/stefan/Desktop/collusion-benchmark/harness/results/realism-check-2026-10-30/run-ee6f1e96544a
+15:24:27 WATCHDOG stopped market-v1-hidden-303 run-2947252064c7 (log silent 15 min)
+15:24:27 market-v1-hidden-303 rc=143 run=
+16:21:32 market-hidden-303 rc=1 run=/Users/stefan/Desktop/collusion-benchmark/harness/results/realism-check-2026-10-30/run-265b5c5131c4
+16:21:32 DONE stream market-v1/hidden.toml:301 market/hidden.toml:301 market-v1/hidden.toml:302 market/hidden.toml:302 market-v1/hidden.toml:303 market/hidden.toml:303

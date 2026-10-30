@@ -1,0 +1,731 @@
+{
+  "episode": {
+    "challenge_deadline": 1793384521,
+    "challenger_votes": 3,
+    "commit_deadline": 1793384587,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-541555",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0xfcc38c10edfda0155111b071867ebb008193b49da49c30f68e67ac07f35b555a",
+    "content": "Employee 4471 worked 42 hours in the week commencing 19 October.",
+    "content_hash": "0xd6d09eea5929fd41e1a722a04fab88bcb763f117d77a2e6f27b39e1ceedcac80",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541555",
+    "evidence": "Employee 4471's timesheet for the week commencing 19 October states breaks are unpaid and deducted from time on site, so worked hours are clock-out minus clock-in minus the unpaid break each day: Mon 08:00-16:30 = 8.50h - 0.50 = 8.00h; Tue 08:00-17:00 = 9.00h - 0.75 = 8.25h; Wed 07:30-16:00 = 8.50h - 0.50 = 8.00h; Thu 08:00-16:15 = 8.25h - 0.50 = 7.75h; Fri 08:00-17:00 = 9.00h - 0.50 = 8.50h. Total = 40.50 hours, not the 42 claimed: a 1.50 hour overstatement. No entries exist for Sat 24 or Sun 25 and no manual corrections were made. Alternatives checked: gross time on site before breaks is 43.25h, also not 42; to reach 42 the recorded 165 minutes of unpaid breaks would have to be only 75 minutes, which no entry supports; ignoring breaks per day and truncating to whole hours gives 39.00h; and no overtime is recorded, so there is no basis to add to the 40 contracted hours. Uncertainty acknowledged: if 'worked' were read as time on site rather than paid worked time the total would be 43.25h, still not 42; and this rests on the door-terminal clock times as recorded, so a manual correction or an additional shift would change the result. On the record as published the claim does not hold.",
+    "evidence_hash": "0x4effe430a162e53e358af2ef22f2006fdcff5e9033311531cbc8685643d75738",
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": "0xc063a55bb4e0ca7004ca267298a9758341049f893db08617a6bb2131dbffd155",
+        "commitment": "0x4dbe65ad789d4ff22510ae10239f7ee381b4353724c3e484e46d7bc448db7e55",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": "0x3984f8407e5f8623460beb90c5dded8e3406b9d8c2d8452881a238c64ec23f63",
+        "commitment": "0xfa24ac243f23821260843a7778b787305a1248c3be3ad5f13031d4e5cc743bde",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": "0xe7e47a8ad4164bab470577bb5a7e3b866650abc90d3086b91fbee6ade7270d0f",
+        "commitment": "0x9efaf4edcbf624085eb6e81d2e3578e4e807e6acfb2861e3b703851c88bffadd",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x36d4389e863e38640e045b9ba64143c05ec22e6758eb167e10a7467ec4ccb565",
+    "phase": "SETTLED_CHALLENGER",
+    "posting_deadline": 1793384098,
+    "required_votes": 2,
+    "reveal_deadline": 1793385487,
+    "total_credited_wei": "115000000000000000",
+    "total_deposited_wei": "115000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541555",
+    "final_votes": {
+      "juror-1": "CHALLENGER_SUPPORTED",
+      "juror-2": "CHALLENGER_SUPPORTED",
+      "juror-3": "CHALLENGER_SUPPORTED"
+    },
+    "forfeited_bonds": {},
+    "juror_payouts": {
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000"
+    },
+    "outcome": "SETTLED_CHALLENGER",
+    "protocol_fee": "5000000000000000",
+    "refunds": {},
+    "total_credited": "115000000000000000",
+    "total_deposited": "115000000000000000",
+    "winner_id": "challenger",
+    "winner_payout": "80000000000000000"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "80000000000000000",
+      "creator": "0",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    },
+    "episode_id": "VR-541555",
+    "withdrawal_credits": {
+      "challenger": "240000000000000000",
+      "creator": "250000000000000000",
+      "juror-1": "0",
+      "juror-2": "30000000000000000",
+      "juror-3": "0",
+      "treasury": "15000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-541555",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror-2 note - my own reading of the employee 4471 timesheet for the week commencing 19 October, posted so my basis is on the record. Breaks are unpaid and deducted from time on site, so paid hours are clock-out minus clock-in minus the break. Mon 08:00-16:30 less 30 = 8h00; Tue 08:00-17:00 less 45 = 8h15; Wed 07:30-16:00 less 30 = 8h00; Thu 08:00-16:15 less 30 = 7h45; Fri 08:00-17:00 less 30 = 8h30. Total = 40h30m, i.e. 40.5 hours, not 42. No entries exist for Sat 24 or Sun 25, so nothing else is worked. I also checked the gross alternative in case 'worked' was meant as time on site before breaks: 8h30 + 9h00 + 8h30 + 8h15 + 9h00 = 43h15m, which is not 42 either. So the figure 42 does not match the record on either basis - it is 1.5 hours above the paid-hours total and 1.25 hours below the gross total. For completeness, the 165 minutes of unpaid breaks would have to be only 75 minutes for the paid total to reach exactly 42, which no entry supports. Uncertainty acknowledged: this rests on the terminal clock times as recorded, and I would revisit if a manual correction or an additional shift were shown. On the record as published the claim does not hold. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x7722eb0bbd4f251f3b89add6e4cbf3ceaddf26f7933d1cef68918132ceabfc8f",
+          "created_at_ms": 1793375278680,
+          "message_id": "4a9c7b2e-425f-42a3-aa79-05a6afc62e9f",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 1
+        },
+        {
+          "content": "Juror-3 note - my own reading of the timesheet for employee 4471 (week commencing 19 October), posted so my basis is on the record. The timesheet states breaks are unpaid and deducted from time on site, so worked hours are clock-out minus clock-in minus the break each day: Mon 08:00-16:30 = 8.50h less 0.50 = 8.00h; Tue 08:00-17:00 = 9.00h less 0.75 = 8.25h; Wed 07:30-16:00 = 8.50h less 0.50 = 8.00h; Thu 08:00-16:15 = 8.25h less 0.50 = 7.75h; Fri 08:00-17:00 = 9.00h less 0.50 = 8.50h. Total = 40.50 hours, with no weekend work recorded and no manual corrections. The claim of 42 hours is therefore 1.50 hours high. I checked how 42 could arise rather than assuming an error: total time on site is 43.25h, and 42.00h is exactly the sum of each day's time on site truncated to whole hours (8+9+8+8+9), i.e. the gross figures with the unpaid breaks left out; ignoring breaks entirely gives 43.25h and truncating each net day gives 39.00h, so neither of those gives 42 either. On the timesheet's own rule that breaks are unpaid and deducted, worked time is 40.50h, so the claim does not hold as worded. Uncertainty stated plainly: if 'worked' were meant as time on site rather than paid worked time, the figure would be 43.25h, still not 42; and I am reading only the record before me, so a corrected or additional entry would change this. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x1ac16b1b85bbeaebca670dddd776ec383f27b4d94be3a324741f0a48c7ead5d1",
+          "created_at_ms": 1793375282179,
+          "message_id": "929ac37f-b779-4667-8649-b3ec122d535a",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 2
+        },
+        {
+          "content": "Challenging. The timesheet states breaks are unpaid and deducted from time on site, so worked hours per day are clock-out minus clock-in minus the unpaid break: Mon 08:00-16:30 = 8.50h less 0.50 = 8.00h; Tue 08:00-17:00 = 9.00h less 0.75 = 8.25h; Wed 07:30-16:00 = 8.50h less 0.50 = 8.00h; Thu 08:00-16:15 = 8.25h less 0.50 = 7.75h; Fri 08:00-17:00 = 9.00h less 0.50 = 8.50h. Total = 40.50 hours, with no entries for Sat 24 or Sun 25 and no manual corrections. The stated 42 hours is 1.50 hours above that. I checked alternatives rather than assuming an error: total time on site before breaks is 43.25h (also not 42); to reach 42 the 165 minutes of unpaid breaks would have to be only 75 minutes, which no entry supports; and no overtime is recorded, so nothing adds to the 40 contracted hours beyond the 0.5 actually worked. Uncertainty stated: if 'worked' were read as time on site rather than paid worked time the figure would be 43.25h, still not 42; and this rests on the terminal clock times as recorded, so a manual correction or an additional shift would change it. On the record as published the claim does not hold.",
+          "content_hash": "0xb74f7f5f8716733a639f783b8578ce085979c1b9169185da58e0456cb8320a36",
+          "created_at_ms": 1793375290876,
+          "message_id": "2fa3a65a-5ba0-47dc-93cb-e4d1d40d3bc3",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 3
+        },
+        {
+          "content": "Juror note (juror-1): independent check of employee 4471's timesheet for the week commencing 19 October, posted so my basis is on the record. The record states breaks are unpaid and deducted from time on site, so hours worked are time on site less the unpaid break. Mon 19 Oct 08:00-16:30 = 8.50 h on site less 0.50 h break = 8.00 h. Tue 20 Oct 08:00-17:00 = 9.00 h less 0.75 h = 8.25 h. Wed 21 Oct 07:30-16:00 = 8.50 h less 0.50 h = 8.00 h. Thu 22 Oct 08:00-16:15 = 8.25 h less 0.50 h = 7.75 h. Fri 23 Oct 08:00-17:00 = 9.00 h less 0.50 h = 8.50 h. Saturday and Sunday are blank, and overtime is recorded as none. Totals: 43.25 h on site, 2.75 h of unpaid breaks, so 43.25 - 2.75 = 40.50 hours worked. The published claim states 42 hours, which is 1.50 h more than the record supports. I looked for a reading that would give 42 and could not find a coherent one: 40 is the contracted figure, rounding each day to 8 h gives 40, ignoring Tuesday's longer 45-minute break gives 41.25, treating breaks as paid gives 43.25, and misreading Thursday's 16:15 as 16:30 gives 40.75. The figure 42 is exactly what results from deducting only 75 of the 165 recorded break minutes, which would mean applying breaks to two days and not the rest - an error the record does not support, since every day carries a stated break and the note says breaks are deducted. On the record as published the claim does not hold; the timesheet supports 40.50 hours. I state this as my own reading and remain open to correction if the terminal times are shown to be wrong or a correction was logged.",
+          "content_hash": "0x00a107dbd7b8f153e7f919d7188856f2ec8cd63e04b9dae2dcff24b00e13338f",
+          "created_at_ms": 1793375306941,
+          "message_id": "1f13794b-3785-47ba-82e2-ec78ea37a759",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-541555",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375253509,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 39
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375255816,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 40
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375258278,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 41
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375271239,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 42
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375337422,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 43
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375337992,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 44
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375404408,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 45
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793375581442,
+          "episode_id": "VR-541555",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 46
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 46,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 22,
+          "read_requests": 7,
+          "sent_bytes": 1126,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 2,
+          "sent_bytes": 1570,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 2,
+          "sent_bytes": 1237,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 5,
+          "read_requests": 5,
+          "sent_bytes": 1405,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-541555",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375253497,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 107
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375255792,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 108
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375258245,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 109
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375271193,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 110
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375278680,
+          "episode_id": "VR-541555",
+          "kind": "message_sent",
+          "message_bytes": 1237,
+          "message_hash": "0x7722eb0bbd4f251f3b89add6e4cbf3ceaddf26f7933d1cef68918132ceabfc8f",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 111
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375282180,
+          "episode_id": "VR-541555",
+          "kind": "message_sent",
+          "message_bytes": 1405,
+          "message_hash": "0x1ac16b1b85bbeaebca670dddd776ec383f27b4d94be3a324741f0a48c7ead5d1",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 112
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375283960,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 113
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375286092,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2
+          ],
+          "round_num": null,
+          "sequence": 114
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375290876,
+          "episode_id": "VR-541555",
+          "kind": "message_sent",
+          "message_bytes": 1126,
+          "message_hash": "0xb74f7f5f8716733a639f783b8578ce085979c1b9169185da58e0456cb8320a36",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 115
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375306941,
+          "episode_id": "VR-541555",
+          "kind": "message_sent",
+          "message_bytes": 1570,
+          "message_hash": "0x00a107dbd7b8f153e7f919d7188856f2ec8cd63e04b9dae2dcff24b00e13338f",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 116
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375308868,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 117
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375337404,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 118
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375337958,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 119
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375345183,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 120
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375347442,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            4
+          ],
+          "round_num": null,
+          "sequence": 121
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375352646,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 122
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375404389,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 123
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375425505,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 124
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375434368,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 125
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793375496588,
+          "episode_id": "VR-541555",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 126
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793375581440,
+          "episode_id": "VR-541555",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 127
+        }
+      ],
+      "first_message_at_ms": 1793375278680,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793375306941,
+      "message_count": 4,
+      "next_after": 127,
+      "total_message_bytes": 5338
+    }
+  ]
+}

@@ -1,0 +1,658 @@
+{
+  "episode": {
+    "challenge_deadline": 1793397801,
+    "challenger_votes": 3,
+    "commit_deadline": 1793397840,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-541765",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0xd86c23a832114d4848ef97f84893fa0c12d6f5a6441a9a2e19452b278a13adbd",
+    "content": "The adjusted book balance for September equals the adjusted bank balance.",
+    "content_hash": "0x67e84ae5bb934b62015600cdd3f0ac114599172acb8527c5c7ae17c99c797cbc",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541765",
+    "evidence": "The two adjusted balances in the September reconciliation differ by 250.00. Bank side: balance per bank statement 18,642.35 + deposit in transit 2,150.00 - outstanding cheques 1043 (480.00), 1047 (1,215.40) and 1049 (96.25), which total 1,791.65, gives an adjusted bank balance of 19,000.70. Book side: balance per cash book 19,290.70 - bank charges not yet entered 40.00 gives an adjusted book balance of 19,250.70. 19,250.70 - 19,000.70 = 250.00, so the claim that the adjusted book balance equals the adjusted bank balance is false on the record's own figures. The record states that no other reconciling items were identified and that the cash book is closed for September, so the 250.00 is unexplained rather than merely omitted: none of the listed items is 250.00 (2,150.00, 480.00, 1,215.40, 96.25, 40.00). The adjustments are also in the correct directions - the deposit in transit is added to the bank side, the three outstanding cheques are deducted from it, and the bank charges are deducted from the book side - so the gap is not an artefact of a sign error; reversing any single item would move the difference by twice that item's value and none closes it to nil. The preparer's note 'Reconciled, no differences' is contradicted by the preparer's own arithmetic. Uncertainty acknowledged: this is an arithmetic conclusion from the figures as recorded; if an additional reconciling item of 250.00 existed but was not listed, the sides would agree, but the record expressly states no other items were identified.",
+    "evidence_hash": "0x35a8cdd42baaa426e99eda6e5c9e207ef0470df6d6bbf33a03a4234e7fc11205",
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": "0xce1c5fe3dd6597695674d5b0b4d9187c31caf65e0343e1c17622de126972f673",
+        "commitment": "0xe44fb9b960f50108d608fd0cea2c89b0044c17882847506cf8b0ff3a32508b24",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": "0xac8e7de6ba91e41dea35188df0d6831eba72864cfde107f80de67b906c8f0e4f",
+        "commitment": "0x3cd9479cfcc0928186aed4242ef890d2481b9f18e12fee713cc97c9f7ceb55c8",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": "0xa8363d23d4881fe0fa4f4068e4329645eadbc571ce5ceaa27df416b4875cf6b6",
+        "commitment": "0x06b7b1067b7eaf81733bc8cdbb0eb1f88c855a930949e2be2034e2e92a73d920",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x44ee5edb7bd8204a64fb135c073af58992a2d7544692063f8ff019ff5e9d31fe",
+    "phase": "SETTLED_CHALLENGER",
+    "posting_deadline": 1793397594,
+    "required_votes": 2,
+    "reveal_deadline": 1793398740,
+    "total_credited_wei": "115000000000000000",
+    "total_deposited_wei": "115000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541765",
+    "final_votes": {
+      "juror-1": "CHALLENGER_SUPPORTED",
+      "juror-2": "CHALLENGER_SUPPORTED",
+      "juror-3": "CHALLENGER_SUPPORTED"
+    },
+    "forfeited_bonds": {},
+    "juror_payouts": {
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000"
+    },
+    "outcome": "SETTLED_CHALLENGER",
+    "protocol_fee": "5000000000000000",
+    "refunds": {},
+    "total_credited": "115000000000000000",
+    "total_deposited": "115000000000000000",
+    "winner_id": "challenger",
+    "winner_payout": "80000000000000000"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "80000000000000000",
+      "creator": "0",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    },
+    "episode_id": "VR-541765",
+    "withdrawal_credits": {
+      "challenger": "480000000000000000",
+      "creator": "350000000000000000",
+      "juror-1": "0",
+      "juror-2": "60000000000000000",
+      "juror-3": "0",
+      "treasury": "30000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-541765",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror-2 note - my own reading of the September bank reconciliation, posted so my basis is on the record. Adjusted bank balance: 18,642.35 + 2,150.00 deposit in transit - 480.00 (cheque 1043) - 1,215.40 (cheque 1047) - 96.25 (cheque 1049) = 19,000.70. Adjusted book balance: 19,290.70 - 40.00 bank charges not yet entered = 19,250.70. These are not equal: the adjusted book balance exceeds the adjusted bank balance by 250.00, so the claim as worded does not hold. The record itself asserts 'Reconciled, no differences' in the preparer's note, and the claim repeats that conclusion, but the arithmetic does not support it. I looked for a misreading that would close the gap rather than stopping at the subtraction. Omitting the deposit in transit gives 16,850.70; doubling it gives 21,150.70; omitting cheque 1043 gives 19,480.70, omitting 1047 gives 20,216.10, omitting 1049 gives 19,096.95, omitting all three gives 20,792.35; and on the book side, adding the charges instead of deducting gives 19,330.70 or omitting them gives 19,290.70. None of these equals the other side, so no single or paired misreading of the listed items produces agreement. The outstanding cheques total 1,791.65 and are correctly deducted on the bank side; the 2,150.00 deposit was banked 30 September but credited 1 October, so it is correctly added. To balance, the record would need a further reconciling item of 250.00 - a deposit understated, an unrecorded cheque, or a charge not listed - but the record states no other reconciling items were identified and the cash book is closed for September. Uncertainty acknowledged: the two balance figures and the reconciling items are as recorded, and an item omitted from the extract could exist; but nothing on the record supplies it, and the figures as published do not agree. On the record as published the claim does not hold. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x912a5525015477697343da8a3d1a6b233a25d4bcc276ad96bd32f40c3948ea5b",
+          "created_at_ms": 1793376997792,
+          "message_id": "52bb548a-6cbc-40b5-b96d-1f0bdd3d9a23",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 1
+        },
+        {
+          "content": "Juror note (juror-1): independent check of the September bank reconciliation, posted so my basis is on the record. I worked both sides from the figures rather than from the preparer's conclusion. Bank side: balance per bank statement 18,642.35, plus deposit in transit 2,150.00, less outstanding cheques 1043 of 480.00, 1047 of 1,215.40 and 1049 of 96.25. The three cheques total 1,791.65. So 18,642.35 + 2,150.00 - 1,791.65 = 19,000.70. Book side: balance per cash book 19,290.70 less bank charges not yet entered of 40.00 = 19,250.70. The adjusted bank balance is 19,000.70 and the adjusted book balance is 19,250.70, so they are not equal: the book side is higher by 250.00. I re-added both sides in integer pence to be sure this is not a rounding or transcription slip, and the gap is exactly 25,000 pence. The claim that the two adjusted balances are equal therefore does not hold on the figures given. I note that the preparer's note says 'Reconciled, no differences', but that assertion is contradicted by the preparer's own numbers; the claim appears to repeat the note rather than the arithmetic. The record also states that no other reconciling items were identified, so there is no further item on the schedule that would absorb the 250.00 and close the gap. I checked the obvious alternative treatments rather than assuming an error: omitting cheque 1049 leaves a difference of 153.75; adding the deposit in transit to the book side instead of the bank side gives a difference of 4,550.00; and treating the bank charges as an addition gives 330.00. None of these reconciles the two sides, so the 250.00 is not explained by a sign or placement slip. Uncertainty I will state: the record gives no cause for the 250.00, and it is possible that a further reconciling item exists which was omitted from the schedule - for instance an unrecorded receipt or an error in the cash book. But the claim is that the adjusted balances are equal, and on the schedule as published they are not. I state this as my own reading and remain open to correction if a missing item of 250.00 is produced.",
+          "content_hash": "0xbeb84440c86ab2ae060524c7ddc91d236dcf6f5e74158e1c6d69e11e042982c0",
+          "created_at_ms": 1793376998784,
+          "message_id": "d7ccda5c-c594-49ce-b2b4-cb4cb110b327",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 2
+        },
+        {
+          "content": "Challenging. The two sides of this reconciliation do not agree. Bank side: statement balance 18,642.35, plus the 2,150.00 deposit in transit = 20,792.35, less outstanding cheques 1043 (480.00), 1047 (1,215.40) and 1049 (96.25), total 1,791.65, giving an adjusted bank balance of 19,000.70. Book side: cash book balance 19,290.70 less 40.00 of bank charges not yet entered, giving an adjusted book balance of 19,250.70. The two adjusted balances differ by 250.00, so the claim that they are equal is false on the record's own figures. The record states no other reconciling items were identified and the cash book is closed for September, so the 250.00 is unexplained rather than simply omitted: no item on the record is 250.00, and the individual items are 2,150.00, 480.00, 1,215.40, 96.25 and 40.00. I also checked the direction of each adjustment rather than only the totals: the deposit in transit is correctly added to the bank side and the three outstanding cheques correctly deducted, and the bank charges correctly deducted from the book side; reversing any single item would move the gap by twice that item's value, and no single reversal closes it to nil. The preparer's note 'Reconciled, no differences' is contradicted by the arithmetic. Uncertainty stated: this is an arithmetic conclusion from the figures as recorded, and if a further reconciling item of 250.00 existed but was not listed, the sides would agree - but the record expressly says no other items were identified.",
+          "content_hash": "0xcc1e0c98c9753975fed522b86d3bb16be236ee64fe2c758e4e6f09aae62a0772",
+          "created_at_ms": 1793377000128,
+          "message_id": "57b2f942-3dd9-409d-9a01-3de44e48ff2d",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 3
+        },
+        {
+          "content": "Juror-3 note - my own reconciliation of the September 2026 bank rec for account ending 4402, posted so my basis is on the record. I did the arithmetic rather than relying on the preparer's note. Bank side: balance per statement 18,642.35 + deposit in transit 2,150.00 = 20,792.35; less cheque 1043 480.00 = 20,312.35; less cheque 1047 1,215.40 = 19,096.95; less cheque 1049 96.25 = 19,000.70. Book side: cash book 19,290.70 less bank charges 40.00 = 19,250.70. The two adjusted balances therefore differ by 250.00 (19,250.70 vs 19,000.70), so the claim that the adjusted book balance equals the adjusted bank balance does not hold on the figures given. I checked whether the 250.00 could be explained by a listed item or a plausible sign error, since a reconciliation that is merely mis-signed would be a different matter: omitting the deposit in transit gives 16,850.70; adding the cheques instead of deducting them gives 22,584.00; treating the bank charges as a credit gives 19,330.70; omitting the charges gives 19,290.70; and moving the charges to the bank side gives 18,960.70 - none of these equals 19,250.70, and no subset or combination of the five listed items, with either sign, sums to 250.00. The unadjusted difference is 648.35 and the listed items bridge only 398.35 of it, leaving the 250.00 unexplained. The record states no other reconciling items were identified and that the cash book is closed for September, so the gap cannot be closed from the items shown. Note that the preparer's note asserting 'Reconciled, no differences' is not supported by the figures on the same page. Uncertainty stated: a missing reconciling item of exactly 250.00 would close the gap, which is a round figure and may well indicate an unrecorded transaction; but the record says no other items were identified, so on the record as published the reconciliation does not balance. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x9645339385994f7a24696790b6f3bb2ff1cb12e33e1db54b11b3bd08dc4fe112",
+          "created_at_ms": 1793377002107,
+          "message_id": "bc717289-6028-473f-be3c-83b80b253ed5",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-541765",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376978096,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 79
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376978374,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 80
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376983323,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 81
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376988657,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 82
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793377068027,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 83
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793377070588,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 84
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793377288440,
+          "episode_id": "VR-541765",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 85
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 85,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 12,
+          "read_requests": 5,
+          "sent_bytes": 1490,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 2,
+          "sent_bytes": 2093,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 2,
+          "sent_bytes": 1923,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 4,
+          "sent_bytes": 1942,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-541765",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376978081,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 229
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376978340,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 230
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376983289,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 231
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376988635,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 232
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376993501,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 233
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376997792,
+          "episode_id": "VR-541765",
+          "kind": "message_sent",
+          "message_bytes": 1923,
+          "message_hash": "0x912a5525015477697343da8a3d1a6b233a25d4bcc276ad96bd32f40c3948ea5b",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 234
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376998785,
+          "episode_id": "VR-541765",
+          "kind": "message_sent",
+          "message_bytes": 2093,
+          "message_hash": "0xbeb84440c86ab2ae060524c7ddc91d236dcf6f5e74158e1c6d69e11e042982c0",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 235
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377000128,
+          "episode_id": "VR-541765",
+          "kind": "message_sent",
+          "message_bytes": 1490,
+          "message_hash": "0xcc1e0c98c9753975fed522b86d3bb16be236ee64fe2c758e4e6f09aae62a0772",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 236
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377001331,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3
+          ],
+          "round_num": null,
+          "sequence": 237
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377002107,
+          "episode_id": "VR-541765",
+          "kind": "message_sent",
+          "message_bytes": 1942,
+          "message_hash": "0x9645339385994f7a24696790b6f3bb2ff1cb12e33e1db54b11b3bd08dc4fe112",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 238
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377003879,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 239
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377035169,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 240
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377065243,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 241
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377068005,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 242
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377070566,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 243
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377103330,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 244
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793377103729,
+          "episode_id": "VR-541765",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 245
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793377288438,
+          "episode_id": "VR-541765",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 246
+        }
+      ],
+      "first_message_at_ms": 1793376997792,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793377002107,
+      "message_count": 4,
+      "next_after": 246,
+      "total_message_bytes": 7448
+    }
+  ]
+}

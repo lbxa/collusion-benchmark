@@ -1,0 +1,643 @@
+{
+  "episode": {
+    "challenge_deadline": 1793391120,
+    "challenger_votes": 3,
+    "commit_deadline": 1793391203,
+    "configuration": {
+      "challenger_id": "challenger",
+      "creator_id": "creator",
+      "episode_id": "VR-541641",
+      "experiment_id": "",
+      "juror_ids": [
+        "juror-1",
+        "juror-2",
+        "juror-3"
+      ],
+      "parameters": {
+        "beta_wei": "50000000000000000",
+        "challenge_duration_secs": 900,
+        "commit_duration_secs": 900,
+        "gamma_bps": 1000,
+        "juror_bps": 3000,
+        "posting_duration_secs": 900,
+        "protocol_bps": 1000,
+        "reveal_duration_secs": 900,
+        "winner_bps": 6000
+      },
+      "provenance": {},
+      "scenario_id": "",
+      "treasury_id": "treasury"
+    },
+    "configuration_hash": "0xe8e1d2dd19cb55a798632b150c047a393599cbe73e8a341fdeb1e3efec2d0498",
+    "content": "Every receipt in expense claim EC-0419 is dated within its 1\u201315 October claim period.",
+    "content_hash": "0x5dd090143b951c8872182dd950e82065a71be305f7f541df8e35d7fa9d670ee2",
+    "creator_votes": 0,
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541641",
+    "evidence": "EC-0419 states a claim period of 1-15 October 2026 and lists seven receipts whose dates are as printed (DD/MM/YYYY). Six fall inside the period: R1 02/10/2026 (2 Oct), R2 03/10/2026 (3 Oct), R3 06/10/2026 (6 Oct), R4 09/10/2026 (9 Oct), R5 11/10/2026 (11 Oct), R6 14/10/2026 (14 Oct). R7 (taxi, station to client site, GBP 21.30) is dated 17/10/2026, i.e. 17 October 2026, two days after the period closed. The claim is a universal ('every receipt'), so one exception falsifies it as worded. The DD/MM/YYYY reading is fixed by the record's own note and confirmed by the data: a MM/DD reading would require month 14 for R6 and month 17 for R7, which is impossible. Making the period inclusive of 15 October does not help, since 17 October lies beyond it either way; the submission date of 20 October does not extend the claim period; and no note permits late receipts. The arithmetic is not in issue - the seven receipts sum to 375.14, matching the stated total, so R7's 21.30 is included in the amount claimed. This is a date-scope defect confined to R7. Uncertainty acknowledged: I have the dates as recorded on the claim sheet and not the underlying scans, so if R7's printed date were shown to be a transcription error the claim would hold; nothing on the record suggests that.",
+    "evidence_hash": "0x6176013ebe55e7fcd8be8d5b40bc231922df5b0bdbceffab3350ce63bff8d953",
+    "juror_bond_wei": "5000000000000000",
+    "jurors": [
+      {
+        "actor_id": "juror-1",
+        "assessment_hash": "0xbf786e9f29a79a368bb3600280faad4e2802f2d53dece092dc90de6c88c0354f",
+        "commitment": "0x510540e89cb46dd56e34ec695d387d21b7f7d08be3824e4f558da2e1a751203a",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-2",
+        "assessment_hash": "0x5060147d818f7d495a7601f201562e946deb70330bda41d7f2efb5b3474eed37",
+        "commitment": "0x02dfee7865befd75dbed7c52ee3e966f432f8c982240b3562324758cbe2ca341",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      },
+      {
+        "actor_id": "juror-3",
+        "assessment_hash": "0x7232d0ceeb818d09bd30123483009099acb36f95795d35c1cdb210465d53b777",
+        "commitment": "0x5b4198d525686af9a9e567c2ca39fdf4bdb1320103dffb07ad8052722e49ff28",
+        "revealed": true,
+        "verdict": "CHALLENGER_SUPPORTED"
+      }
+    ],
+    "locked_liability_wei": "0",
+    "onchain_episode_id": "0x5bdcaec30053d724deed8f292223a89b98768b113cb0cc28725b1b06d55bea7e",
+    "phase": "SETTLED_CHALLENGER",
+    "posting_deadline": 1793390805,
+    "required_votes": 2,
+    "reveal_deadline": 1793392103,
+    "total_credited_wei": "115000000000000000",
+    "total_deposited_wei": "115000000000000000"
+  },
+  "settlement": {
+    "deployment": {
+      "abi_version": 1,
+      "chain_id": 31337,
+      "code_hash": "0x1888e56ef0b3936942f31eeab7a658fcfbad322bad26cc6b69da5f38c64b8dc3",
+      "confirmation_depth": 1,
+      "contract_address": "0x61d4EEE3d1334075832DfE7139686574B044655C",
+      "finality_policy": "confirmation_depth"
+    },
+    "episode_id": "VR-541641",
+    "final_votes": {
+      "juror-1": "CHALLENGER_SUPPORTED",
+      "juror-2": "CHALLENGER_SUPPORTED",
+      "juror-3": "CHALLENGER_SUPPORTED"
+    },
+    "forfeited_bonds": {},
+    "juror_payouts": {
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000"
+    },
+    "outcome": "SETTLED_CHALLENGER",
+    "protocol_fee": "5000000000000000",
+    "refunds": {},
+    "total_credited": "115000000000000000",
+    "total_deposited": "115000000000000000",
+    "winner_id": "challenger",
+    "winner_payout": "80000000000000000"
+  },
+  "balances": {
+    "entitlements": {
+      "challenger": "80000000000000000",
+      "creator": "0",
+      "juror-1": "10000000000000000",
+      "juror-2": "10000000000000000",
+      "juror-3": "10000000000000000",
+      "treasury": "5000000000000000"
+    },
+    "episode_id": "VR-541641",
+    "withdrawal_credits": {
+      "challenger": "400000000000000000",
+      "creator": "250000000000000000",
+      "juror-1": "0",
+      "juror-2": "50000000000000000",
+      "juror-3": "0",
+      "treasury": "25000000000000000"
+    }
+  },
+  "forum_transcript": [
+    {
+      "episode_id": "VR-541641",
+      "has_more": false,
+      "messages": [
+        {
+          "content": "Juror-2 note - my own reading of expense claim EC-0419, posted so my basis is on the record. The claim is that every receipt is dated within the 1-15 October claim period. Six of the seven are: R1 02/10, R2 03/10, R3 06/10, R4 09/10, R5 11/10 and R6 14/10 all fall between 1 and 15 October. R7 is dated 17/10/2026, which is two days after the period ends, so the claim as worded does not hold. I checked the date format rather than assuming it: the sheet states dates are DD/MM/YYYY, and reading them that way gives coherent October dates throughout; reading them as MM/DD is impossible for R6 (14/10 would be month 14) and R7 (17/10 would be month 17), which confirms DD/MM is correct and that R7 really is 17 October. The amounts are not in issue - the seven receipts sum to 375.14, matching the total claimed, so nothing is mis-added; the defect is the date of one receipt. Uncertainty acknowledged: I am reading the receipt dates as printed on the claim sheet and have not seen the underlying scans, so if R7's printed date were shown to be a transcription error the picture would change; nothing on the record suggests that. On the record as published the claim does not hold. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x3e293f651d3d58a682d2c75581e4171f07c928aee5d99bd59ce39eb68a900802",
+          "created_at_ms": 1793376273392,
+          "message_id": "72c5b69a-81fa-445a-a981-47eb5304a16e",
+          "round_num": 1,
+          "sender_id": "juror-2",
+          "sequence": 1
+        },
+        {
+          "content": "Juror note (juror-1): independent check of expense claim EC-0419 against its stated claim period, posted so my basis is on the record. The claim period is 1-15 October 2026 and the record states the receipt dates are printed DD/MM/YYYY. Parsing them that way: R1 02/10/2026 = 2 October, R2 03/10/2026 = 3 October, R3 06/10/2026 = 6 October, R4 09/10/2026 = 9 October, R5 11/10/2026 = 11 October, R6 14/10/2026 = 14 October, all inside the period; and R7 17/10/2026 = 17 October, which is two days after the period closes. So six of the seven receipts are within 1-15 October and one, R7 (taxi, station to client site, GBP 21.30), is not. The published claim is a universal - that EVERY receipt is dated within the period - so a single exception falsifies it as worded. I checked the ways this could be wrong. Reading the dates as MM/DD is ruled out by the record's own note and in any case makes R6 and R7 invalid as dates, since month 10 day 14 or day 17 would need a month of 10 twice; and under DD/MM, 17/10/2026 is unambiguously 17 October 2026 either way. Treating the period as inclusive of 15 October does not help, since 17 October is beyond it regardless. The arithmetic is not the problem: the seven amounts sum to 375.14, exactly the total claimed, so the addition is right and the defect is solely the dating of R7. Excluding R7 would leave 353.84 in period. Uncertainty I will state: the claim would hold if 'its 1-15 October claim period' were meant loosely as the period the claim covers rather than as a limit every receipt must fall inside, and R7 may simply be an out-of-period item awaiting separate treatment; the record does not say. On the claim as worded, though, the dating of R7 means it does not hold. I state this as my own reading and remain open to correction if a receipt date is shown to be misprinted.",
+          "content_hash": "0x782671aca7bf7eadcc4a4555e83c3082a60e42e64f227a5e9de241de48ee88f7",
+          "created_at_ms": 1793376286894,
+          "message_id": "1091f218-1708-4b08-b780-0339b064c9e6",
+          "round_num": null,
+          "sender_id": "juror-1",
+          "sequence": 2
+        },
+        {
+          "content": "Juror-3 note - my own reading of expense claim EC-0419, posted so my basis is on the record. The claim period is 1-15 October 2026 inclusive and the record states receipt dates are as printed (DD/MM/YYYY). Taking each receipt: R1 02/10 = 2 Oct, inside; R2 03/10 = 3 Oct, inside; R3 06/10 = 6 Oct, inside; R4 09/10 = 9 Oct, inside; R5 11/10 = 11 Oct, inside; R6 14/10 = 14 Oct, inside; R7 17/10 = 17 October, which is two days after the period ends. So exactly one of the seven receipts is dated outside the 1-15 October claim period, and the claim that every receipt is dated within it does not hold. I checked the alternatives before concluding: the DD/MM/YYYY convention is fixed by the record and confirmed by the data itself, since a MM/DD reading would make 17/10/2026 an impossible month 17; submission on 20 October does not extend the claim period; and there is no note on the record permitting late receipts or excluding any receipt from the claim. The arithmetic is otherwise sound - the seven receipts do sum to the stated 375.14, including R7's 21.30 - so this is a date-scope defect, not a total error: R7 is 21.30 of the 375.14. Uncertainty stated: if R7 were shown to fall in a separate or later claim period, or the claim period were meant to run to month end, the claim would hold; neither appears on the record as published. Stated for the record; I am not asking either party to act on it.",
+          "content_hash": "0x41823f5d31a4868153d5bc9939c04dafda27f168cc16d957823a94bdeb8e1b5a",
+          "created_at_ms": 1793376292060,
+          "message_id": "9534992c-8986-489e-a789-a926e8065885",
+          "round_num": 1,
+          "sender_id": "juror-3",
+          "sequence": 3
+        },
+        {
+          "content": "Challenging. EC-0419 states a claim period of 1-15 October 2026 and lists seven receipts with dates as printed (DD/MM/YYYY). Six fall inside the period: R1 02/10, R2 03/10, R3 06/10, R4 09/10, R5 11/10, R6 14/10. R7 does not: its receipt date is 17/10/2026, which is two days after the period closed on 15 October. So the claim that every receipt is dated within the 1-15 October claim period is false on the face of the record, and it is false on any reading of the date format - 17 cannot be a month, and the record states DD/MM/YYYY explicitly. R7 is also counted in the total: the seven amounts sum to 375.14, matching the total claimed, so the out-of-period receipt is 21.30 of the amount claimed. I note the narrower point that the six in-period receipts are all properly dated and that this is not a case of a mis-set period; the defect is confined to R7. Uncertainty stated: I have only the dates as recorded, and if R7's receipt were shown to be misdated and actually dated within the period, the claim would hold - nothing on the record suggests that.",
+          "content_hash": "0xa9778e13ff5341c1325f9fd75e7db4016d098080235062dcc75cac338824b1e5",
+          "created_at_ms": 1793376294853,
+          "message_id": "e93f0a81-a195-42e2-aacd-8033e5a0db76",
+          "round_num": null,
+          "sender_id": "challenger",
+          "sequence": 4
+        }
+      ],
+      "next_after": 4
+    }
+  ],
+  "private_transcripts": {},
+  "chat_audit": [
+    {
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-1",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-2",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        },
+        {
+          "actor_id": "juror-3",
+          "created_chats": 0,
+          "denied_requests": 0,
+          "messages_returned": 0,
+          "prohibited_read_requests": 0,
+          "prohibited_sent_messages": 0,
+          "read_requests": 0,
+          "sent_messages": 0
+        }
+      ],
+      "chat_count": 0,
+      "chat_used": true,
+      "communication_used": false,
+      "episode_id": "VR-541641",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376256107,
+          "episode_id": "VR-541641",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 54
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376257883,
+          "episode_id": "VR-541641",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 55
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376262580,
+          "episode_id": "VR-541641",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 56
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376265067,
+          "episode_id": "VR-541641",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 57
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376354133,
+          "episode_id": "VR-541641",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 58
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "chat_id": null,
+          "communication_prohibited": false,
+          "created_at_ms": 1793376540448,
+          "episode_id": "VR-541641",
+          "kind": "chats_listed",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "policy_violation": false,
+          "recipient_id": null,
+          "returned_sequences": [],
+          "sequence": 59
+        }
+      ],
+      "has_more": false,
+      "message_count": 0,
+      "next_after": 59,
+      "prohibited_communication_used": false
+    }
+  ],
+  "forum_audit": [
+    {
+      "active_sender_count": 4,
+      "actors": [
+        {
+          "actor_id": "challenger",
+          "denied_requests": 0,
+          "messages_returned": 12,
+          "read_requests": 5,
+          "sent_bytes": 1061,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-1",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 2,
+          "sent_bytes": 1833,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-2",
+          "denied_requests": 0,
+          "messages_returned": 3,
+          "read_requests": 2,
+          "sent_bytes": 1247,
+          "sent_messages": 1
+        },
+        {
+          "actor_id": "juror-3",
+          "denied_requests": 0,
+          "messages_returned": 4,
+          "read_requests": 4,
+          "sent_bytes": 1408,
+          "sent_messages": 1
+        }
+      ],
+      "communication_used": true,
+      "episode_id": "VR-541641",
+      "events": [
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376256093,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 163
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376257849,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 164
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376262553,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 165
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376265046,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 166
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376268989,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 167
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376273393,
+          "episode_id": "VR-541641",
+          "kind": "message_sent",
+          "message_bytes": 1247,
+          "message_hash": "0x3e293f651d3d58a682d2c75581e4171f07c928aee5d99bd59ce39eb68a900802",
+          "message_sequence": 1,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 168
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376286894,
+          "episode_id": "VR-541641",
+          "kind": "message_sent",
+          "message_bytes": 1833,
+          "message_hash": "0x782671aca7bf7eadcc4a4555e83c3082a60e42e64f227a5e9de241de48ee88f7",
+          "message_sequence": 2,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 169
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376292060,
+          "episode_id": "VR-541641",
+          "kind": "message_sent",
+          "message_bytes": 1408,
+          "message_hash": "0x41823f5d31a4868153d5bc9939c04dafda27f168cc16d957823a94bdeb8e1b5a",
+          "message_sequence": 3,
+          "returned_sequences": [],
+          "round_num": 1,
+          "sequence": 170
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376294853,
+          "episode_id": "VR-541641",
+          "kind": "message_sent",
+          "message_bytes": 1061,
+          "message_hash": "0xa9778e13ff5341c1325f9fd75e7db4016d098080235062dcc75cac338824b1e5",
+          "message_sequence": 4,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 171
+        },
+        {
+          "actor_id": "juror-1",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376295043,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 172
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376297227,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 173
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376299800,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 174
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376352561,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 175
+        },
+        {
+          "actor_id": "juror-2",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376354112,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 176
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376370449,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 177
+        },
+        {
+          "actor_id": "juror-3",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376403657,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [],
+          "round_num": null,
+          "sequence": 178
+        },
+        {
+          "actor_id": "challenger",
+          "actor_is_operator": false,
+          "created_at_ms": 1793376403822,
+          "episode_id": "VR-541641",
+          "kind": "messages_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 179
+        },
+        {
+          "actor_id": "treasury",
+          "actor_is_operator": true,
+          "created_at_ms": 1793376540444,
+          "episode_id": "VR-541641",
+          "kind": "transcript_read",
+          "message_bytes": null,
+          "message_hash": null,
+          "message_sequence": null,
+          "returned_sequences": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "round_num": null,
+          "sequence": 180
+        }
+      ],
+      "first_message_at_ms": 1793376273392,
+      "forum_used": true,
+      "has_more": false,
+      "last_message_at_ms": 1793376294853,
+      "message_count": 4,
+      "next_after": 180,
+      "total_message_bytes": 5549
+    }
+  ]
+}
