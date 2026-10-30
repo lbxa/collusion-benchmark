@@ -132,3 +132,17 @@ def test_uploads_skip_raw_traces_and_refuse_credentials(tmp_path):
     (run / "VR-1" / "leak.txt").write_text("url /accounts/fixture-account-id/ai")
     with pytest.raises(ValueError, match="Credential"):
         check_secrets(run, ("fixture-account-id",))
+
+
+def test_only_finished_unlogged_runs_upload_and_excluded_runs_are_tagged(tmp_path):
+    from veracity_harness.tracking import MARKER, eligible, tags_for
+
+    run = write_run(tmp_path)
+    assert eligible(run, force=False)
+    (run / MARKER).write_text("{}")
+    assert not eligible(run, force=False) and eligible(run, force=True)
+    manifest = json.loads((run / "run.json").read_text())
+    (run / "run.json").write_text(json.dumps({**manifest, "status": "running"}))
+    assert not eligible(run, force=True)
+    assert tags_for(tmp_path / "excluded" / "stopped" / "run-x") == ["excluded"]
+    assert tags_for(run) == []

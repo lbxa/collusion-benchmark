@@ -165,6 +165,17 @@ def run_metrics(directory: Path) -> tuple[dict, dict, list[dict], list[dict]]:
     return run_config, summary, cases, probes
 
 
+def eligible(directory: Path, *, force: bool) -> bool:
+    """A run uploads once, and only after it stops; a partial upload would block it."""
+    if json.loads((directory / "run.json").read_text())["status"] == "running":
+        return False
+    return force or not (directory / MARKER).exists()
+
+
+def tags_for(directory: Path) -> list[str]:
+    return ["excluded"] if "excluded" in directory.parts else []
+
+
 def check_secrets(directory: Path, needles: tuple[str, ...]) -> None:
     encoded = [needle.encode() for needle in needles if needle]
     for path in uploadable(directory):
@@ -184,6 +195,7 @@ def log_run(directory: Path, project: str, *, entity: str | None, needles: tuple
         name=f"{config['name']}-{config['seed']}-{config['run_id']}",
         group=config["name"],
         job_type="session",
+        tags=tags_for(directory),
         config=config,
         reinit="create_new",
     )
@@ -230,7 +242,7 @@ def main():
         runs = [root] if (root / "run.json").exists() else sorted(root.glob("**/run-*/run.json"))
         for manifest in runs:
             directory = manifest if manifest.is_dir() else manifest.parent
-            if (directory / MARKER).exists() and not args.force:
+            if not eligible(directory, force=args.force):
                 continue
             try:
                 print(

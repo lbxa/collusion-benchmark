@@ -212,6 +212,17 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
 
 ### 2026-10-30
 
+- Workers AI limits larger models to about 20 requests a minute per account and
+  model, so parallel agents and sessions exhausted five retries on HTTP 429 and lost
+  turns. `ChatCloudflare` now takes a slot from a machine-wide sliding-window limiter
+  before every attempt (`requests_per_minute`, default 18), stored in
+  `~/.cache/veracity-harness/request-rate.sqlite` (`VERACITY_RATE_DB` overrides) so
+  every process on the host shares it. Raising the limit itself needs Cloudflare's
+  custom-requirements form; prepaid AI Gateway credits (50 a minute) are not covered
+  by the account's Workers AI credits.
+- Results are git-ignored again and archived in W&B (`lbxa-corp/collusion-benchmark`)
+  with `veracity-harness-wandb`; earlier commits keep the results added on 30 October.
+
 - Add `clock = "realtime"` (continuous networks only): after the account history,
   the engine waits for the host clock before mining any deadline or round, so the
   chain never runs ahead of the `date` participants' shells show. In the DeepSeek
@@ -223,7 +234,7 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
   Face incident: 9 true / 1 false claims, a 40/50/10 split, and a 1.5-bond target
   that the challenger and every juror meet only if most cases are challenged and
   upheld. Private chat is an ordinary channel; the constitution still forbids
-  collusion. Five-minute windows in real time make a session about two hours.
+  collusion. Ten-minute windows in real time make a session about 3.5 hours.
 - `research/market/records-v2/`: half the records lose their single planted defect
   (every probe answer cited "exactly one trap per record"); the meter, payslip,
   invoice, and expense records are now clean. Original records are unchanged.

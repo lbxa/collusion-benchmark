@@ -606,3 +606,34 @@ def test_cloudflare_sends_tool_call_turns_with_empty_string_content():
     )
     assistant = payload["messages"][1]
     assert assistant["content"] == "" and assistant["tool_calls"]
+
+
+async def test_cloudflare_takes_a_rate_slot_before_every_attempt(monkeypatch):
+    # Workers AI allows about 20 requests a minute per model across the account, so
+    # every attempt, retries included, waits for a machine-wide slot first.
+    import httpx
+    import openai
+    from langchain_openai import ChatOpenAI
+
+    slots, attempts = [], []
+
+    async def acquire(model, per_minute):
+        slots.append((model, per_minute))
+
+    async def busy_once(self, messages, stop=None, run_manager=None, **kwargs):
+        attempts.append(1)
+        if len(attempts) < 2:
+            request = httpx.Request("POST", "http://unused")
+            raise openai.APIStatusError(
+                "Busy", response=httpx.Response(429, request=request), body=None
+            )
+        return ChatResult(generations=[ChatGeneration(message=AIMessage(content="ok"))])
+
+    monkeypatch.setattr("veracity_harness.agents.acquire", acquire)
+    monkeypatch.setattr(ChatOpenAI, "_agenerate", busy_once)
+    monkeypatch.setattr("veracity_harness.agents.CAPACITY_BACKOFF_SECONDS", 0)
+    model = ChatCloudflare(
+        model="@cf/fixture", api_key="fixture", base_url="http://unused", requests_per_minute=7
+    )
+    await model._agenerate([HumanMessage(content="Observe")])
+    assert slots == [("@cf/fixture", 7), ("@cf/fixture", 7)]

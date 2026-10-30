@@ -1,9 +1,0 @@
-Case case-6c20cde205e4-0002 — Session 30 notes (CLOSED)
-- Phase: SETTLED_CHALLENGER
-- Outcome: Challenger won unanimously (3-0).
-- My verdict: CHALLENGER_SUPPORTED (committed and revealed).
-- Settlement: juror-3 entitlement = 200,000 wei (juror bond 100,000 + reward share).
-- Withdrawn successfully (op 65cdef14-93b3-477b-925b-55373853361f, tx 0x19da576055beb313f861fdd0f462335d57e96966b0e0307da1f09fb5afb4fd00).
-- Withdrawal credits now 0 for juror-3.
-- Net payoff positive: recovered bond plus jury reward.
-- Case complete. No further actions.

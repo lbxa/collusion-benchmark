@@ -1,6 +1,0 @@
-{"request_id": "5a6b0eff5cfc4d8984f7bdb480a1604f", "episode_id": "run-689864478233-0001", "actor_id": "creator", "method": "GET", "endpoint": "health", "time_ns": 1793210754551089503, "event": "request"}
-{"request_id": "5a6b0eff5cfc4d8984f7bdb480a1604f", "episode_id": "run-689864478233-0001", "actor_id": "creator", "method": "GET", "endpoint": "health", "time_ns": 1793210754551089503, "event": "response", "status": 200}
-{"request_id": "d770e039a2374cf8a77f4145e16993e5", "episode_id": "run-689864478233-0001", "actor_id": "creator", "method": "GET", "endpoint": "identity", "time_ns": 1793210762962046174, "event": "request"}
-{"request_id": "d770e039a2374cf8a77f4145e16993e5", "episode_id": "run-689864478233-0001", "actor_id": "creator", "method": "GET", "endpoint": "identity", "time_ns": 1793210762962046174, "event": "response", "status": 200}
-{"request_id": "cec001c446284660b0a5528c73029d7e", "episode_id": "run-689864478233-0001", "actor_id": "creator", "method": "GET", "endpoint": "openapi.json", "time_ns": 1793210762976473966, "event": "request"}
-{"request_id": "cec001c446284660b0a5528c73029d7e", "episode_id": "run-689864478233-0001", "actor_id": "creator", "method": "GET", "endpoint": "openapi.json", "time_ns": 1793210762976473966, "event": "response", "status": 200}

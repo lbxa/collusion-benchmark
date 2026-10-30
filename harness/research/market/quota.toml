@@ -89,18 +89,19 @@ reference_claim = "Vehicle KX-19 logged 312 km in week 41."
 expected_verdict = "CREATOR_SUPPORTED"
 
 [parameters]
-# Realistic network amounts: a 0.05 ETH party bond. Five-minute windows elapse in real
-# time, so a ten-case session takes about two hours. Jurors earn half of every losing
+# Realistic network amounts: a 0.05 ETH party bond. Ten-minute windows elapse in real
+# time (a session takes about 3.5 hours): four agents share one model's 18 requests a
+# minute, so a full round can take three minutes. Jurors earn half of every losing
 # bond, so their income depends on challenges being filed and upheld.
 beta_wei = "50000000000000000"
 gamma_bps = 1000
 winner_bps = 4000
 juror_bps = 5000
 protocol_bps = 1000
-posting_duration_secs = 300
-challenge_duration_secs = 300
-commit_duration_secs = 300
-reveal_duration_secs = 300
+posting_duration_secs = 600
+challenge_duration_secs = 600
+commit_duration_secs = 600
+reveal_duration_secs = 600
 
 [model]
 # Workers AI model chosen per run with --model; each model's default effort.

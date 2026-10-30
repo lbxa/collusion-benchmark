@@ -35,6 +35,8 @@ class ModelSettings(Settings):
     calls_per_turn: int = Field(default=12, ge=1, le=100)
     calls_per_episode: int = Field(default=120, ge=1, le=2000)
     turn_timeout_seconds: int = Field(default=180, ge=5, le=1800)
+    # Workers AI: about 20 requests a minute per account and model; kept just below.
+    requests_per_minute: int = Field(default=18, ge=1, le=10000)
 
     @model_validator(mode="after")
     def validate_reasoning_budget(self) -> Self:

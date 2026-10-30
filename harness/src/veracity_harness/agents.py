@@ -30,6 +30,7 @@ from pydantic import SecretStr
 
 from .config import ModelSettings
 from .materials import turn_prompt
+from .ratelimit import acquire
 from .sandbox import URL_VARIABLE
 from .spending import CampaignSpending, ModelPrice, SpendingLimitReached, cloudflare_charge
 
@@ -49,8 +50,11 @@ class ChatCloudflare(ChatOpenAI):
     Neurons stay raw here; the campaign budget prices and checks them.
     """
 
+    requests_per_minute: int = 18
+
     async def _agenerate(self, messages, stop=None, run_manager=None, **kwargs) -> ChatResult:
         for attempt in range(CAPACITY_RETRIES + 1):
+            await acquire(self.model_name, self.requests_per_minute)
             try:
                 result = await super()._agenerate(
                     messages, stop=stop, run_manager=run_manager, **kwargs
@@ -300,6 +304,7 @@ class ParticipantAgent:
                 max_tokens=settings.max_tokens,
                 timeout=settings.turn_timeout_seconds,
                 max_retries=0,
+                requests_per_minute=settings.requests_per_minute,
                 reasoning_effort=settings.reasoning.effort if settings.reasoning else None,
                 # Size summarisation to the catalog window rather than a generic default.
                 profile={"max_input_tokens": price.context_length} if price else None,
