@@ -529,3 +529,38 @@ async def test_challenger_juror_session_runs_end_to_end(tmp_path):
     evidence = json.loads((directory / case / "evidence.json").read_text())
     assert evidence["episode"]["evidence"] == experiment.schedule[0].evidence
     assert evidence["episode"]["phase"] not in {"OPEN", "EXPIRED_UNCHALLENGED"}
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize(
+    "config,party", [("creator-juror", "creator"), ("challenger-juror", "challenger")]
+)
+async def test_scripted_offer_reaches_the_jury_forum_when_voting_opens(tmp_path, config, party):
+    experiment = load_experiment(
+        ROOT / f"harness/research/market/{config}-offer.toml", model_name="fixture/protocol"
+    )
+    seconds = {
+        name: 10
+        for name in (
+            "posting_duration_secs",
+            "challenge_duration_secs",
+            "commit_duration_secs",
+            "reveal_duration_secs",
+        )
+    }
+    experiment = experiment.model_copy(
+        update={
+            "episodes": 1,
+            "schedule": experiment.schedule[:1],
+            "opportunities_per_phase": 1,
+            "awareness_probe": False,
+            "parameters": experiment.parameters.model_copy(update=seconds),
+        }
+    )
+    directory = await run_experiment(experiment, tmp_path, model=ProtocolFixtureModel())
+    manifest = json.loads((directory / "run.json").read_text())
+    assert manifest["status"] == "complete"
+    case = manifest["episodes"][0]["episode_id"]
+    evidence = json.loads((directory / case / "evidence.json").read_text())
+    posts = evidence["forum_transcript"][0]["messages"]
+    assert [(m["sender_id"], m["content"]) for m in posts] == [(party, experiment.offer)]

@@ -235,6 +235,19 @@ class TurnResult:
     reasoning_calls: int = 0
 
 
+def offer_branch(episode: str, offer: str | None) -> str:
+    """A shell elif that posts a scripted offer to the forum once voting opens."""
+    if offer is None:
+        return ""
+    body = shlex.quote(json.dumps({"content": offer}))
+    return (
+        'elif [ "$phase" = COMMIT ]; then '
+        f'curl -fsS -X POST "${URL_VARIABLE}/v1/episodes/{episode}/forum/messages" '
+        "-H 'Content-Type: application/json' "
+        f"-H 'Idempotency-Key: {episode}-scripted-offer' --data {body}; "
+    )
+
+
 class PublisherModel(BaseChatModel):
     """A scripted publisher: posts its one scheduled claim while the case is open for it.
 
@@ -243,6 +256,7 @@ class PublisherModel(BaseChatModel):
     """
 
     claim: str
+    offer: str | None = None
 
     @property
     def _llm_type(self):
@@ -265,7 +279,8 @@ class PublisherModel(BaseChatModel):
             'if [ "$phase" = REGISTERED ]; then '
             f'curl -fsS -X POST "${URL_VARIABLE}/v1/episodes/{episode}/claims" '
             "-H 'Content-Type: application/json' "
-            f"-H 'Idempotency-Key: {episode}-publisher-claim' --data {body}; fi"
+            f"-H 'Idempotency-Key: {episode}-publisher-claim' --data {body}; "
+            f"{offer_branch(episode, self.offer)}fi"
         )
         call = {"name": "execute", "args": {"command": command}, "id": f"{episode}-publish"}
         return ChatResult(
@@ -277,6 +292,7 @@ class ChallengerModel(BaseChatModel):
     """A scripted challenger: files the case's prepared evidence once the claim is open."""
 
     evidence: str
+    offer: str | None = None
 
     @property
     def _llm_type(self):
@@ -297,7 +313,8 @@ class ChallengerModel(BaseChatModel):
             'if [ "$phase" = OPEN ]; then '
             f'curl -fsS -X POST "${URL_VARIABLE}/v1/episodes/{episode}/challenges" '
             "-H 'Content-Type: application/json' "
-            f"-H 'Idempotency-Key: {episode}-scripted-challenge' --data {body}; fi"
+            f"-H 'Idempotency-Key: {episode}-scripted-challenge' --data {body}; "
+            f"{offer_branch(episode, self.offer)}fi"
         )
         call = {"name": "execute", "args": {"command": command}, "id": f"{episode}-challenge"}
         return ChatResult(

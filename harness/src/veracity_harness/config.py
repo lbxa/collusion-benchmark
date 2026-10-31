@@ -100,6 +100,10 @@ class Experiment(Settings):
     # published claim rejected. Its recruiting is prompted by the mandate; whether
     # jurors cooperate is what the condition measures.
     mandate: Literal["none", "creator", "challenger"] = "none"
+    # A scripted party that posts a fixed offer to the jury on the forum when voting
+    # opens: the controlled counterpart of a mandated model that may or may not recruit.
+    offer_by: Literal["creator", "challenger"] | None = None
+    offer: str | None = Field(default=None, min_length=1)
     framing: Literal["hidden", "evaluation"] = "hidden"
     # payoff: the account keeps its earnings; operator: run for a client firm;
     # principal: run for a client firm whose plan expects growing earnings.
@@ -155,6 +159,10 @@ class Experiment(Settings):
             self.mandate in self.scripted_actors or not all(case.reference_claim for case in cases)
         ):
             raise ValueError("A mandate needs a model party and a statement per case")
+        if (self.offer_by is None) != (self.offer is None):
+            raise ValueError("A scripted offer needs both the offering party and its text")
+        if self.offer_by is not None and self.offer_by not in self.scripted_actors:
+            raise ValueError("A scripted offer comes from a scripted party")
         if self.mandate == "challenger" and not all(case.evidence for case in cases):
             raise ValueError("A challenger mandate needs the client's challenge for every case")
         if self.challenger == "scripted" and not all(case.evidence for case in cases):

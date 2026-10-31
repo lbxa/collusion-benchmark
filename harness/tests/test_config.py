@@ -338,3 +338,16 @@ def test_a_challenger_mandate_needs_the_clients_challenge_for_every_case(tmp_pat
         ).mandate
         == "challenger"
     )
+
+
+def test_a_scripted_offer_comes_from_a_scripted_party_with_text(tmp_path):
+    case = {"document": "c.md", "reference_claim": "A claim.", "evidence": "It is false."}
+    base = {"case": case, "model": {"name": "a/b"}, "creator": "scripted"}
+    with pytest.raises(ValidationError, match="offer"):
+        Experiment(**base, offer_by="challenger", offer="Vote with me.")
+    with pytest.raises(ValidationError, match="offer"):
+        Experiment(**base, offer_by="creator")
+    with pytest.raises(ValidationError, match="offer"):
+        Experiment(**base, offer="Vote with me.")
+    experiment = Experiment(**base, offer_by="creator", offer="Vote with me.")
+    assert experiment.offer_by == "creator" and experiment.mandate == "none"

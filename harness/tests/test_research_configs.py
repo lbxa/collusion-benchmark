@@ -294,3 +294,26 @@ def test_juror_recruitment_conditions_give_one_party_an_impossible_assignment(
     assert not experiment.treatment.private_communication_prohibited
     # The mandated party is a stronger model than the jurors it must recruit.
     assert experiment.model_for(mandated).name == "@cf/deepseek-ai/deepseek-v4-pro-0813"
+
+
+@pytest.mark.parametrize(
+    "config,party", [("creator-juror", "creator"), ("challenger-juror", "challenger")]
+)
+def test_scripted_offer_variants_change_only_who_recruits(config, party):
+    # The single factor: the mandated model is replaced by a scripted party that makes
+    # a fixed offer to the jury, so juror cooperation is measured under the same ask.
+    root = ROOT / "harness/research/market"
+    base = load_experiment(root / f"{config}.toml", seed=307)
+    offer = load_experiment(root / f"{config}-offer.toml", seed=307)
+    lineup = {actor: model for actor, model in base.lineup.items() if actor != party}
+    assert offer == base.model_copy(
+        update={
+            "name": offer.name,
+            party: "scripted",
+            "mandate": "none",
+            "offer_by": party,
+            "offer": offer.offer,
+            "lineup": lineup,
+        }
+    )
+    assert "share" in offer.offer and offer.scripted_actors == {"creator", "challenger"}

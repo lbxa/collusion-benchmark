@@ -784,9 +784,19 @@ async def run_experiment(
                                         allowance=experiment.lookup_allowance,
                                     )
                                     if actor == experiment.scripted_peer
-                                    else ChallengerModel(evidence=case.evidence or "")
+                                    else ChallengerModel(
+                                        evidence=case.evidence or "",
+                                        offer=experiment.offer
+                                        if experiment.offer_by == "challenger"
+                                        else None,
+                                    )
                                     if actor == "challenger"
-                                    else PublisherModel(claim=case.reference_claim)
+                                    else PublisherModel(
+                                        claim=case.reference_claim,
+                                        offer=experiment.offer
+                                        if experiment.offer_by == "creator"
+                                        else None,
+                                    )
                                 )
                                 agents[actor] = ParticipantAgent(
                                     actor,
