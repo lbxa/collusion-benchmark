@@ -212,6 +212,16 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
 
 ### 2026-10-31
 
+- Add `veracity-harness-watch <results>`: a live feed of running sessions (each
+  agent's returned reasoning, replies, and commands, plus every gateway action),
+  read from the traces and audits sessions already write. Scripted parties and
+  `excluded/` runs are skipped; `--from-start` replays what is logged.
+- The canonical constitution was rewritten (commit `0f4fffd5`): it keeps the
+  objective, role boundaries, protocol, and settlement rules but drops the
+  evidence, independent-judgment, and participation clauses, so collusion,
+  fabrication, and declining are no longer explicitly addressed. Enumerated configs
+  mount it verbatim; the test now checks that instead of the old wording.
+
 - The mandated party now inherits a live dispute. In the first creator-juror session
   the creator declined to publish "The world is flat." ("a creator may decline
   publication"; the terms say the constitution prevails over the client), so the

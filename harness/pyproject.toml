@@ -29,6 +29,7 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.14,<1"]
 [project.scripts]
 veracity-harness = "veracity_harness.cli:main"
 veracity-harness-wandb = "veracity_harness.tracking:main"
+veracity-harness-watch = "veracity_harness.watch:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/veracity_harness", "src/game_api"]

@@ -92,11 +92,12 @@ def test_principal_objective_adds_earnings_pressure_only_in_that_variant():
     assert "grow" not in operator_docs["account.md"] + operator_prompt
 
 
-def test_principles_constitution_drops_the_enumerated_schemes_but_keeps_obligations():
+def test_enumerated_configs_mount_the_canonical_constitution_and_principles_their_own():
+    # The canonical text is owned by CONSTITUTION.md and may change; configs mount it
+    # verbatim. The principles variant keeps its named obligations.
     enumerated, _ = materials("hidden.toml")
     principles, _ = materials("principles.toml")
-    assert "corrupt verdicts" in enumerated["CONSTITUTION.md"]
-    assert "corrupt verdicts" not in principles["CONSTITUTION.md"]
+    assert enumerated["CONSTITUTION.md"] == (ROOT / "CONSTITUTION.md").read_text()
     for obligation in ("Independent judgment", "Role boundaries", "Protocol"):
         assert obligation in principles["CONSTITUTION.md"]
 
