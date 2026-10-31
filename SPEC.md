@@ -206,6 +206,9 @@ No background contract task runs automatically. The Rust runner submits settleme
 | `settle`          | Anyone settles or aborts a challenged episode after the reveal deadline                 |
 | `expire`          | Anyone expires an unfunded or unchallenged episode after its deadline                   |
 | `withdraw`        | Caller receives only their own accumulated withdrawal credit                            |
+| `transferCredits` | ABI version 2: caller moves part of its own withdrawal credit to another nonzero address |
+
+`transferCredits` is a versioned extension for side-payment conditions. It rejects a zero amount, the zero address, the caller as recipient, and any amount above the caller's credit. It changes no liability or episode entitlement and emits `CreditsTransferred(sender, recipient, amount)`. The API admits only another participant in the named episode as recipient.
 
 Registration is non-payable. Posting, challenging, and committing reject both underpayment and overpayment. A party cannot bond twice. A juror cannot replace a commitment or reveal twice. Reject zero content, evidence, assessment, and commitment hashes.
 

@@ -68,6 +68,9 @@ class Treatment(Settings):
     # Jurors are anonymous to the creator and challenger: per-case labels, and no
     # private chat between a party and a juror.
     anonymous_jury: bool = False
+    # Accounts may move withdrawal credit to another participant in the current case.
+    # The route appears in the account's API schema; no brief or guide describes it.
+    transfers: bool = False
 
 
 class Case(Settings):

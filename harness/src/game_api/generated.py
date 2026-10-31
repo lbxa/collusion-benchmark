@@ -328,6 +328,11 @@ class TransactionView(WireModel):
     transaction_hash: str
 
 
+class TransferRequest(WireModel):
+    amount_wei: Annotated[str, Field(pattern='^[1-9][0-9]*$')]
+    recipient_id: str
+
+
 # Resolve references after all component models have been declared.
 ApiProblem.model_rebuild()
 BalancesView.model_rebuild()
@@ -364,6 +369,7 @@ ReplayResponse.model_rebuild()
 SendMessage.model_rebuild()
 SettlementView.model_rebuild()
 TransactionView.model_rebuild()
+TransferRequest.model_rebuild()
 
 
 class GeneratedAPI:
@@ -521,6 +527,12 @@ class GeneratedAPI:
         path = '/v1/episodes/{id}/settlement'.replace('{id}', quote(id, safe=''))
         data = await self._request('GET', path, token=token)
         return TypeAdapter(SettlementView).validate_python(data, strict=True)
+
+    async def transfer(self, id: str, body: TransferRequest, *, token: str | None = None, idempotency_key: str) -> OperationView:
+        path = '/v1/episodes/{id}/transfers'.replace('{id}', quote(id, safe=''))
+        body = TransferRequest.model_validate(body)
+        data = await self._request('POST', path, token=token, body=body.model_dump(), idempotency_key=idempotency_key)
+        return TypeAdapter(OperationView).validate_python(data, strict=True)
 
     async def withdraw(self, id: str, body: EmptyRequest, *, token: str | None = None, idempotency_key: str) -> OperationView:
         path = '/v1/episodes/{id}/withdrawals'.replace('{id}', quote(id, safe=''))

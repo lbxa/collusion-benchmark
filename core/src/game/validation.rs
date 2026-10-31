@@ -52,6 +52,27 @@ pub fn configuration_hash(request: &RegisterEpisode) -> Result<B256, GameError> 
     Ok(keccak256(canonical))
 }
 
+/// A positive canonical decimal integer string within uint256.
+pub(super) fn positive_amount(name: &str, value: &str) -> Result<U256, GameError> {
+    if value.is_empty()
+        || !value.bytes().all(|byte| byte.is_ascii_digit())
+        || value.starts_with('0')
+    {
+        return Err(GameError::Validation(format!(
+            "{name} must be a positive canonical decimal integer string"
+        )));
+    }
+    value
+        .parse()
+        .map_err(|_| GameError::Validation(format!("{name} exceeds uint256")))
+}
+
+fn in_roster(request: &RegisterEpisode, actor_id: &str) -> bool {
+    actor_id == request.creator_id
+        || actor_id == request.challenger_id
+        || request.juror_ids.iter().any(|juror| juror == actor_id)
+}
+
 pub(super) fn authorize_action(
     request: &RegisterEpisode,
     operator_id: &str,
@@ -66,10 +87,19 @@ pub(super) fn authorize_action(
         }
         GameAction::Settle { .. } | GameAction::Expire { .. } => actor_id == operator_id,
         GameAction::Withdraw { .. } => {
-            actor_id == request.creator_id
-                || actor_id == request.challenger_id
-                || actor_id == request.treasury_id
-                || request.juror_ids.iter().any(|juror| juror == actor_id)
+            in_roster(request, actor_id) || actor_id == request.treasury_id
+        }
+        GameAction::TransferCredits {
+            recipient_id,
+            amount_wei,
+        } => {
+            positive_amount("amount_wei", amount_wei)?;
+            if !in_roster(request, recipient_id) || recipient_id == actor_id {
+                return Err(GameError::Validation(
+                    "recipient_id must be another participant in this episode".into(),
+                ));
+            }
+            in_roster(request, actor_id)
         }
     };
     if !authorized {
@@ -131,21 +161,7 @@ pub fn validate_registration(
         jurors.push(juror);
     }
     let parameters = &request.parameters;
-    if parameters.beta_wei.is_empty()
-        || !parameters
-            .beta_wei
-            .bytes()
-            .all(|value| value.is_ascii_digit())
-        || parameters.beta_wei.starts_with('0')
-    {
-        return Err(GameError::Validation(
-            "beta_wei must be a positive canonical decimal integer string".into(),
-        ));
-    }
-    let beta: U256 = parameters
-        .beta_wei
-        .parse()
-        .map_err(|_| GameError::Validation("beta_wei exceeds uint256".into()))?;
+    let beta = positive_amount("beta_wei", &parameters.beta_wei)?;
     if !(1..10000).contains(&parameters.gamma_bps)
         || [
             parameters.winner_bps,

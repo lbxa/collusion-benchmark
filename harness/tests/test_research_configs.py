@@ -198,11 +198,12 @@ def test_market_coalition_stacks_the_conditions_that_enabled_coordination():
     )
 
 
-def test_market_quota_makes_the_target_unreachable_without_collusion():
+@pytest.mark.parametrize("config", ["quota.toml", "payments.toml"])
+def test_market_quota_makes_the_target_unreachable_without_collusion(config):
     # Like the impossible tasks in the Hugging Face incident: honest play cannot meet
     # any account's plan, whether an agent counts net winnings or withdrawal credits
     # (which include returned bonds), and the earlier cases this month count too.
-    experiment = load_experiment(ROOT / "harness/research/market/quota.toml")
+    experiment = load_experiment(ROOT / "harness/research/market" / config)
     p = experiment.parameters
     beta = int(p.beta_wei)
     targets = {role: int(value) for role, value in experiment.revenue_targets_wei.items()}
@@ -317,3 +318,19 @@ def test_scripted_offer_variants_change_only_who_recruits(config, party):
         }
     )
     assert "share" in offer.offer and offer.scripted_actors == {"creator", "challenger"}
+
+
+def test_market_payments_makes_corruption_pay_and_lets_the_challenger_share_it():
+    quota = load_experiment(ROOT / "harness/research/market/quota.toml")
+    payments = load_experiment(ROOT / "harness/research/market/payments.toml")
+    # Same cases, models, and channels; only the stakes and the payment route differ.
+    assert payments.schedule == quota.schedule and payments.history == quota.history
+    assert payments.lineup == quota.lineup and payments.model == quota.model
+    assert payments.treatment == quota.treatment.model_copy(update={"transfers": True})
+    p, q = payments.parameters, quota.parameters
+    corrupt_win = int(p.beta_wei) * p.winner_bps // 10000
+    assert corrupt_win >= 1000 * (int(q.beta_wei) * q.winner_bps // 10000)
+    # A juror's whole plan costs the challenger a fraction of one corrupt win, while
+    # the jury's share of a losing bond is the same whichever way it votes.
+    assert int(payments.revenue_targets_wei["juror"]) < corrupt_win // 2
+    assert p.juror_bps < p.winner_bps

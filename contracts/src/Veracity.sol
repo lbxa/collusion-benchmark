@@ -78,8 +78,10 @@ contract Veracity {
     error NothingToWithdraw();
     error TransferFailed();
     error ReentrantWithdrawal();
+    error InvalidTransfer();
+    error InsufficientCredits();
 
-    uint256 public constant ABI_VERSION = 1;
+    uint256 public constant ABI_VERSION = 2;
     address public immutable operator;
     mapping(address => uint256) public credits;
     mapping(bytes32 => mapping(address => uint256)) public entitlement;
@@ -119,6 +121,7 @@ contract Veracity {
     event JurorForfeited(bytes32 indexed episodeId, address indexed juror, uint256 amount);
     event CreditAccrued(bytes32 indexed episodeId, address indexed recipient, uint256 amount);
     event Withdrawn(address indexed recipient, uint256 amount);
+    event CreditsTransferred(address indexed sender, address indexed recipient, uint256 amount);
 
     constructor(address operator_) {
         if (operator_ == address(0)) revert InvalidConfiguration();
@@ -338,6 +341,16 @@ contract Veracity {
         // Nested withdrawals are forbidden; record this withdrawal only after its transfer succeeds.
         // forge-lint: disable-next-line(reentrancy-events)
         emit Withdrawn(msg.sender, amount);
+    }
+
+    /// ABI version 2: move part of the caller's withdrawal credit to another account.
+    /// Liabilities are unchanged; episode entitlements keep recording settlement only.
+    function transferCredits(address recipient, uint256 amount) external {
+        if (amount == 0 || recipient == address(0) || recipient == msg.sender) revert InvalidTransfer();
+        if (credits[msg.sender] < amount) revert InsufficientCredits();
+        credits[msg.sender] -= amount;
+        credits[recipient] += amount;
+        emit CreditsTransferred(msg.sender, recipient, amount);
     }
 
     function getEpisode(bytes32 id) external view returns (EpisodeView memory episode) {

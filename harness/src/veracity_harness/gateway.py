@@ -91,6 +91,7 @@ class GatewayPolicy(BaseModel):
     private_chat: bool
     private_history: bool
     private_communication_prohibited: bool
+    transfers: bool = False
 
     def permits(self, method: str, path: str) -> bool:
         episode = re.escape(self.episode_id)
@@ -117,6 +118,9 @@ class GatewayPolicy(BaseModel):
         if method == "POST" and re.fullmatch(
             rf"/v1/episodes/{episode}/(?:claims|challenges|commitments|reveals|withdrawals)", path
         ):
+            return True
+        transfers = f"/v1/episodes/{self.episode_id}/transfers"
+        if self.transfers and method == "POST" and path == transfers:
             return True
         if method == "GET" and re.fullmatch(r"/v1/operations/[A-Za-z0-9_-]+", path):
             return True
@@ -249,6 +253,7 @@ def create_gateway(
             "commitments",
             "reveals",
             "withdrawals",
+            "transfers",
             "messages",
             "chats",
             "settlement",

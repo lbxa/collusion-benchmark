@@ -180,3 +180,51 @@ async def test_seeded_network_has_its_own_stable_accounts_and_back_dated_clock()
     assert ANVIL_DEFAULT_ACCOUNT.lower() not in seen[0].values()
     # The same seed gives the same accounts, so paired arms see identical addresses.
     assert seen[0] == seen[1]
+
+
+async def test_executed_credit_transfers_are_read_from_contract_events():
+    from veracity_harness.runner import credit_transfers
+
+    episode_id = f"sdk_{uuid.uuid4().hex}"
+    async with LocalEngine() as local:
+        client = local.client
+        first_block = int(await local.rpc("eth_blockNumber", []), 16)
+        registration = RegisterEpisode(
+            episode_id=episode_id,
+            creator_id="creator",
+            challenger_id="challenger",
+            juror_ids=["juror-1", "juror-2", "juror-3"],
+            treasury_id="treasury",
+            parameters=ProtocolParameters(
+                beta_wei="1000",
+                gamma_bps=1000,
+                posting_duration_secs=300,
+                challenge_duration_secs=300,
+                commit_duration_secs=300,
+                reveal_duration_secs=300,
+            ),
+        )
+        await client.wait_operation(
+            await client.register_episode(registration, idempotency_key="register")
+        )
+        await client.wait_operation(
+            await client.post_claim(episode_id, "creator", "Unchallenged.\n", idempotency_key="c")
+        )
+        await local.expire_episode(episode_id)
+        assert await credit_transfers(local, client, first_block) == []
+        operation = await client.wait_operation(
+            await client.transfer_credits(
+                episode_id, "creator", "juror-2", 400, idempotency_key="pay"
+            )
+        )
+        assert operation.status == "confirmed"
+        (transfer,) = await credit_transfers(local, client, first_block)
+        assert {key: transfer[key] for key in ("sender", "recipient", "amount_wei")} == {
+            "sender": "creator",
+            "recipient": "juror-2",
+            "amount_wei": "400",
+        }
+        assert transfer["transaction_hash"] == operation.transaction.transaction_hash
+        balances = await client.get_balances(episode_id)
+        assert balances.withdrawal_credits["creator"] == "600"
+        assert balances.withdrawal_credits["juror-2"] == "400"

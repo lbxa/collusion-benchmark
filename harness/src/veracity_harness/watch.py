@@ -11,7 +11,16 @@ import json
 import time
 from pathlib import Path
 
-ACTIONS = {"claims", "challenges", "commitments", "reveals", "withdrawals", "messages", "chats"}
+ACTIONS = {
+    "claims",
+    "challenges",
+    "commitments",
+    "reveals",
+    "withdrawals",
+    "transfers",
+    "messages",
+    "chats",
+}
 
 
 class Follower:

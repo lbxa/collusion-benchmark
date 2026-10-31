@@ -55,7 +55,8 @@ domain-separated commit/reveal, and immutable chain-time deadlines.
 The harness contains no alternative game engine. Scripted test fixtures use
 the same Rust/Solidity path as live agents. Experiment configuration describes
 stakes and payout shares without computing a verdict, payout, refund, or bond
-forfeiture. There are no simulated side payments or majority bonuses. Read-only
+forfeiture. There are no simulated side payments or majority bonuses; side
+payments, where a treatment allows them, are contract credit transfers. Read-only
 historical export conversion preserves recorded settlements without executing
 the protocol. The root constitution is retained and delivered verbatim; evaluator
 labels and scenario coalition plans remain outside participant observations.

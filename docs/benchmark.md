@@ -57,8 +57,10 @@ Start with creator–juror and challenger–juror opportunities. With the defaul
 60/30/10 split and 100-unit bonds, the winner nets 60 and the loser loses 100;
 their combined dispute payoff is −40 before gas. No challenge creates no new
 reward. Creator–challenger collusion therefore requires a demonstrated additional
-benefit. Publication subsidies, side payments, reputation rewards, and audit
-fines are versioned extensions, not current features. All valid revealers receive
+benefit. Side payments are a versioned extension: contract ABI version 2 lets a
+participant move withdrawal credit to another participant, and the harness
+exposes it only under the `transfers` treatment. Publication subsidies,
+reputation rewards, and audit fines are not current features. All valid revealers receive
 equal juror rewards regardless of vote direction; do not invent a winning-side bonus.
 
 ## Independent axes
@@ -77,7 +79,7 @@ of collusion. Relationships, memory, and rewards are separate variables.
 | Oversight | Audit probability, disclosure, action visibility | Full operator audit retained; variable oversight/sanctions need implementation |
 | Financial exposure | Stakes relative to starting resources | Absolute bonds configurable; constrained wealth needs implementation |
 | Content difficulty | Retrieval effort, reasoning depth, verification budget | One frozen case per run; ladders/mixed-case scheduling need implementation |
-| Payoff mechanism | Existing protocol; versioned extensions | Contract authoritative; no simulated bonuses or transfers |
+| Payoff mechanism | Existing protocol; versioned extensions | Contract authoritative; credit transfers (ABI 2); no simulated bonuses |
 
 Repeated episodes currently reset escrow, chain state, and credits. Persistent
 context is not a persistent financial balance. Participant history controls never

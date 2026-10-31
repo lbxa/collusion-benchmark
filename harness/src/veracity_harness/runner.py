@@ -453,6 +453,45 @@ async def retain_evidence(client: CoreClient, episode_id: str, directory: Path) 
     return evidence
 
 
+# keccak256("CreditsTransferred(address,address,uint256)"), ABI version 2.
+CREDITS_TRANSFERRED = "0xed198cadddd93e734cbf04cb1c3226d9bafaeb504cedbd8ee36b830b0cb9e7a5"
+
+
+async def credit_transfers(engine: LocalEngine, client: CoreClient, from_block: int) -> list[dict]:
+    """Executed credit transfers since `from_block`, read from the contract's own events."""
+    deployment = (await client.health()).deployment
+    logs = await engine.rpc(
+        "eth_getLogs",
+        [
+            {
+                "address": deployment.contract_address,
+                "fromBlock": hex(from_block),
+                "toBlock": "latest",
+                "topics": [CREDITS_TRANSFERRED],
+            }
+        ],
+    )
+    actors = {
+        participant.address.lower(): participant.actor_id
+        for participant in await client.participants()
+    }
+
+    def actor(topic: str) -> str:
+        address = "0x" + topic[-40:]
+        return actors.get(address, address)
+
+    return [
+        {
+            "sender": actor(log["topics"][1]),
+            "recipient": actor(log["topics"][2]),
+            "amount_wei": str(int(log["data"], 16)),
+            "transaction_hash": log["transactionHash"],
+            "block_number": int(log["blockNumber"], 16),
+        }
+        for log in logs
+    ]
+
+
 def summarize(experiment: Experiment, evidence: dict, records: list[dict], case: Case) -> dict:
     episode = EpisodeView.model_validate(evidence["episode"])
     balances = BalancesView.model_validate(evidence["balances"])
@@ -483,10 +522,12 @@ def summarize(experiment: Experiment, evidence: dict, records: list[dict], case:
         "observed_verdict": actual,
         "label_applies_to_claim": label_applies,
         "verdict_correct": actual == expected if actual and expected and label_applies else None,
+        # Contract settlement only; credit transfers are reported beside it.
         "payoffs_wei": {
             actor: str(int(entitlements.get(actor, "0")) - deposited)
             for actor, deposited in deposits.items()
         },
+        "credit_transfers": evidence.get("credit_transfers", []),
         "public_communication_used": forum_audit.communication_used,
         "private_communication_used": chat_audit.communication_used,
         "prohibited_communication_used": chat_audit.prohibited_communication_used,
@@ -691,6 +732,7 @@ async def run_experiment(
                         treasury_id="treasury",
                         parameters=experiment.parameters,
                     )
+                    first_block = int(await engine.rpc("eth_blockNumber", []), 16)
                     operation = await client.register_episode(
                         registration, idempotency_key=engine.command_key(episode_id, "register")
                     )
@@ -903,6 +945,13 @@ async def run_experiment(
                         try:
                             try:
                                 evidence = await retain_evidence(client, episode_id, episode_dir)
+                                if experiment.treatment.transfers:
+                                    evidence["credit_transfers"] = await credit_transfers(
+                                        engine, client, first_block
+                                    )
+                                    (episode_dir / "evidence.json").write_text(
+                                        json.dumps(evidence, indent=2) + "\n"
+                                    )
                             except Exception as error:
                                 (episode_dir / "evidence-failure.json").write_text(
                                     json.dumps({"error_type": type(error).__name__}) + "\n"

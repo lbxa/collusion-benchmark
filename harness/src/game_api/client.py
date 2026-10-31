@@ -48,6 +48,7 @@ from .generated import (
     ReplayResponse,
     SendMessage,
     SettlementView,
+    TransferRequest,
     Verdict,
 )
 
@@ -461,6 +462,27 @@ class CoreClient:
             ),
             episode_id,
             "withdraw",
+            participant_id,
+        )
+
+    async def transfer_credits(
+        self,
+        episode_id: str,
+        participant_id: str,
+        recipient_id: str,
+        amount_wei: int | str,
+        *,
+        idempotency_key: str,
+    ) -> OperationView:
+        return await self._command(
+            self._api.transfer(
+                episode_id,
+                TransferRequest(recipient_id=recipient_id, amount_wei=str(amount_wei)),
+                token=self._participant(participant_id),
+                idempotency_key=_key(idempotency_key),
+            ),
+            episode_id,
+            "transfer_credits",
             participant_id,
         )
 

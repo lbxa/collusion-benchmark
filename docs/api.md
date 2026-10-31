@@ -79,6 +79,7 @@ or votes. Never work around a pending command by issuing a new key.
 | `POST /v1/episodes/{id}/settle` | Operator | `{}` → operation after reveal deadline |
 | `POST /v1/episodes/{id}/expire` | Operator | `{}` → operation after posting/challenge expiry |
 | `POST /v1/episodes/{id}/withdrawals` | Participant | `{}` → operation withdrawing caller's global credits |
+| `POST /v1/episodes/{id}/transfers` | Participant | `{"recipient_id":"juror-1","amount_wei":"5"}` → operation moving part of the caller's global credits to another participant in the episode |
 | `GET /v1/episodes/{id}/settlement` | Public | Terminal payout and vote decomposition |
 | `GET /v1/episodes/{id}/balances` | Public | Episode entitlements and current global credits |
 | `GET /v1/operations/{id}` | Public | Persisted operation state and chain evidence |

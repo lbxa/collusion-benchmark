@@ -285,7 +285,9 @@ async def test_market_session_publishes_schedule_and_retains_shared_cache_and_pr
             "episodes": 2,
             "schedule": experiment.schedule[:2],
             "opportunities_per_phase": 1,
-            "treatment": experiment.treatment.model_copy(update={"public_messaging": True}),
+            "treatment": experiment.treatment.model_copy(
+                update={"public_messaging": True, "transfers": True}
+            ),
             "lineup": {"juror-2": "fixture/other-juror"},
         }
     )
@@ -293,6 +295,8 @@ async def test_market_session_publishes_schedule_and_retains_shared_cache_and_pr
     directory = await run_experiment(experiment, tmp_path, model=model)
     manifest = json.loads((directory / "run.json").read_text())
     assert manifest["status"] == "complete"
+    # With transfers enabled each case reports the payments it executed: none here.
+    assert [summary["credit_transfers"] for summary in manifest["episodes"]] == [[], []]
     assert len(manifest["provenance"]["schedule_sha256"]) == 2
     # A mixed lineup is recorded per actor and each actor's calls carry its own model.
     assert manifest["models"]["juror-2"] == "fixture/other-juror"
