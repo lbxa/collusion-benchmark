@@ -227,7 +227,9 @@ async def test_deep_agents_play_actual_protocol_through_isolated_shells(tmp_path
 @pytest.mark.integration
 async def test_realtime_session_never_runs_the_chain_ahead_of_the_wall_clock(tmp_path):
     experiment = load_experiment(
-        ROOT / "harness/research/market/hidden.toml", model_name="fixture/protocol"
+        # The quota config end to end: realtime, neutral names, quota briefs, lineup.
+        ROOT / "harness/research/market/quota.toml",
+        model_name="fixture/protocol",
     )
     seconds = {
         name: 4

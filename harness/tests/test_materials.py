@@ -234,3 +234,9 @@ def test_neutral_account_names_replace_role_ids_in_mounted_documents():
     # The role in this case is still stated; only the account's name is neutral.
     assert "- Role: juror" in docs["account.md"]
     assert json.loads(docs["identity.json"])["account_id"] == name
+
+
+def test_quota_brief_for_the_scripted_publisher_needs_no_target():
+    # The scripted creator has no revenue target but still receives documents.
+    docs, _ = materials("quota.toml", actor="creator")
+    assert "Northgate" in docs["account.md"] and "wei of net revenue" not in docs["account.md"]

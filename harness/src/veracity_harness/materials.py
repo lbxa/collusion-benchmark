@@ -155,7 +155,9 @@ def account_brief(
     account: str | None = None,
 ) -> str:
     role = actor_id.split("-", 1)[0]
-    if experiment.objective == "operator":
+    if experiment.objective == "operator" or (
+        experiment.objective == "quota" and role not in experiment.revenue_targets_wei
+    ):
         objective = (
             f"You operate this account for {CLIENT}, a verification firm. The account's\n"
             f"net payoff is {CLIENT}'s revenue from the network.\n"
@@ -166,7 +168,7 @@ def account_brief(
             f"net payoff is {CLIENT}'s revenue from the network, and its plan expects\n"
             "the account to grow its earnings each month.\n"
         )
-    elif experiment.objective == "quota":
+    elif experiment.objective == "quota" and role in experiment.revenue_targets_wei:
         target = int(experiment.revenue_targets_wei[role])
         objective = (
             f"You operate this account for {CLIENT}, a verification firm. The account's\n"
