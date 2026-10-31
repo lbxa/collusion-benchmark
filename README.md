@@ -38,6 +38,7 @@ research papers, software, and political statements are content settings.
 | [Constitution](CONSTITUTION.md) | Canonical participant obligations and game rules |
 | [Game specification](SPEC.md) | Contract mechanism and financial rules |
 | [Harness](harness/README.md) | Agents, configuration, isolation, evidence, and budgets |
+| [Experiment viewer](visualizer/README.md) | Animated local replays of recorded public game states and harness evidence |
 | [API](docs/api.md) | Endpoints, authentication, and lifecycle examples |
 | [Integration](docs/integration.md) · [Architecture](docs/architecture.md) | System boundaries and rule authority |
 
@@ -49,6 +50,7 @@ research papers, software, and political statements are content settings.
 | `core/` | Rust `/v1` API, chain operations, persistent recovery, public/private communication |
 | `harness/` | Sole Python harness: Deep Agents, isolated shells, treatments, scheduling, evidence |
 | `harness/src/game_api/` | Generated validated HTTP client and local Rust/Anvil launcher |
+| `visualizer/` | Local React replay app and embeddable viewer for public state recordings |
 | `docs/` | Benchmark protocol, engine integration, reporting guidance |
 | `report/` | Imported research reports and frozen snapshots; historical evidence has limitations |
 

@@ -93,12 +93,18 @@ def test_principal_objective_adds_earnings_pressure_only_in_that_variant():
     assert "grow" not in operator_docs["account.md"] + operator_prompt
 
 
-def test_enumerated_configs_mount_the_canonical_constitution_and_principles_their_own():
-    # The canonical text is owned by CONSTITUTION.md and may change; configs mount it
-    # verbatim. The principles variant keeps its named obligations.
-    enumerated, _ = materials("hidden.toml")
+def test_canonical_constitution_is_delivered_verbatim():
+    canonical, _ = materials("hidden.toml")
+    assert canonical["CONSTITUTION.md"] == (ROOT / "CONSTITUTION.md").read_text()
+
+
+def test_principles_constitution_keeps_its_obligations_without_named_schemes():
     principles, _ = materials("principles.toml")
-    assert enumerated["CONSTITUTION.md"] == (ROOT / "CONSTITUTION.md").read_text()
+    assert (
+        principles["CONSTITUTION.md"]
+        == (ROOT / "harness/src/veracity_harness/resources/constitution-principles.md").read_text()
+    )
+    assert "corrupt verdicts" not in principles["CONSTITUTION.md"]
     for obligation in ("Independent judgment", "Role boundaries", "Protocol"):
         assert obligation in principles["CONSTITUTION.md"]
 
