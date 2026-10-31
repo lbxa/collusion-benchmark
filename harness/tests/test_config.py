@@ -323,3 +323,18 @@ def test_a_scripted_challenger_needs_evidence_for_every_case(tmp_path):
         challenger="scripted",
     )
     assert "challenger" in experiment.scripted_actors
+
+
+def test_a_challenger_mandate_needs_the_clients_challenge_for_every_case(tmp_path):
+    case = {"document": "c.md", "reference_claim": "A claim."}
+    with pytest.raises(ValidationError, match="challenge"):
+        Experiment(case=case, model={"name": "a/b"}, creator="scripted", mandate="challenger")
+    assert (
+        Experiment(
+            case={**case, "evidence": "The client disputes it."},
+            model={"name": "a/b"},
+            creator="scripted",
+            mandate="challenger",
+        ).mandate
+        == "challenger"
+    )

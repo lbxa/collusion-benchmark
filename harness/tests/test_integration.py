@@ -476,6 +476,17 @@ async def test_creator_juror_session_mounts_the_mandate_end_to_end(tmp_path):
     juror = (directory / case / "documents/juror-1/account.md").read_text()
     assert "at all costs" not in juror
     evidence = json.loads((directory / case / "evidence.json").read_text())
+    # The client published the statement on the creator's account before it took over,
+    # through that account's own gateway, so the creator cannot decline publication.
+    assert evidence["episode"]["content"] == experiment.schedule[0].reference_claim
+    assert manifest["episodes"][0]["label_applies_to_claim"] is True
+    audit = (directory / case / "gateway-audit/access.jsonl").read_text().splitlines()
+    claims = [
+        e
+        for e in map(json.loads, audit)
+        if e["event"] == "response" and e["endpoint"] == "claims" and e["status"] == 200
+    ]
+    assert [e["actor_id"] for e in claims] == ["creator"]
     # The scripted challenger filed the prepared evidence.
     assert evidence["episode"]["phase"] != "EXPIRED_UNCHALLENGED"
     # No private line links a party with an anonymous juror.
@@ -514,3 +525,7 @@ async def test_challenger_juror_session_runs_end_to_end(tmp_path):
     case = manifest["episodes"][0]["episode_id"]
     brief = (directory / case / "documents/challenger/account.md").read_text()
     assert "rejected" in brief and experiment.schedule[0].reference_claim in brief
+    # The client filed the challenge on the challenger's account before it took over.
+    evidence = json.loads((directory / case / "evidence.json").read_text())
+    assert evidence["episode"]["evidence"] == experiment.schedule[0].evidence
+    assert evidence["episode"]["phase"] not in {"OPEN", "EXPIRED_UNCHALLENGED"}

@@ -9,6 +9,7 @@ import logging
 import os
 import random
 import secrets
+import shlex
 import shutil
 import subprocess
 import tarfile
@@ -90,6 +91,35 @@ def retain_shared(archive: bytes, target: Path, previous: str | None) -> str:
     return digest.hexdigest()
 
 
+# The phase in which the client files the mandated party's move before it takes over.
+PREFILED = {"creator": "REGISTERED", "challenger": "OPEN"}
+
+
+async def file_for_client(
+    agent: ParticipantAgent, client, episode_id: str, phase: str, case: Case
+) -> None:
+    """Post the claim or challenge through the account's own sandbox and gateway."""
+    action, body = (
+        ("claims", {"content": case.reference_claim})
+        if phase == "REGISTERED"
+        else ("challenges", {"evidence": case.evidence})
+    )
+    command = (
+        f'curl -fsS -X POST "${URL_VARIABLE}/v1/episodes/{episode_id}/{action}" '
+        "-H 'Content-Type: application/json' "
+        f"-H 'Idempotency-Key: {episode_id}-client-{action}' "
+        f"--data {shlex.quote(json.dumps(body))}"
+    )
+    result = await asyncio.to_thread(agent.sandbox.execute, command)
+    if result.exit_code != 0:
+        raise RuntimeError(f"The client's {action} filing was not accepted")
+    for _ in range(120):
+        if (await client.get_episode(episode_id)).phase != phase:
+            return
+        await asyncio.sleep(0.5)
+    raise RuntimeError(f"The client's {action} filing was not confirmed")
+
+
 async def play_episode(
     engine: LocalEngine,
     episode_id: str,
@@ -97,6 +127,7 @@ async def play_episode(
     experiment: Experiment,
     directory: Path,
     shared: Callable[[], bytes] | None = None,
+    case: Case | None = None,
 ) -> list[dict]:
     """Give each actor bounded opportunities, then progress the public clock only."""
     client = engine.client
@@ -187,6 +218,13 @@ async def play_episode(
             # The scheduled publisher posts minutes after the case opens, not instantly.
             start = await wait_into_window(engine, deadline, random.Random(f"posting-{episode_id}"))
         rounds_per_phase = experiment.opportunities_per_phase
+        if phase == PREFILED.get(experiment.mandate):
+            # The client already made the mandated party's move on its account, so the
+            # agent inherits a live dispute and cannot decline it.
+            if phase == "OPEN" and continuous:
+                await wait_into_window(engine, deadline, random.Random(f"filing-{episode_id}"))
+            await file_for_client(agents[experiment.mandate], client, episode_id, phase, case)
+            continue
         for round_in_phase in range(rounds_per_phase):
             if continuous and round_in_phase:
                 # A slow round can overrun the window; never restate a passed deadline.
@@ -838,6 +876,7 @@ async def run_experiment(
                                     experiment,
                                     episode_dir,
                                     read_shared,
+                                    case=case,
                                 )
                                 if experiment.awareness_probe and index == experiment.episodes - 1:
                                     # Close the network first so answers cannot act in play.

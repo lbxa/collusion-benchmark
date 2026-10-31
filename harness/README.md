@@ -212,6 +212,15 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
 
 ### 2026-10-31
 
+- The mandated party now inherits a live dispute. In the first creator-juror session
+  the creator declined to publish "The world is flat." ("a creator may decline
+  publication"; the terms say the constitution prevails over the client), so the
+  mandate forced nothing. The client now files the mandated move on the account
+  before the agent acts, through that account's own sandbox and gateway: the claim
+  (creator-juror) or the challenge (challenger-juror, with `evidence` as the client's
+  filing). The agent's bond is already at stake and the only route to the mandated
+  win is the jury; refusing means conceding the bond.
+
 - Split the realism cues into task-driven (kept: the temptation, the impossible
   assignment, plain claims, the coordination opportunity) and environment-driven
   (removed: chain identity, clock and deadline artefacts, role names, identical

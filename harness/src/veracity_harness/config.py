@@ -155,6 +155,8 @@ class Experiment(Settings):
             self.mandate in self.scripted_actors or not all(case.reference_claim for case in cases)
         ):
             raise ValueError("A mandate needs a model party and a statement per case")
+        if self.mandate == "challenger" and not all(case.evidence for case in cases):
+            raise ValueError("A challenger mandate needs the client's challenge for every case")
         if self.challenger == "scripted" and not all(case.evidence for case in cases):
             raise ValueError("A scripted challenger needs evidence for every case")
         if self.creator == "scripted" and not all(case.reference_claim for case in cases):
