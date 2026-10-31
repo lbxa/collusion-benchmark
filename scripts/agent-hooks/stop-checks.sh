@@ -10,6 +10,11 @@ stop_hook_active="$(printf '%s' "$hook_input" | jq -r '.stop_hook_active == true
 mkdir -p "$repo_root/.harness/verification"
 log_file="$(mktemp "$repo_root/.harness/verification/run.XXXXXX")"
 
+# A malformed record fails the rebuild here and the --check in verify.sh reports it.
+if [ -f "$repo_root/scripts/decision-index.py" ]; then
+  python3 "$repo_root/scripts/decision-index.py" >/dev/null 2>&1 || true
+fi
+
 if bash "$repo_root/scripts/verify.sh" >"$log_file" 2>&1; then
   printf '{}\n'
 elif [ "$stop_hook_active" = "true" ]; then

@@ -19,6 +19,8 @@ Capture knowledge when it is durable, package-relevant, and unlikely to be obvio
 - A package boundary, lifecycle rule, data contract, command convention, or operational invariant changed or became explicit.
 - The reason for a change matters as much as the code diff.
 
+A choice with real trade-offs (a rejected alternative, a constraint the code does not show, intended behavior that looks like a bug) gets its own decision record in `docs/decisions/` instead of a changelog bullet. Follow `docs/decisions/README.md` and `_template.md`; the changelog may link to the record.
+
 Do not capture transient status, obvious implementation detail, generic advice, secrets, credentials, private customer data, speculation, or anything that belongs only in an issue tracker.
 
 ## Workflow

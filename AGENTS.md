@@ -43,6 +43,19 @@ compromised outcome. Keep evaluator labels and coalition plans out of agent inpu
 The sole harness is `harness/`; its `src/game_api/` owns the retained HTTP client.
 Historical payoff-only campaigns are not constitution-conditioned benchmark evidence.
 
+## Decision Records
+
+Writing a decision record is part of "done", for every agent and without being
+asked. When a change encodes a choice with real trade-offs — a constraint the
+code does not show, a rejected alternative, behavior that looks like a bug but
+is intended, a parked experiment — add `docs/decisions/<short-statement>.md`
+from `docs/decisions/_template.md` in the same change. Use today's date, no
+number in the filename, and people (not agents) as deciders. Never invent the
+rationale: mark unverified parts `> ⚠️ NEEDS CONFIRMATION (who)`. Records are
+append-only; supersede rather than rewrite. Do not edit `docs/decisions/INDEX.md`;
+the Stop hook regenerates it and `scripts/verify.sh` rejects a stale one. Small
+package facts stay in the package README changelog; see `docs/decisions/README.md`.
+
 ## Commit & Pull Request Guidelines
 
 Use focused, imperative subjects such as `Add Cargo verification hooks`. Pull requests should describe behavior, link spec sections or issues, and report verification results and blockers.

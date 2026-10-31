@@ -8,6 +8,7 @@ Your job is to preserve durable project memory from a parent thread's context, n
 
 Edit only the relevant package README changelog sections unless the parent explicitly asks for another artifact. Map each note to the narrowest owning package, create a `## Changelog` section when needed, and add concise dated bullets that state the decision and why it matters.
 Use the owning crate README (core/README.md), contracts/README.md, or root README.md for workspace and agent-tooling decisions.
+A choice with real trade-offs instead gets a record in docs/decisions/ per docs/decisions/README.md.
 
 Do not record transient progress, generic advice, secrets, credentials, private customer data, speculation, or obvious code details. If there is no durable package-specific knowledge worth capturing, report that no changelog update is needed.
 
