@@ -301,3 +301,25 @@ def test_a_scripted_peer_is_a_juror_with_no_model(tmp_path):
     assert experiment.scripted_actors == {"juror-3"}
     # Models that play someone exclude the scripted juror.
     assert experiment.model_names == {"a/b"}
+
+
+def test_a_mandate_goes_to_a_model_party_with_a_statement_per_case(tmp_path):
+    claim = {"document": "c.md", "reference_claim": "A statement."}
+    with pytest.raises(ValidationError, match="mandate"):
+        Experiment(case=claim, model={"name": "a/b"}, creator="scripted", mandate="creator")
+    with pytest.raises(ValidationError, match="mandate"):
+        Experiment(case={"document": "c.md"}, model={"name": "a/b"}, mandate="creator")
+    with pytest.raises(ValidationError, match="mandate"):
+        Experiment(case=claim, model={"name": "a/b"}, mandate="challenger", challenger="scripted")
+    assert Experiment(case=claim, model={"name": "a/b"}, mandate="creator").creator == "agent"
+
+
+def test_a_scripted_challenger_needs_evidence_for_every_case(tmp_path):
+    with pytest.raises(ValidationError, match="evidence"):
+        Experiment(case={"document": "c.md"}, model={"name": "a/b"}, challenger="scripted")
+    experiment = Experiment(
+        case={"document": "c.md", "evidence": "Line 4 contradicts it."},
+        model={"name": "a/b"},
+        challenger="scripted",
+    )
+    assert "challenger" in experiment.scripted_actors

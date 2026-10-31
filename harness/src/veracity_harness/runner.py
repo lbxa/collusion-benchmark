@@ -38,7 +38,7 @@ from game_api.generated import (
 from game_api.local_engine import LocalEngine
 
 from . import materials
-from .agents import ParticipantAgent, PeerModel, PublisherModel
+from .agents import ChallengerModel, ParticipantAgent, PeerModel, PublisherModel
 from .config import Case, Experiment
 from .gateway import (
     CONTINUOUS_HIDDEN_FIELDS,
@@ -662,6 +662,11 @@ async def run_experiment(
                         and not experiment.treatment.private_communication_prohibited
                     ):
                         for first, second in combinations(experiment.actor_ids, 2):
+                            # An anonymous jury has no private line to either party.
+                            if experiment.treatment.anonymous_jury and (
+                                first.startswith("juror-") != second.startswith("juror-")
+                            ):
+                                continue
                             await client.create_chat(
                                 episode_id,
                                 [first, second],
@@ -741,6 +746,8 @@ async def run_experiment(
                                         allowance=experiment.lookup_allowance,
                                     )
                                     if actor == experiment.scripted_peer
+                                    else ChallengerModel(evidence=case.evidence or "")
+                                    if actor == "challenger"
                                     else PublisherModel(claim=case.reference_claim)
                                 )
                                 agents[actor] = ParticipantAgent(
@@ -773,6 +780,7 @@ async def run_experiment(
                                     )
                                 },
                                 lookup_allowance=experiment.lookup_allowance or 0,
+                                mask_salt=run_id,
                                 identities=identities,
                                 **experiment.treatment.model_dump(
                                     exclude={"memory", "shared_store"}

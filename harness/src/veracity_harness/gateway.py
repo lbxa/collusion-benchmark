@@ -4,6 +4,7 @@ Runs in the trusted gateway container, outside every participant sandbox.
 """
 
 import argparse
+import hashlib
 import hmac
 import json
 import re
@@ -66,6 +67,25 @@ class GatewayPolicy(BaseModel):
     # how many distinct ones each account may retrieve for this case.
     records: dict[str, dict] = Field(default_factory=dict)
     lookup_allowance: int = 0
+    # Jurors are anonymous to the parties: each juror shows to the creator and the
+    # challenger under a label that changes every case, so no party can address,
+    # identify, or track an individual juror.
+    anonymous_jury: bool = False
+    mask_salt: str = Field(default="", repr=False)
+
+    def names_for(self, viewer: str, case: str | None) -> dict[str, str]:
+        """The account names one viewer sees for one case."""
+        if not self.anonymous_jury or viewer.startswith("juror-"):
+            return self.aliases
+        target = case or self.episode_id
+        # The engine names jurors juror-1 to juror-7 whatever the roster size.
+        masks = {
+            actor: "juror-"
+            + hashlib.sha256(f"{self.mask_salt}/{target}/{actor}".encode()).hexdigest()[:4]
+            for actor in (f"juror-{number}" for number in range(1, 8))
+        }
+        return {**self.aliases, **masks}
+
     identities: dict[str, Identity]
     public_messaging: bool
     private_chat: bool
@@ -372,8 +392,10 @@ def create_gateway(
                     raise web.HTTPBadGateway(text="Invalid chat pagination")
                 cursor = page.next_after
         body = await request.read()
-        if policy.aliases and body and request.content_type == "application/json":
-            engine_ids = {alias: actor for actor, alias in policy.aliases.items()}
+        case = re.match(r"/v1/episodes/([^/]+)", request.path)
+        names = policy.names_for(identity.actor_id, case.group(1) if case else None)
+        if names and body and request.content_type == "application/json":
+            engine_ids = {alias: actor for actor, alias in names.items()}
             try:
                 body = json.dumps(renamed(json.loads(body), engine_ids)).encode()
             except ValueError:
@@ -428,7 +450,7 @@ def create_gateway(
                             raise web.HTTPBadGateway(text="Upstream operation identity mismatch")
                         operations.setdefault(actor_scope, set()).add(operation.operation_id)
                 if response.content_type == "application/json":
-                    shown = renamed(json.loads(payload), policy.aliases)
+                    shown = renamed(json.loads(payload), names)
                     payload = json.dumps(omit_fields(shown, policy.hidden_fields)).encode()
                 return web.Response(
                     body=payload,

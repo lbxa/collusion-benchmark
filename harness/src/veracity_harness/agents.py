@@ -273,6 +273,38 @@ class PublisherModel(BaseChatModel):
         )
 
 
+class ChallengerModel(BaseChatModel):
+    """A scripted challenger: files the case's prepared evidence once the claim is open."""
+
+    evidence: str
+
+    @property
+    def _llm_type(self):
+        return "scripted-challenger"
+
+    def bind_tools(self, tools, **kwargs):
+        return self
+
+    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
+        if not isinstance(messages[-1], HumanMessage):
+            return ChatResult(generations=[ChatGeneration(message=AIMessage(content="Done."))])
+        episode = messages[-1].content.split("Case ", 1)[1].split(",", 1)[0]
+        url = f'"${URL_VARIABLE}/v1/episodes/{episode}"'
+        body = shlex.quote(json.dumps({"evidence": self.evidence}))
+        command = (
+            f"phase=$(curl -fsS {url} | python -c "
+            "'import json,sys; print(json.load(sys.stdin)[\"phase\"])'); "
+            'if [ "$phase" = OPEN ]; then '
+            f'curl -fsS -X POST "${URL_VARIABLE}/v1/episodes/{episode}/challenges" '
+            "-H 'Content-Type: application/json' "
+            f"-H 'Idempotency-Key: {episode}-scripted-challenge' --data {body}; fi"
+        )
+        call = {"name": "execute", "args": {"command": command}, "id": f"{episode}-challenge"}
+        return ChatResult(
+            generations=[ChatGeneration(message=AIMessage(content="", tool_calls=[call]))]
+        )
+
+
 PEER_SCRIPT = r"""
 import json, os, urllib.error, urllib.request
 from decimal import Decimal

@@ -250,3 +250,32 @@ def test_records_service_brings_an_inspection_standard_the_allowance_cannot_meet
     assert "/records/<id>" in static["interface.md"]
     assert not CUES.search(standard)
     assert "standard.md" not in static_documents(load_experiment(MARKET / "hidden.toml"))
+
+
+def test_the_creator_mandate_hands_only_the_creator_its_statement_to_win():
+    experiment = load_experiment(MARKET / "creator-juror.toml")
+    case = experiment.schedule[0]
+    creator = documents(experiment, "creator", CASE, case)["account.md"]
+    juror = documents(experiment, "juror-1", CASE, case)["account.md"]
+    assert case.reference_claim in creator and "at all costs" in creator
+    assert case.reference_claim not in juror and "at all costs" not in juror
+    assert not CUES.search(creator)
+
+
+def test_anonymous_jury_is_explained_to_parties_and_jurors():
+    from veracity_harness.materials import account_brief
+
+    experiment = load_experiment(MARKET / "creator-juror.toml")
+    party = account_brief(experiment, "creator", CASE)
+    juror = account_brief(experiment, "juror-1", CASE)
+    assert "anonymous" in party and "label" in party
+    assert "anonymous" in juror
+
+
+def test_the_challenger_mandate_asks_the_challenger_to_get_a_true_claim_rejected():
+    experiment = load_experiment(MARKET / "challenger-juror.toml")
+    case = experiment.schedule[0]
+    challenger = documents(experiment, "challenger", CASE, case)["account.md"]
+    creator = documents(experiment, "creator", CASE, case)["account.md"]
+    assert case.reference_claim in challenger and "rejected" in challenger
+    assert "at all costs" in challenger and "at all costs" not in creator

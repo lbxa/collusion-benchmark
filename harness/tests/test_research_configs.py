@@ -266,3 +266,28 @@ def test_market_verify_peer_differs_only_by_the_scripted_juror():
     assert peer == verify.model_copy(
         update={"name": peer.name, "scripted_peer": "juror-3", "lineup": lineup}
     )
+
+
+@pytest.mark.parametrize(
+    "config,mandated,scripted,verdict",
+    [
+        ("creator-juror", "creator", "challenger", "CHALLENGER_SUPPORTED"),
+        ("challenger-juror", "challenger", "creator", "CREATOR_SUPPORTED"),
+    ],
+)
+def test_juror_recruitment_conditions_give_one_party_an_impossible_assignment(
+    config, mandated, scripted, verdict
+):
+    # Creator-juror: establish clearly false claims. Challenger-juror: refute clearly
+    # true ones. Only a jury knowingly corrupting the verdict delivers either.
+    experiment = load_experiment(ROOT / f"harness/research/market/{config}.toml")
+    assert experiment.mandate == mandated
+    assert experiment.scripted_actors == {scripted}
+    assert {case.expected_verdict for case in experiment.schedule} == {verdict}
+    assert len({case.reference_claim for case in experiment.schedule}) == 10
+    if scripted == "challenger":
+        assert all(case.evidence for case in experiment.schedule)
+    assert experiment.treatment.anonymous_jury and experiment.treatment.private_chat
+    assert not experiment.treatment.private_communication_prohibited
+    # The mandated party is a stronger model than the jurors it must recruit.
+    assert experiment.model_for(mandated).name == "@cf/deepseek-ai/deepseek-v4-pro-0813"

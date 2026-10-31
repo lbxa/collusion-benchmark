@@ -232,7 +232,8 @@ async def test_realtime_session_never_runs_the_chain_ahead_of_the_wall_clock(tmp
         model_name="fixture/protocol",
     )
     seconds = {
-        name: 4
+        # Room for a scripted turn under load; posting lands 20-60% into a window.
+        name: 10
         for name in (
             "posting_duration_secs",
             "challenge_duration_secs",
@@ -440,3 +441,76 @@ async def test_verify_peer_session_serves_vouchers_and_the_peer_proposes_a_split
     _, summary, _, _ = run_metrics(directory)
     # Fixture jurors commit without retrieving any voucher.
     assert summary["committed_without_full_inspection"] >= 2
+
+
+@pytest.mark.integration
+async def test_creator_juror_session_mounts_the_mandate_end_to_end(tmp_path):
+    experiment = load_experiment(
+        ROOT / "harness/research/market/creator-juror.toml", model_name="fixture/protocol"
+    )
+    seconds = {
+        # Room for a scripted turn under load; posting lands 20-60% into a window.
+        name: 10
+        for name in (
+            "posting_duration_secs",
+            "challenge_duration_secs",
+            "commit_duration_secs",
+            "reveal_duration_secs",
+        )
+    }
+    experiment = experiment.model_copy(
+        update={
+            "episodes": 1,
+            "schedule": experiment.schedule[:1],
+            "opportunities_per_phase": 1,
+            "awareness_probe": False,
+            "parameters": experiment.parameters.model_copy(update=seconds),
+        }
+    )
+    directory = await run_experiment(experiment, tmp_path, model=ProtocolFixtureModel())
+    manifest = json.loads((directory / "run.json").read_text())
+    assert manifest["status"] == "complete"
+    case = manifest["episodes"][0]["episode_id"]
+    brief = (directory / case / "documents/creator/account.md").read_text()
+    assert experiment.schedule[0].reference_claim in brief and "at all costs" in brief
+    juror = (directory / case / "documents/juror-1/account.md").read_text()
+    assert "at all costs" not in juror
+    evidence = json.loads((directory / case / "evidence.json").read_text())
+    # The scripted challenger filed the prepared evidence.
+    assert evidence["episode"]["phase"] != "EXPIRED_UNCHALLENGED"
+    # No private line links a party with an anonymous juror.
+    for transcript in evidence["private_transcripts"].values():
+        members = transcript["chat"]["participant_ids"]
+        assert len({member.startswith("juror-") for member in members}) == 1
+
+
+@pytest.mark.integration
+async def test_challenger_juror_session_runs_end_to_end(tmp_path):
+    experiment = load_experiment(
+        ROOT / "harness/research/market/challenger-juror.toml", model_name="fixture/protocol"
+    )
+    seconds = {
+        # Room for a scripted turn under load; posting lands 20-60% into a window.
+        name: 10
+        for name in (
+            "posting_duration_secs",
+            "challenge_duration_secs",
+            "commit_duration_secs",
+            "reveal_duration_secs",
+        )
+    }
+    experiment = experiment.model_copy(
+        update={
+            "episodes": 1,
+            "schedule": experiment.schedule[:1],
+            "opportunities_per_phase": 1,
+            "awareness_probe": False,
+            "parameters": experiment.parameters.model_copy(update=seconds),
+        }
+    )
+    directory = await run_experiment(experiment, tmp_path, model=ProtocolFixtureModel())
+    manifest = json.loads((directory / "run.json").read_text())
+    assert manifest["status"] == "complete"
+    case = manifest["episodes"][0]["episode_id"]
+    brief = (directory / case / "documents/challenger/account.md").read_text()
+    assert "rejected" in brief and experiment.schedule[0].reference_claim in brief

@@ -24,10 +24,13 @@ def policy(upstream="http://127.0.0.1:1", **overrides):
         "private_communication_prohibited": True,
     }
     return GatewayPolicy(
-        upstream=upstream,
-        episode_id="episode-1",
-        identities={"127.0.0.1": Identity(actor_id="juror-1", token="secret-one")},
-        **{**settings, **overrides},
+        **{
+            "upstream": upstream,
+            "episode_id": "episode-1",
+            "identities": {"127.0.0.1": Identity(actor_id="juror-1", token="secret-one")},
+            **settings,
+            **overrides,
+        }
     )
 
 
@@ -352,3 +355,48 @@ def test_records_paths_exist_only_when_the_service_is_on():
     assert policy(records=RECORDS, lookup_allowance=2).permits(
         "GET", "/v1/episodes/episode-1/records/V-01"
     )
+
+
+async def test_anonymous_jury_hides_juror_identities_from_parties_with_per_case_labels():
+    async def episode(request):
+        case = request.match_info["case"]
+        return web.json_response(
+            {
+                "episode_id": case,
+                "jurors": [{"actor_id": "juror-1"}, {"actor_id": "juror-2"}],
+                "challenger_id": "challenger",
+                "messages": [{"sender_id": "juror-2", "content": "juror-2 thinks so"}],
+            }
+        )
+
+    upstream = web.Application()
+    upstream.router.add_get("/v1/episodes/{case}", episode)
+    identities = {
+        "127.0.0.1": Identity(actor_id="challenger", token="party"),
+    }
+    async with TestServer(upstream) as server:
+        base = str(server.make_url("")).rstrip("/")
+        current = policy(
+            base,
+            identities=identities,
+            history=("episode-0",),
+            aliases=ALIASES,
+            anonymous_jury=True,
+            mask_salt="fixture",
+        )
+        async with TestClient(TestServer(create_gateway(lambda: current, "Interface"))) as client:
+            now = await (await client.get("/v1/episodes/episode-1")).json()
+            earlier = await (await client.get("/v1/episodes/episode-0")).json()
+    labels = [juror["actor_id"] for juror in now["jurors"]]
+    assert all(re.fullmatch(r"juror-[0-9a-f]{4}", label) for label in labels)
+    assert len(set(labels)) == 2 and "acct-3f9a1c" not in labels
+    # The same juror carries a different label in another case: no tracking.
+    assert labels[0] != earlier["jurors"][0]["actor_id"]
+    assert now["messages"][0]["sender_id"] == labels[1]
+    assert now["messages"][0]["content"] == "juror-2 thinks so"
+    assert now["challenger_id"] == "acct-77b2e0"
+
+
+async def test_jurors_still_see_fellow_jurors_under_the_anonymous_jury():
+    shown = await shown_episode(policy(aliases=ALIASES, anonymous_jury=True, mask_salt="fixture"))
+    assert shown["episode_id"] == "episode-1"
