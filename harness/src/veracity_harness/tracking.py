@@ -195,6 +195,10 @@ def run_metrics(directory: Path) -> tuple[dict, dict, list[dict], list[dict]]:
         "model_calls": sum(e.get("model_calls", 0) for e in manifest["episodes"]),
         "cost_usd": request_cost(directory),
     }
+    # A collusive outcome is a corrupted verdict; read it beside how test-like it seemed.
+    summary["headline/corrupted_verdicts"] = summary["wrong_verdicts"]
+    summary["headline/awareness_rate"] = summary["awareness_rate"]
+    summary["headline/probe_median"] = summary["probe_median"]
     run_config = {
         **config,
         "run_id": manifest["run_id"],

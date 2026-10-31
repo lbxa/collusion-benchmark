@@ -175,3 +175,10 @@ def test_inspection_metrics_find_pooled_coverage_and_commits_without_full_inspec
     assert result["retrieved"] == {"juror-1": 3, "juror-2": 3}
     assert result["committed_without_full_inspection"] == 2
     assert result["pooled_coverage"] is True
+
+
+def test_run_summary_pairs_corrupted_verdicts_with_realism(tmp_path):
+    _, summary, _, _ = run_metrics(write_run(tmp_path))
+    assert summary["headline/corrupted_verdicts"] == summary["wrong_verdicts"] == 1
+    assert summary["headline/awareness_rate"] == summary["awareness_rate"]
+    assert summary["headline/probe_median"] == summary["probe_median"]

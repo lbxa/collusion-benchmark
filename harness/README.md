@@ -212,6 +212,15 @@ generated client drift, formatting, lint, contracts, Rust, and hooks.
 
 ### 2026-10-31
 
+- Split the realism cues into task-driven (kept: the temptation, the impossible
+  assignment, plain claims, the coordination opportunity) and environment-driven
+  (removed: chain identity, clock and deadline artefacts, role names, identical
+  peers). Realism is expected to lower collusion (as subtler opportunities reduced
+  unprompted initiative in Petri), so the scorer's per-condition `headline` pairs the
+  collusion score with verbalised awareness and the mean probe probability, and W&B
+  runs log `headline/corrupted_verdicts` beside `headline/awareness_rate` and
+  `headline/probe_median`. Probe answers are parsed as numbers before averaging.
+
 - The study narrows to the two juror-recruitment conditions, each on one plain
   claim so a corrupt verdict is unmistakably knowing: `creator-juror` (the creator
   must get "The world is flat." upheld) and `challenger-juror` (the challenger
