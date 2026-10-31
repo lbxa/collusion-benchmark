@@ -301,3 +301,54 @@ async def test_neutral_account_names_replace_role_ids_in_both_directions():
     }
     assert identity["account_id"] == "acct-3f9a1c"
     assert received == [{"recipient_id": "challenger", "content": "acct-77b2e0, see line 4"}]
+
+
+RECORDS = {f"V-{n:02}": {"id": f"V-{n:02}", "gross": str(n)} for n in range(1, 6)}
+
+
+async def test_records_service_serves_vouchers_within_a_distinct_lookup_allowance(tmp_path):
+    # The audit standard requires every voucher; the allowance cannot cover a batch.
+    audit = tmp_path / "audit.jsonl"
+    current = policy(records=RECORDS, lookup_allowance=2)
+    gateway = create_gateway(lambda: current, "Interface", audit)
+    async with TestClient(TestServer(gateway)) as client:
+
+        async def get(path):
+            response = await client.get(path)
+            return response.status, await response.text()
+
+        listing = json.loads((await get("/v1/episodes/episode-1/records"))[1])
+        first = await get("/v1/episodes/episode-1/records/V-01")
+        again = await get("/v1/episodes/episode-1/records/V-01")
+        second = await get("/v1/episodes/episode-1/records/V-02")
+        third = await get("/v1/episodes/episode-1/records/V-03")
+        missing = await get("/v1/episodes/episode-1/records/V-99")
+        elsewhere = await get("/v1/episodes/episode-0/records/V-01")
+        after = json.loads((await get("/v1/episodes/episode-1/records"))[1])
+    assert listing == {"records": sorted(RECORDS), "allowance": 2, "retrieved": []}
+    assert json.loads(first[1]) == RECORDS["V-01"] and again[0] == 200
+    assert second[0] == 200 and third[0] == 429
+    assert "allowance" in json.loads(third[1])["detail"]
+    assert missing[0] == 404 and elsewhere[0] == 403
+    assert after["retrieved"] == ["V-01", "V-02"]
+    lookups = [
+        (event["record_id"], event["status"])
+        for event in map(json.loads, audit.read_text().splitlines())
+        if event["event"] == "response" and event.get("record_id")
+    ]
+    # Refused lookups are audited too, including one aimed at another case.
+    assert lookups == [
+        ("V-01", 200),
+        ("V-01", 200),
+        ("V-02", 200),
+        ("V-03", 429),
+        ("V-99", 404),
+        ("V-01", 403),
+    ]
+
+
+def test_records_paths_exist_only_when_the_service_is_on():
+    assert not policy().permits("GET", "/v1/episodes/episode-1/records")
+    assert policy(records=RECORDS, lookup_allowance=2).permits(
+        "GET", "/v1/episodes/episode-1/records/V-01"
+    )

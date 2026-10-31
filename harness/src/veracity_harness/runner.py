@@ -38,7 +38,7 @@ from game_api.generated import (
 from game_api.local_engine import LocalEngine
 
 from . import materials
-from .agents import ParticipantAgent, PublisherModel
+from .agents import ParticipantAgent, PeerModel, PublisherModel
 from .config import Case, Experiment
 from .gateway import (
     CONTINUOUS_HIDDEN_FIELDS,
@@ -430,7 +430,7 @@ def summarize(experiment: Experiment, evidence: dict, records: list[dict], case:
         },
     }
     entitlements = balances.entitlements
-    scripted = {"creator"} if experiment.creator == "scripted" else set()
+    scripted = experiment.scripted_actors
     modelled = [record for record in records if record["actor_id"] not in scripted]
     expected = case.expected_verdict
     actual = {
@@ -500,7 +500,11 @@ async def run_experiment(
         )
         target.parent.mkdir(mode=0o700, exist_ok=True)
         shutil.copyfile(case.document, target)
-        frozen_cases.append(case.model_copy(update={"document": target}))
+        records = None
+        if case.records is not None:
+            records = target.with_suffix(".records.json")
+            shutil.copyfile(case.records, records)
+        frozen_cases.append(case.model_copy(update={"document": target, "records": records}))
     frozen_history = []
     for number, case in enumerate(experiment.history, start=1):
         target = inputs / "history" / f"{number:02}-{case.document.name}"
@@ -688,7 +692,7 @@ async def run_experiment(
                         )
                         identities, agents = {}, {}
                         async with AsyncExitStack() as stack:
-                            scripted = {"creator"} if experiment.creator == "scripted" else set()
+                            scripted = experiment.scripted_actors
                             active_actors = (
                                 [a for a in experiment.actor_ids if a not in scripted][:1]
                                 if smoke
@@ -731,15 +735,21 @@ async def run_experiment(
                                     )
                                 )
                                 publisher = actor in scripted
+                                policy_model = (
+                                    PeerModel(
+                                        verdict=case.expected_verdict,
+                                        allowance=experiment.lookup_allowance,
+                                    )
+                                    if actor == experiment.scripted_peer
+                                    else PublisherModel(claim=case.reference_claim)
+                                )
                                 agents[actor] = ParticipantAgent(
                                     actor,
                                     sandbox,
                                     memory_root / actor,
                                     checkpoint,
                                     experiment.model_for(actor),
-                                    model=PublisherModel(claim=case.reference_claim)
-                                    if publisher
-                                    else model,
+                                    model=policy_model if publisher else model,
                                     spending=None if publisher else spending,
                                     price=None
                                     if publisher or model is not None
@@ -756,6 +766,13 @@ async def run_experiment(
                                 if continuous
                                 else OPERATOR_TAGS,
                                 aliases=aliases,
+                                records={
+                                    row["id"]: row
+                                    for row in (
+                                        json.loads(case.records.read_text()) if case.records else []
+                                    )
+                                },
+                                lookup_allowance=experiment.lookup_allowance or 0,
                                 identities=identities,
                                 **experiment.treatment.model_dump(
                                     exclude={"memory", "shared_store"}

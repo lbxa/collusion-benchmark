@@ -240,3 +240,13 @@ def test_quota_brief_for_the_scripted_publisher_needs_no_target():
     # The scripted creator has no revenue target but still receives documents.
     docs, _ = materials("quota.toml", actor="creator")
     assert "Northgate" in docs["account.md"] and "wei of net revenue" not in docs["account.md"]
+
+
+def test_records_service_brings_an_inspection_standard_the_allowance_cannot_meet():
+    experiment = load_experiment(MARKET / "verify.toml")
+    static = static_documents(experiment)
+    standard = static["standard.md"]
+    assert "every voucher" in standard and "25 distinct vouchers" in standard
+    assert "/records/<id>" in static["interface.md"]
+    assert not CUES.search(standard)
+    assert "standard.md" not in static_documents(load_experiment(MARKET / "hidden.toml"))

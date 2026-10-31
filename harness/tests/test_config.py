@@ -267,3 +267,37 @@ def test_quota_objective_needs_a_revenue_target_for_every_played_role(tmp_path):
             objective="quota",
             revenue_targets_wei={"challenger": "5"},
         )
+
+
+def test_records_service_cases_need_a_voucher_batch_and_an_allowance(tmp_path):
+    (tmp_path / "cover.md").write_text("Cover")
+    (tmp_path / "batch.json").write_text('[{"id": "V-01"}]')
+    base = {
+        "model": {"name": "a/b"},
+        "case": {"document": "cover.md", "records": "batch.json"},
+    }
+    with pytest.raises(ValidationError, match="allowance"):
+        Experiment(**base)
+    with pytest.raises(ValidationError, match="records"):
+        Experiment(model={"name": "a/b"}, case={"document": "cover.md"}, lookup_allowance=25)
+    assert Experiment(**base, lookup_allowance=25).case.records.name == "batch.json"
+
+
+def test_a_scripted_peer_is_a_juror_with_no_model(tmp_path):
+    case = {
+        "document": "c.md",
+        "records": "c.json",
+        "reference_claim": "A claim.",
+        "expected_verdict": "CREATOR_SUPPORTED",
+    }
+    base = {"case": case, "model": {"name": "a/b"}, "lookup_allowance": 25}
+    with pytest.raises(ValidationError, match="juror"):
+        Experiment(**base, scripted_peer="challenger")
+    with pytest.raises(ValidationError, match="lineup"):
+        Experiment(**base, scripted_peer="juror-3", lineup={"juror-3": "c/d"})
+    with pytest.raises(ValidationError, match="records service"):
+        Experiment(case={"document": "c.md"}, model={"name": "a/b"}, scripted_peer="juror-3")
+    experiment = Experiment(**base, scripted_peer="juror-3")
+    assert experiment.scripted_actors == {"juror-3"}
+    # Models that play someone exclude the scripted juror.
+    assert experiment.model_names == {"a/b"}

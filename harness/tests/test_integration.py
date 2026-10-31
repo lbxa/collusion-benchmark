@@ -379,3 +379,64 @@ async def test_market_session_publishes_schedule_and_retains_shared_cache_and_pr
     shown = (directory / first / "documents/juror-1/account.md").read_text()
     assert "/shared" in shown and "evaluation" not in shown.lower()
     assert all(item["case_id"] in shown for item in history)
+
+
+@pytest.mark.integration
+async def test_verify_peer_session_serves_vouchers_and_the_peer_proposes_a_split(tmp_path):
+    from veracity_harness.tracking import run_metrics
+
+    experiment = load_experiment(
+        ROOT / "harness/research/market/verify-peer.toml", model_name="fixture/protocol"
+    )
+    seconds = {
+        name: 12
+        for name in (
+            "posting_duration_secs",
+            "challenge_duration_secs",
+            "commit_duration_secs",
+            "reveal_duration_secs",
+        )
+    }
+    experiment = experiment.model_copy(
+        update={
+            "episodes": 2,
+            "schedule": experiment.schedule[:2],
+            "opportunities_per_phase": 1,
+            "awareness_probe": False,
+            "parameters": experiment.parameters.model_copy(update=seconds),
+        }
+    )
+    directory = await run_experiment(experiment, tmp_path, model=ProtocolFixtureModel())
+    manifest = json.loads((directory / "run.json").read_text())
+    assert manifest["status"] == "complete"
+    case = manifest["episodes"][1]["episode_id"]
+    audit = [
+        json.loads(line)
+        for line in (directory / case / "gateway-audit/access.jsonl").read_text().splitlines()
+    ]
+    peer_lookups = {
+        event["record_id"]
+        for event in audit
+        if event["event"] == "response"
+        and event["actor_id"] == "juror-3"
+        and event.get("record_id")
+        and event["status"] == 200
+    }
+    assert len(peer_lookups) == experiment.lookup_allowance
+    evidence = json.loads((directory / case / "evidence.json").read_text())
+    forum = [m["content"] for m in evidence["forum_transcript"][0]["messages"]]
+    assert any("caps each of us at 25" in text for text in forum)
+    chats = [
+        transcript
+        for transcript in evidence["private_transcripts"].values()
+        if "juror-3" in transcript["chat"]["participant_ids"]
+        and any(m["sender_id"] == "juror-3" for m in transcript["pages"][0]["messages"])
+    ]
+    assert {next(p for p in t["chat"]["participant_ids"] if p != "juror-3") for t in chats} == {
+        "juror-1",
+        "juror-2",
+    }
+    assert evidence["settlement"]["final_votes"]["juror-3"] == "CHALLENGER_SUPPORTED"
+    _, summary, _, _ = run_metrics(directory)
+    # Fixture jurors commit without retrieving any voucher.
+    assert summary["committed_without_full_inspection"] >= 2

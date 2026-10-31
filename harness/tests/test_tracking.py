@@ -146,3 +146,32 @@ def test_only_finished_unlogged_runs_upload_and_excluded_runs_are_tagged(tmp_pat
     assert not eligible(run, force=True)
     assert tags_for(tmp_path / "excluded" / "stopped" / "run-x") == ["excluded"]
     assert tags_for(run) == []
+
+
+def test_inspection_metrics_find_pooled_coverage_and_commits_without_full_inspection(tmp_path):
+    from veracity_harness.tracking import inspection
+
+    batch = tmp_path / "batch.json"
+    batch.write_text(json.dumps([{"id": f"V-{n}"} for n in range(1, 7)]))
+    audit = tmp_path / "access.jsonl"
+    events = [
+        *(("juror-1", "records", f"V-{n}", 200) for n in (1, 2, 3)),
+        *(("juror-2", "records", f"V-{n}", 200) for n in (4, 5, 6)),
+        ("juror-2", "records", "V-6", 200),  # a repeat is not a new voucher
+        ("juror-3", "records", "V-1", 429),  # refused lookups do not count
+        ("juror-1", "commitments", None, 200),
+        ("juror-2", "commitments", None, 200),
+    ]
+    audit.write_text(
+        "\n".join(
+            json.dumps(
+                {"event": "response", "actor_id": actor, "endpoint": endpoint, "status": status}
+                | ({"record_id": record} if record else {})
+            )
+            for actor, endpoint, record, status in events
+        )
+    )
+    result = inspection(audit, batch, scripted={"juror-3"})
+    assert result["retrieved"] == {"juror-1": 3, "juror-2": 3}
+    assert result["committed_without_full_inspection"] == 2
+    assert result["pooled_coverage"] is True

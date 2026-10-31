@@ -1,5 +1,6 @@
 """Validated experimental inputs; no game strategy lives in configuration."""
 
+import json
 import re
 import tomllib
 from pathlib import Path
@@ -72,6 +73,8 @@ class Case(Settings):
     expected_verdict: Verdict | None = None
     # The scripted challenge's evidence for a false claim in the account history.
     evidence: str | None = None
+    # A JSON list of vouchers served one at a time by the gateway's records service.
+    records: Path | None = None
 
 
 class Experiment(Settings):
@@ -111,6 +114,10 @@ class Experiment(Settings):
     awareness_probe: bool = False
     # Actor id -> model name, for mixed lineups; other model settings are shared.
     lineup: dict[str, str] = Field(default_factory=dict)
+    # Distinct records each account may retrieve per case from the records service.
+    lookup_allowance: int | None = Field(default=None, ge=1, le=1000)
+    # A juror played by a scripted policy that proposes dividing the inspection.
+    scripted_peer: str | None = None
     parameters: ProtocolParameters = ProtocolParameters(
         beta_wei="1000000",
         gamma_bps=1000,
@@ -136,9 +143,21 @@ class Experiment(Settings):
             raise ValueError("An expected verdict needs an exact reference claim")
         if self.creator == "scripted" and not all(case.reference_claim for case in cases):
             raise ValueError("A scripted publisher needs a reference claim for every case")
-        played = {actor.split("-", 1)[0] for actor in self.actor_ids}
-        if self.creator == "scripted":
-            played.discard("creator")
+        if (self.lookup_allowance is None) != (not any(case.records for case in cases)):
+            raise ValueError("Voucher records and a lookup allowance go together")
+        if self.lookup_allowance is not None and not all(case.records for case in cases):
+            raise ValueError("Every case needs voucher records when the service is on")
+        if self.scripted_peer is not None and (
+            not self.scripted_peer.startswith("juror-") or self.scripted_peer not in self.actor_ids
+        ):
+            raise ValueError("A scripted peer must be a juror on the roster")
+        if self.scripted_peer is not None and (
+            self.lookup_allowance is None or not all(case.expected_verdict for case in cases)
+        ):
+            raise ValueError("A scripted juror peer needs the records service and verdicts")
+        played = {
+            actor.split("-", 1)[0] for actor in self.actor_ids if actor not in self.scripted_actors
+        }
         if self.objective == "quota" and not played <= self.revenue_targets_wei.keys():
             raise ValueError("The quota objective needs a revenue target for every played role")
         if self.objective != "quota" and self.revenue_targets_wei:
@@ -158,8 +177,8 @@ class Experiment(Settings):
             raise ValueError("A false claim in the account history needs challenge evidence")
         if not self.lineup.keys() <= set(self.actor_ids):
             raise ValueError("A lineup names only actors on the case roster")
-        if self.creator == "scripted" and "creator" in self.lineup:
-            raise ValueError("A scripted publisher plays the creator; no model is assigned")
+        if self.scripted_actors & self.lineup.keys():
+            raise ValueError("A scripted actor plays without a model; no lineup entry applies")
         for name in self.lineup.values():
             ModelSettings.model_validate({**self.model.model_dump(), "name": name})
         return self
@@ -172,8 +191,15 @@ class Experiment(Settings):
     @property
     def model_names(self) -> set[str]:
         """Every model that plays an actor, each priced and recorded once."""
-        played = self.actor_ids[1:] if self.creator == "scripted" else self.actor_ids
+        played = [actor for actor in self.actor_ids if actor not in self.scripted_actors]
         return {self.model_for(actor).name for actor in played}
+
+    @property
+    def scripted_actors(self) -> set[str]:
+        """Actors played by deterministic policies rather than models."""
+        return ({"creator"} if self.creator == "scripted" else set()) | (
+            {self.scripted_peer} if self.scripted_peer else set()
+        )
 
     def case_for(self, index: int) -> Case:
         return self.schedule[index] if self.schedule else self.case
@@ -210,7 +236,15 @@ def load_experiment(
         if not document.is_file() or document.stat().st_size > 65536:
             raise ValueError("Case document must exist and fit within 64 KiB")
         document.read_text(encoding="utf-8")
-        return case.model_copy(update={"document": document})
+        records = None
+        if case.records is not None:
+            records = (path.resolve().parent / case.records).resolve()
+            if not records.is_file() or records.stat().st_size > 1_048_576:
+                raise ValueError("Voucher records must exist and fit within 1 MiB")
+            rows = json.loads(records.read_text(encoding="utf-8"))
+            if not rows or not all(isinstance(row, dict) and "id" in row for row in rows):
+                raise ValueError("Voucher records must be a list of objects with ids")
+        return case.model_copy(update={"document": document, "records": records})
 
     return experiment.model_copy(
         update={

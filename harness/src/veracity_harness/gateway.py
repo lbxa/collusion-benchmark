@@ -62,6 +62,10 @@ class GatewayPolicy(BaseModel):
     hidden_fields: frozenset[str] = OPERATOR_TAGS
     # Engine actor id -> the account name participants see, in both directions.
     aliases: dict[str, str] = Field(default_factory=dict)
+    # The current case's vouchers by id, served by the gateway's records service, and
+    # how many distinct ones each account may retrieve for this case.
+    records: dict[str, dict] = Field(default_factory=dict)
+    lookup_allowance: int = 0
     identities: dict[str, Identity]
     public_messaging: bool
     private_chat: bool
@@ -95,6 +99,12 @@ class GatewayPolicy(BaseModel):
         ):
             return True
         if method == "GET" and re.fullmatch(r"/v1/operations/[A-Za-z0-9_-]+", path):
+            return True
+        if (
+            self.records
+            and method == "GET"
+            and re.fullmatch(rf"/v1/episodes/{episode}/records(?:/[A-Za-z0-9_-]+)?", path)
+        ):
             return True
         if self.public_messaging and method in {"GET", "POST"}:
             if path == f"/v1/episodes/{self.episode_id}/forum/messages":
@@ -210,8 +220,10 @@ def create_gateway(
         except (OSError, ValueError):
             raise web.HTTPServiceUnavailable(text="Gateway policy unavailable") from None
         identity = current.identities.get(request.remote or "")
-        endpoint = request.path.rsplit("/", 1)[-1]
+        record = re.fullmatch(r"/v1/episodes/[^/]+/records(?:/([^/]+))?", request.path)
+        endpoint = "records" if record else request.path.rsplit("/", 1)[-1]
         if endpoint not in {
+            "records",
             "claims",
             "challenges",
             "commitments",
@@ -243,6 +255,8 @@ def create_gateway(
             "endpoint": endpoint,
             "time_ns": time.time_ns(),
         }
+        if record and record.group(1):
+            event["record_id"] = record.group(1)
 
         def append(**fields):
             if audit_path is not None:
@@ -264,6 +278,8 @@ def create_gateway(
     app = web.Application(client_max_size=MAX_BODY, middlewares=[audit])
     session_key = web.AppKey("upstream", aiohttp.ClientSession)
     operations: dict[tuple[str, str], set[str]] = {}
+    # Distinct records each (case, account) has retrieved from the records service.
+    lookups: dict[tuple[str, str], set[str]] = {}
 
     async def session_lifecycle(application):
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=35)) as session:
@@ -289,6 +305,33 @@ def create_gateway(
             return web.Response(text=interface, content_type="text/markdown")
         if request.path == "/v1/identity":
             return web.json_response(policy.public_identity(identity))
+        record = re.fullmatch(
+            rf"/v1/episodes/{re.escape(policy.episode_id)}/records(?:/([A-Za-z0-9_-]+))?",
+            request.path,
+        )
+        if record:
+            retrieved = lookups.setdefault((policy.episode_id, identity.actor_id), set())
+            record_id = record.group(1)
+            if record_id is None:
+                return web.json_response(
+                    {
+                        "records": sorted(policy.records),
+                        "allowance": policy.lookup_allowance,
+                        "retrieved": sorted(retrieved),
+                    }
+                )
+            if record_id not in policy.records:
+                raise web.HTTPNotFound(text="No such record in this case")
+            if record_id not in retrieved and len(retrieved) >= policy.lookup_allowance:
+                return web.json_response(
+                    {
+                        "detail": "Lookup allowance for this case is used up "
+                        f"({len(retrieved)} of {policy.lookup_allowance} distinct records)."
+                    },
+                    status=429,
+                )
+            retrieved.add(record_id)
+            return web.json_response(policy.records[record_id])
         headers = {"Authorization": f"Bearer {identity.token}"}
         if policy.relay_token:
             headers["X-Veracity-Relay"] = policy.relay_token

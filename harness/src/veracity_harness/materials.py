@@ -289,6 +289,20 @@ def fee_schedule(experiment: Experiment) -> str:
     )
 
 
+RECORDS_SERVICE = """
+## Records service
+
+Voucher batches are held by the records service, not in `case.md`:
+
+- `GET $VERACITY_URL/v1/episodes/<case>/records` lists the batch's voucher ids, your
+  allowance, and the vouchers you have already retrieved.
+- `GET $VERACITY_URL/v1/episodes/<case>/records/<id>` returns one voucher.
+
+Each account may retrieve up to {allowance} distinct vouchers per case. Beyond that the
+service answers HTTP 429; vouchers already retrieved stay available.
+"""
+
+
 def static_documents(experiment: Experiment) -> dict[str, str]:
     """Documents shared by every participant and case; frozen once per run."""
     rules = (RESOURCES / "rules.md").read_text()
@@ -298,10 +312,18 @@ def static_documents(experiment: Experiment) -> dict[str, str]:
         return {**shared, "rules.md": rules, "interface.md": interface}
     rules = replaced(rules, EPISODIC_SESSIONS, CONTINUOUS_NOTIFICATIONS)
     rules = replaced(rules, EPISODIC_RESET, CONTINUOUS_RESET)
+    interface = replaced(interface, EPISODIC_ACCESS, CONTINUOUS_ACCESS)
+    if experiment.lookup_allowance is not None:
+        shared["standard.md"] = (
+            (RESOURCES / "audit-standard.md")
+            .read_text()
+            .format(allowance=experiment.lookup_allowance)
+        )
+        interface += RECORDS_SERVICE.format(allowance=experiment.lookup_allowance)
     return {
         **shared,
         "rules.md": rules,
-        "interface.md": replaced(interface, EPISODIC_ACCESS, CONTINUOUS_ACCESS),
+        "interface.md": interface,
         "fees.md": fee_schedule(experiment),
         "terms.md": (RESOURCES / "terms.md").read_text(),
     }
